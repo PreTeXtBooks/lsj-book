@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- This is the main file of the PreTeXt book.                  -->
+<!-- The main.ptx here always starts with <pretext> tags.        -->
+<!-- In this example, the main file just imports other .ptx      -->
+<!-- files which contain content.                                -->
+
+<pretext xml:lang="en-US" xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <!-- we first include a file which contains the docinfo element: -->
+  <xi:include href="./meta_docinfo.ptx" />
+
+  <!-- The <book> tags wrap all the content.  Change the @xml:id   -->
+  <!-- to some short (non-spaced) description of your book         -->
+  <book xml:id="learning-stats-with-jamovi">
+    <!-- The book needs a title and can have a subtitle  -->
+    <title>Learning Statistics with jamovi</title>
+    <subtitle>A Tutorial for Beginners in Statistical Analysis</subtitle>
+
+    <!-- Now we include files containing each main division.       -->
+
+    <!-- First a frontmatter for prefaces and such. Maybe comment  -->
+    <!-- out for now and write this when the book is more complete -->
+    <xi:include href="./meta_frontmatter.ptx" />
+
+    <!-- Part I: Beginnings -->
+    <part xml:id="part-i-beginnings">
+      <title>Beginnings</title>
+
+      <!-- Chapter 1: Why do we learn statistics? -->
+      <xi:include href="./ch01-why-statistics.ptx" />
+
+      <!-- Chapter 2: A brief introduction to research design -->
+      <xi:include href="./ch02-research-design.ptx" />
+    </part>
+
+    <!-- Part II: An introduction to jamovi -->
+    <part xml:id="part-ii-introduction-to-jamovi">
+      <title>An introduction to jamovi</title>
+
+      <!-- Chapter 3: Getting started with jamovi -->
+      <xi:include href="./ch03-getting-started-jamovi.ptx" />
+    </part>
+
+    <!-- Part III: Working with data -->
+    <part xml:id="part-iii-working-with-data">
+      <title>Working with data</title>
+
+      <!-- Chapter 4: Descriptive statistics -->
+      <xi:include href="./ch04-descriptive-statistics.ptx" />
+
+      <!-- Chapter 5: Drawing graphs -->
+      <xi:include href="./ch05-drawing-graphs.ptx" />
+
+      <!-- Chapter 6: Pragmatic matters -->
+      <xi:include href="./ch06-pragmatic-matters.ptx" />
+    </part>
+
+    <!-- Part IV: Statistical theory -->
+    <part xml:id="part-iv-statistical-theory">
+      <title>Statistical theory</title>
+
+      <!-- Chapter 7: Introduction to probability -->
+      <xi:include href="./ch07-probability.ptx" />
+
+      <!-- Chapter 8: Estimating unknown quantities from a sample -->
+      <xi:include href="./ch08-estimation.ptx" />
+
+      <!-- Chapter 9: Hypothesis testing -->
+      <xi:include href="./ch09-hypothesis-testing.ptx" />
+    </part>
+
+    <!-- Part V: Statistical tools -->
+    <part xml:id="part-v-statistical-tools">
+      <title>Statistical tools</title>
+
+      <!-- Chapter 10: Categorical data analysis -->
+      <xi:include href="./ch10-categorical-data-analysis.ptx" />
+
+      <!-- Chapter 11: Comparing two means -->
+      <xi:include href="./ch11-comparing-two-means.ptx" />
+
+      <!-- Chapter 12: Correlation and linear regression -->
+      <xi:include href="./ch12-correlation-regression.ptx" />
+
+      <!-- Chapter 13: Comparing several means (one-way ANOVA) -->
+      <xi:include href="./ch13-anova.ptx" />
+
+      <!-- Chapter 14: Factorial ANOVA -->
+      <xi:include href="./ch14-factorial-anova.ptx" />
+
+      <!-- Chapter 15: Factor analysis -->
+      <xi:include href="./ch15-factor-analysis.ptx" />
+    </part>
+
+    <!-- Part VI: Endings, alternatives and prospects -->
+    <part xml:id="part-vi-endings">
+      <title>Endings, alternatives and prospects</title>
+
+      <!-- Chapter 16: Bayesian statistics -->
+      <xi:include href="./ch16-bayesian-statistics.ptx" />
+
+      <!-- Epilogue -->
+      <xi:include href="./epilogue.ptx" />
+    </part>
+
+    <!-- Finally we place the backmatter in its own file and include-->
+    <xi:include href="./meta_backmatter.ptx" />
+  </book>
+</pretext>

@@ -11,3 +11,10 @@ termout.txt
 .DS_Store
 /*_cache/
 /*_files/
+
+# PreTeXt build artifacts
+pretext/output
+pretext/generated-assets
+pretext/node_modules
+pretext/.error_schema.log
+pretext/cli.log

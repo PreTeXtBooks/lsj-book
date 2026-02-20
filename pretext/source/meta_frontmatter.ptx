@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This frontmatter division will contain all content before the -->
+<!-- first chapter.  Fill in and comment/uncomment to see how this -->
+<!-- works.                                                        -->
+
+<frontmatter xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="meta_frontmatter">
+  <titlepage>
+    <author>
+      <personname>Danielle Navarro and David Foxcroft</personname>
+    </author>
+    <date><today/></date>
+  </titlepage>
+
+  <colophon>
+
+    <website>
+      <name><c>learnstatswithjamovi.com</c></name>
+      <address>https://www.learnstatswithjamovi.com</address>
+    </website>
+
+    <copyright>
+      <year>2018<ndash/>2025</year>
+      <holder>Danielle Navarro and David Foxcroft</holder>
+      <shortlicense>
+        This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
+        To view a copy of this license, visit
+        <url 
+          href="http://creativecommons.org/licenses/by-sa/4.0/"
+          visual="creativecommons.org/licenses/by-sa/4.0">
+          CreativeCommons.org</url>
+      </shortlicense>
+    </copyright>
+
+  </colophon>
+
+  <preface xml:id="meta_frontmatter-preface">
+    <p>
+      In this textbook we cover the contents of an introductory statistics
+      class, as typically taught to undergraduate psychology, health or
+      social science students. The book covers how to get started in jamovi
+      as well as giving an introduction to data manipulation. From a
+      statistical perspective, the book discusses descriptive statistics and
+      graphing first, followed by chapters on probability theory, sampling
+      and estimation, and null hypothesis testing. After introducing the
+      theory, the book covers the analysis of contingency tables,
+      correlation, t-tests, regression, ANOVA and factor analysis. Bayesian
+      statistics are touched on at the end of the book.
+    </p>
+    <p>
+      This book is an adaptation of DJ Navarro (2018).
+      <em>Learning statistics with R: A tutorial for psychology students
+      and other beginners</em>. (Version 0.6).
+    </p>
+  </preface>
+
+</frontmatter>
