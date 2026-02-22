@@ -399,14 +399,14 @@
     <figure xml:id="fig-fig7-6">
       <caption>An illustration of what happens when you change the mean of a normal distribution. The solid line depicts a normal distribution with a mean of <m>\mu = 4</m>. The dashed line shows a normal distribution with a mean of <m>\mu = 7</m>. In both cases, the standard deviation is <m>\sigma = 1</m>. Not surprisingly, the two distributions have the same shape, but the dashed line is shifted to the right</caption>
       <image source="images/fig-fig7-6-1.png" width="90%">
-        <description>Line graph showing two overlapping probability density curves. The solid line curve peaks at an observed value of 3, and the dashed line curve peaks at an observed value of 6. The x-axis is labeled "Observed Value" and the y-axis is labeled "Probability Density</description>
+        <description>Line graph showing two overlapping probability density curves. The solid line curve peaks at an observed value of 3, and the dashed line curve peaks at an observed value of 6. The x-axis is labeled "Observed Value" and the y-axis is labeled "Probability Density"</description>
       </image>
     </figure>
 
     <figure xml:id="fig-fig7-7">
       <caption>An illustration of what happens when you change the the standard deviation of a normal distribution. Both distributions plotted in this figure have a mean of <m>\mu = 5</m>, but they have different standard deviations. The solid line plots a distribution with standard deviation <m>\sigma = 1</m>, and the dashed line shows a distribution with standard deviation <m>\sigma = 2</m>. As a consequence, both distributions are "centred" on the same spot, but the dashed line is wider than the solid one</caption>
       <image source="images/fig-fig7-7-1.png" width="90%">
-        <description>A probability density plot showing two curves. The solid line represents a normal distribution centered at 5 with higher peak, while the dashed line represents a broader distribution also centered at 5. The x-axis is labeled "Observed Value" and the y-axis is labeled "Probability Density</description>
+        <description>A probability density plot showing two curves. The solid line represents a normal distribution centered at 5 with higher peak, while the dashed line represents a broader distribution also centered at 5. The x-axis is labeled "Observed Value" and the y-axis is labeled "Probability Density"</description>
       </image>
     </figure>
 
