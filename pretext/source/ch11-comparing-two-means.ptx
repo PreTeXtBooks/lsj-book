@@ -647,4 +647,282 @@
     </subsection>
   </section>
 
+  <section xml:id="sec-checking-normality">
+    <title>Checking the normality of a sample</title>
+
+    <p>All of the tests that we have discussed so far in this chapter have assumed that the data are normally distributed. This assumption is often quite reasonable, because the central limit theorem does tend to ensure that many real world quantities are normally distributed. Any time that you suspect that your variable is <em>actually</em> an average of lots of different things, there's a pretty good chance that it will be normally distributed, or at least close enough to normal that you can get away with using <m>t</m>-tests.</p>
+
+    <p>However, life doesn't come with guarantees, and besides there are lots of ways in which you can end up with variables that are highly non-normal. For example, any time you think that your variable is actually the minimum of lots of different things, there's a very good chance it will end up quite skewed. In psychology, response time (RT) data is a good example of this. If you suppose that there are lots of things that could trigger a response from a human participant, then the actual response will occur the first time one of these trigger events occurs.<fn>This is a massive oversimplification.</fn> This means that RT data are systematically non-normal. Okay, so if normality is assumed by all the tests, and is mostly but not always satisfied (at least approximately) by real world data, how can we check the normality of a sample? In this section I discuss two methods: QQ plots and the Shapiro-Wilk test.</p>
+
+    <subsection xml:id="subsec-qq-plots">
+      <title>QQ plots</title>
+
+      <p>One way to check whether a sample violates the normality assumption is to draw a "QQ plot" (Quantile-Quantile plot). This allows you to visually check whether you're seeing any systematic violations. In a QQ plot, each observation is plotted as a single dot. The <m>x</m> co-ordinate is the theoretical quantile that the observation should fall in if the data were normally distributed (with mean and variance estimated from the sample), and on the <m>y</m> co-ordinate is the actual quantile of the data within the sample. If the data are normal, the dots should form a straight line. For instance, lets see what happens if we generate data by sampling from a normal distribution, and then drawing a QQ plot. The results are shown in <xref ref="fig-fig11-20"/>.</p>
+
+      <figure xml:id="fig-fig11-20">
+        <caption>Histogram (panel (a)) and normal QQ plot (panel (b)) of normal.data, a normally distributed sample with <m>100</m> observations. The Shapiro-Wilk statistic associated with these data is <m>W = .99</m>, indicating that no significant departures from normality were detected (<m>p = .54</m>)</caption>
+        <image source="images/fig-fig11-20-1.png" width="90%">
+          <description>The image features two graphs. The left graph is a histogram titled "Normally Distributed Data" showing frequency vs. value. The right graph is a Q-Q plot titled "Normal Q-Q Plot" showing standardized residuals vs. sample quantiles, with points following a straight line.</description>
+        </image>
+      </figure>
+
+      <p>As you can see, these data form a pretty straight line; which is no surprise given that we sampled them from a normal distribution! In contrast, have a look at the two data sets shown in <xref ref="fig-fig11-21"/>. The top panels show the histogram and a QQ plot for a data set that is highly skewed: the QQ plot curves upwards. The lower panels show the same plots for a heavy tailed (i.e., high kurtosis) data set: in this case the QQ plot flattens in the middle and curves sharply at either end.</p>
+
+      <figure xml:id="fig-fig11-21">
+        <caption>In the top row, a histogram and a normal QQ plot of the <m>100</m> observations in a skewed data set. The skewness of the data here is <m>1.88</m>, and is reflected in a QQ plot that curves upwards. As a consequence, the Shapiro-Wilk statistic is <m>W = .80</m>, reflecting a significant departure from normality (<m>p &lt; .001</m>). The bottom row shows the same plots for a heavy tailed data set, again consisting of 100 observations. In this case the heavy tails in the data produce a high kurtosis (<m>6.57</m>), and cause the QQ plot to flatten in the middle, and curve away sharply on either side. The resulting Shapiro-Wilk statistic is <m>W = .75</m>, again reflecting significant non-normality (<m>p &lt; .001</m>)</caption>
+        <image source="images/fig-fig11-21-1.png" width="90%">
+          <description>Two sets of graphs show differently distributed data. The left column displays histograms for skewed distribution (top) and heavy-tailed distribution (bottom). The right column contains Normal Q-Q plots for each data set, indicating deviations from normality.</description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-qq-plots-t-tests">
+      <title>QQ plots for independent and paired <m>t</m>-tests</title>
+
+      <p>In our previous analyses we showed how to conduct in jamovi an independent <m>t</m>-test (<xref ref="fig-fig11-9"/>) and a paired samples <m>t</m>-test (<xref ref="fig-fig11-16"/>). And for these analyses jamovi provides an option to show a QQ plot for the difference scores (which jamovi calls the 'residuals'), which is a better way of checking the normality assumption. When we select this option for these analyses, we get the QQ plots shown in <xref ref="fig-fig11-22"/> and <xref ref="fig-fig11-23"/>, respectively. My interpretation is that these plots both show that the difference scores are reasonably normally distributed, so we are good to go!</p>
+
+      <figure xml:id="fig-fig11-22">
+        <caption>jamovi QQ plot for the independent <m>t</m>-test analysis shown in <xref ref="fig-fig11-9"/></caption>
+        <image source="images/fig11-22.png" width="80%">
+          <description>A Q-Q plot showing standardized residuals versus theoretical quantiles. Data points are scattered along the line y = x, indicating that the residuals follow a normal distribution. The x-axis ranges from -2 to 2, and the y-axis ranges from -2 to 2.</description>
+        </image>
+      </figure>
+
+      <figure xml:id="fig-fig11-23">
+        <caption>jamovi QQ plot for the paired samples <m>t</m>-test analysis shown in <xref ref="fig-fig11-16"/></caption>
+        <image source="images/fig11-23.png" width="80%">
+          <description>A Q-Q plot displays standardized residuals versus theoretical quantiles to assess the normality of a data set. The points mostly follow the diagonal line from bottom left to top right, indicating that the residuals are approximately normally distributed.</description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-shapiro-wilk">
+      <title>Shapiro-Wilk tests</title>
+
+      <p>QQ plots provide a nice way to informally check the normality of your data, but sometimes you'll want to do something a bit more formal and the <term>Shapiro-Wilk test</term> is probably what you're looking for.<fn>Either that, or the Kolmogorov-Smirnov test, which is probably more traditional than the Shapiro-Wilk. Although most things I've read seem to suggest Shapiro-Wilk is the better test of normality, the Kolmogorov-Smirnov is a general purpose test of distributional equivalence that can be adapted to handle other kinds of distribution tests. In jamovi the Shapiro-Wilk test is preferred.</fn> As you'd expect, the null hypothesis being tested is that a set of <m>N</m> observations is normally distributed.</p>
+
+      <p>[Additional technical detail<fn>The test statistic that it calculates is conventionally denoted as <m>W</m>, and it's calculated as follows. First, we sort the observations in order of increasing size, and let <m>\bar{X_1}</m> be the smallest value in the sample, <m>X_2</m> be the second smallest and so on. Then the value of <m>W</m> is given by: <me>W=\frac{(\sum_{i=1}^N a_iX_i)^2}{\sum_{i=1}^N(X_i-\bar{X})^2}</me> where <m>\bar{X}</m> is the mean of the observations, and the <m>a_i</m> values are ...mumble, mumble... something complicated that is a bit beyond the scope of an introductory text.</fn>]</p>
+
+      <p>To get the Shapiro-Wilk statistic in jamovi <m>t</m>-tests, check the option for 'Normality' listed under 'Assumptions'. In the randomly sampled data (<m>N = 100</m>) we used for the QQ plot, the value for the Shapiro-Wilk normality test statistic was <m>W = 0.99</m> with a <m>p</m>-value of <m>0.54</m>. So, not surprisingly, we have no evidence that these data depart from normality. When reporting the results for a Shapiro-Wilk test, you should (as usual) make sure to include the test statistic <m>W</m> and the <m>p</m>-value, though given that the sampling distribution depends so heavily on <m>N</m> it would probably be a politeness to include <m>N</m> as well.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-normality-example">
+      <title>Example</title>
+
+      <p>In the meantime, it's probably worth showing you an example of what happens to the QQ plot and the Shapiro-Wilk test when the data turn out to be non-normal. For that, let's look at the distribution of our AFL winning margins data, which if you remember back to the descriptive statistics chapter it didn't look like they came from a normal distribution at all. <xref ref="fig-fig11-24"/> shows what happens to the QQ plot. And when we run the Shapiro-Wilk test on the <em>afl.margins</em> data, we get a value for the Shapiro-Wilk normality test statistic of <m>W = 0.94</m>, and <m>p</m>-value <m>= 9.481 \times 10^{-07}</m>. Clearly a significant effect!</p>
+
+      <figure xml:id="fig-fig11-24">
+        <caption>jamovi QQ plot showing non-normality from the AFL winning margins data</caption>
+        <image source="images/fig11-24.png" width="80%">
+          <description>A Q-Q plot shows standardized residuals against theoretical quantiles. Data points largely follow a diagonal reference line, indicating normality. Points deviate at the upper and lower ends, suggesting potential departures from a normal distribution at extremes.</description>
+        </image>
+      </figure>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-testing-non-normal">
+    <title>Testing non-normal data</title>
+
+    <p>Okay, suppose your data turn out to be pretty substantially non-normal, but you still want to run something like a <m>t</m>-test? This situation occurs a lot in real life. For the AFL winning margins data, for instance, the Shapiro-Wilk test made it very clear that the normality assumption is violated. This is the situation where you want to use Wilcoxon tests. Like the <m>t</m>-test, the Wilcoxon test comes in two forms, one-sample and two-sample, and they're used in more or less the exact same situations as the corresponding <m>t</m>-tests. Unlike the <m>t</m>-test, the Wilcoxon test doesn't assume normality, which is nice. In fact, they don't make any assumptions about what kind of distribution is involved. In statistical jargon, this makes them <term>nonparametric tests</term>. While avoiding the normality assumption is nice, there's a drawback: the Wilcoxon test is usually less powerful than the <m>t</m>-test (i.e., higher type II error rate). I won't discuss the Wilcoxon tests in as much detail as the <m>t</m>-tests, but I'll give you a brief overview.</p>
+
+    <subsection xml:id="subsec-mann-whitney">
+      <title>Two sample Mann-Whitney <m>U</m> test</title>
+
+      <p>I'll start by describing the Mann-Whitney <m>U</m> test, since it's actually simpler than the one sample version. Suppose we're looking at the scores of 10 people on some test. Since my imagination has now failed me completely, let's pretend it's a "test of awesomeness" and there are two groups of people, "A" and "B". I'm curious to know which group is more awesome. The data are included in the file <em>awesome.csv</em>, and there are two variables apart from the usual ID variable: scores and group.</p>
+
+      <p>As long as there are no ties (i.e., people with the exact same awesomeness score) then the test that we want to do is surprisingly simple. All we have to do is construct a table that compares every observation in group A against every observation in group B. Whenever the group A datum is larger, we place a check mark in the table (<xref ref="tbl-tab11-4"/>).</p>
+
+      <table xml:id="tbl-tab11-4">
+        <title>Comparing observations by group for a two-sample Mann-Whitney U test</title>
+        <tabular halign="center">
+          <col/>
+          <col/>
+          <col/>
+          <col/>
+          <col/>
+          <col/>
+          <col/>
+          <row header="yes">
+            <cell colspan="2"></cell>
+            <cell colspan="5">Group B</cell>
+          </row>
+          <row header="yes">
+            <cell colspan="2"></cell>
+            <cell>14.5</cell>
+            <cell>10.4</cell>
+            <cell>12.4</cell>
+            <cell>11.7</cell>
+            <cell>13.0</cell>
+          </row>
+          <row>
+            <cell>Group A</cell>
+            <cell>6.4</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+          </row>
+          <row>
+            <cell></cell>
+            <cell>10.7</cell>
+            <cell>.</cell>
+            <cell><m>\checkmark</m></cell>
+            <cell>.</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+          </row>
+          <row>
+            <cell></cell>
+            <cell>11.9</cell>
+            <cell>.</cell>
+            <cell><m>\checkmark</m></cell>
+            <cell>.</cell>
+            <cell><m>\checkmark</m></cell>
+            <cell>.</cell>
+          </row>
+          <row>
+            <cell></cell>
+            <cell>7.3</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+          </row>
+          <row>
+            <cell></cell>
+            <cell>10.0</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>We then count up the number of checkmarks. This is our test statistic, <m>W</m>.<fn>Actually, there are two different versions of the test statistic that differ from each other by a constant value. The version that I've described is the one that jamovi calculates.</fn> The actual sampling distribution for <m>W</m> is somewhat complicated, and I'll skip the details. For our purposes, it's sufficient to note that the interpretation of <m>W</m> is qualitatively the same as the interpretation of <m>t</m> or <m>z</m>. That is, if we want a two-sided test then we reject the null hypothesis when <m>W</m> is very large or very small, but if we have a directional (i.e., one-sided) hypothesis then we only use one or the other.</p>
+
+      <p>In jamovi, if we run an 'Independent Samples T-Test' with scores as the dependent variable and group as the grouping variable, and then under the options for 'tests' check the option for 'Mann-Whitney U', we will get results showing that <m>U = 3</m> (i.e., the same number of checkmarks as shown above), and a <m>p</m>-value <m>= 0.05556</m>. See <xref ref="fig-fig11-25"/>. Counting up the tick marks this time we get a test statistic of <m>W = 7</m>. As before, if our test is two-sided, then we reject the null hypothesis when W is very large or very small.</p>
+
+      <figure xml:id="fig-fig11-25">
+        <caption>jamovi screen showing results for the Mann-Whitney <m>U</m> test</caption>
+        <image source="images/fig11-25.png" width="90%">
+          <description>A jamovi screenshot showing a Mann-Whitney U test setup on the left and results on the right. The setup includes dependent and grouping variables, while the results section displays statistical values and references.</description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-wilcoxon">
+      <title>One sample Wilcoxon test</title>
+
+      <p>What about the <term>one sample Wilcoxon test</term> (or equivalently, the paired samples Wilcoxon test)? Suppose I'm interested in finding out whether taking a statistics class has any effect on the happiness of students. My data is in the <em>happiness.csv</em> file. What I've measured here is the happiness of each student before taking the class and after taking the class, and the change score is the difference between the two. Just like we saw with the <m>t</m>-test, there's no fundamental difference between doing a paired-samples test using before and after, versus doing a one-sample test using the change scores. As before, the simplest way to think about the test is to construct a tabulation. The way to do it this time is to take those change scores that are positive differences, and tabulate them against all the complete sample. What you end up with is a table that looks like <xref ref="tbl-tab11-5"/>.</p>
+
+      <table xml:id="tbl-tab11-5">
+        <title>Comparing observations by group for a one-sample Wilcoxon <m>U</m> test</title>
+        <tabular halign="center">
+          <col/>
+          <col/>
+          <col/>
+          <col/>
+          <col/>
+          <col/>
+          <col/>
+          <col/>
+          <col/>
+          <col/>
+          <col/>
+          <col/>
+          <col/>
+          <row header="yes">
+            <cell colspan="3"></cell>
+            <cell colspan="10">All differences</cell>
+          </row>
+          <row header="yes">
+            <cell colspan="3"></cell>
+            <cell><m>-24</m></cell>
+            <cell><m>-14</m></cell>
+            <cell><m>-10</m></cell>
+            <cell>7</cell>
+            <cell><m>-6</m></cell>
+            <cell><m>-38</m></cell>
+            <cell>2</cell>
+            <cell><m>-35</m></cell>
+            <cell><m>-30</m></cell>
+            <cell>5</cell>
+          </row>
+          <row>
+            <cell>Positive</cell>
+            <cell></cell>
+            <cell>7</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+            <cell><m>\checkmark</m></cell>
+            <cell><m>\checkmark</m></cell>
+            <cell>.</cell>
+            <cell><m>\checkmark</m></cell>
+            <cell>.</cell>
+            <cell>.</cell>
+            <cell><m>\checkmark</m></cell>
+          </row>
+          <row>
+            <cell>differences</cell>
+            <cell></cell>
+            <cell>2</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+            <cell><m>\checkmark</m></cell>
+            <cell>.</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+          </row>
+          <row>
+            <cell></cell>
+            <cell></cell>
+            <cell>5</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+            <cell>.</cell>
+            <cell><m>\checkmark</m></cell>
+            <cell>.</cell>
+            <cell>.</cell>
+            <cell><m>\checkmark</m></cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>Running this in jamovi is straightforward. For the one sample version, specify the 'Wilcoxon rank' option under 'Tests' in the 'One Sample T-Test' analysis window. This gives a Wilcoxon <m>W = 7</m>, <m>p</m>-value <m>= 0.03711</m>. Evidently, taking a statistics class does have an effect on your happiness. Switching to a paired samples version of the test won't give a different answer, of course; see <xref ref="fig-fig11-26"/>.</p>
+
+      <figure xml:id="fig-fig11-26">
+        <caption>jamovi screen showing results for one-sample and paired sample Wilcoxon nonparametric tests</caption>
+        <image source="images/fig11-26.png" width="90%">
+          <description>A jamovi screenshot displaying statistical analysis for Wilcoxon nonparametric tests. The variables listed include "before" and "after." The results section shows outcomes for one sample and paired samples t-tests, including Wilcoxon W and p-values.</description>
+        </image>
+      </figure>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-ch11-summary">
+    <title>Summary</title>
+
+    <p><ul>
+      <li><p>The one-sample <m>t</m>-test is used to compare a single sample mean against a hypothesised value for the population mean.</p></li>
+      <li><p>An independent samples <m>t</m>-test is used to compare the means of two groups, and tests the null hypothesis that they have the same mean. It comes in two forms: the Student test (see <xref ref="sec-student-t-test"/>) assumes that the groups have the same standard deviation, the Welch test (see <xref ref="sec-welch-t-test"/>) does not.</p></li>
+      <li><p>The paired-samples <m>t</m>-test (see <xref ref="sec-paired-samples-t-test"/>) is used when you have two scores from each person, and you want to test the null hypothesis that the two scores have the same mean.</p></li>
+      <li><p>One-sided tests (see <xref ref="sec-one-sided-tests"/>) are legitimate as long as they are pre-planned (like all tests!).</p></li>
+      <li><p>Effect size calculations for the difference between means can be calculated via the Cohen's <m>d</m> statistic (see <xref ref="sec-effect-size-t-tests"/>).</p></li>
+      <li><p>Checking the normality of a sample (see <xref ref="sec-checking-normality"/>) using QQ plots and the Shapiro-Wilk test.</p></li>
+      <li><p>If your data are non-normal, you can use Mann-Whitney or Wilcoxon tests instead of <m>t</m>-tests for testing non-normal data (see <xref ref="sec-testing-non-normal"/>).</p></li>
+    </ul></p>
+  </section>
+
 </chapter>
