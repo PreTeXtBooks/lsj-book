@@ -231,4 +231,210 @@
     </subsection>
   </section>
 
+  <section xml:id="sec-the-independent-samples-t-test-student-test">
+    <title>The independent samples <m>t</m>-test (Student test)</title>
+
+    <p>Although the one sample <m>t</m>-test has its uses, it's not the most typical example of a <m>t</m>-test.<fn>Although it is the simplest, which is why I started with it.</fn> A much more common situation arises when you've got two different groups of observations. In psychology, this tends to correspond to two different groups of participants, where each group corresponds to a different condition in your study. For each person in the study you measure some outcome variable of interest, and the research question that you're asking is whether or not the two groups have the same population mean. This is the situation that the independent samples <m>t</m>-test is designed for.</p>
+
+    <subsection xml:id="subsec-independent-t-data">
+      <title>The data</title>
+
+      <p>Suppose we have 33 students taking Dr Harpo's statistics lectures, and Dr Harpo doesn't grade to a curve. Actually, Dr Harpo's grading is a bit of a mystery, so we don't really know anything about what the average grade is for the class as a whole. There are two tutors for the class, Anastasia and Bernadette. There are <m>N_1 = 15</m> students in Anastasia's tutorials, and <m>N_2 = 18</m> in Bernadette's tutorials. The research question I'm interested in is whether Anastasia or Bernadette is a better tutor, or if it doesn't make much of a difference. Dr Harpo emails me the course grades, in the <em>harpo.csv</em> file. As usual, I'll load the file into jamovi and have a look at what variables it contains - there are three variables, ID, grade and tutor. The grade variable contains each student's grade, but it is not imported into jamovi with the correct measurement level attribute, so I need to change this so it is regarded as a continuous variable. The tutor variable is a factor that indicates who each student's tutor was - either Anastasia or Bernadette.</p>
+
+      <p>We can calculate means and standard deviations, using the 'Exploration' -- 'Descriptives' analysis, and here's a nice little summary table (<xref ref="tbl-tab11-2"/>).</p>
+
+      <table xml:id="tbl-tab11-2">
+        <title>Descriptives summary table</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell></cell>
+            <cell>mean</cell>
+            <cell>std dev</cell>
+            <cell><m>N</m></cell>
+          </row>
+          <row>
+            <cell>Anastasia's students</cell>
+            <cell>74.53</cell>
+            <cell>9.00</cell>
+            <cell>15</cell>
+          </row>
+          <row>
+            <cell>Bernadette's students</cell>
+            <cell>69.06</cell>
+            <cell>5.77</cell>
+            <cell>18</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>To give you a more detailed sense of what's going on here, I've plotted box and violin plots in jamovi, with mean scores added to the plot with a small solid square. These plots show the distribution of grades for both tutors (<xref ref="fig-fig11-7"/>).</p>
+
+      <figure xml:id="fig-fig11-7">
+        <caption>Box and violin plots from jamovi showing the distribution of grades for students in the classes of Anastasia and Bernadette. Visually, these suggest that students in the class of Anastasia may be getting slightly better grades on average, though they also seem a bit more variable</caption>
+        <image source="images/fig11-7.png" width="80%">
+          <description>Violin plot comparing grades of students tutored by Anastasia and Bernadette. Both plots show distributions with similar means around 75-80 and few outliers. Anastasia's students have a wider grade distribution compared to Bernadette's students.</description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-introducing-independent-t">
+      <title>Introducing the test</title>
+
+      <p>The <term>independent samples <m>t</m>-test</term> comes in two different forms, Student's and Welch's. The original Student <m>t</m>-test, which is the one I'll describe in this section, is the simpler of the two but relies on much more restrictive assumptions than the Welch <m>t</m>-test. Assuming for the moment that you want to run a two-sided test, the goal is to determine whether two "independent samples" of data are drawn from populations with the same mean (the null hypothesis) or different means (the alternative hypothesis). When we say "independent" samples, what we really mean here is that there's no special relationship between observations in the two samples. This probably doesn't make a lot of sense right now, but it will be clearer when we come to talk about the paired samples <m>t</m>-test later on. For now, let's just point out that if we have an experimental design where participants are randomly allocated to one of two groups, and we want to compare the two groups' mean performance on some outcome measure, then an independent samples <m>t</m>-test (rather than a paired samples <m>t</m>-test) is what we're after.</p>
+
+      <p>Okay, so let's let <m>\mu_1</m> denote the true population mean for group 1 (e.g., Anastasia's students), and <m>\mu_2</m> will be the true population mean for group 2 (e.g., Bernadette's students),<fn>A funny question almost always pops up at this point: what the heck is the population being referred to in this case? Is it the set of students actually taking Dr Harpo's class (all 33 of them)? The set of people who might take the class (an unknown number of them)? Or something else? Does it matter which of these we pick? It's traditional in an introductory behavioural stats class to mumble a lot at this point, but since I get asked this question every year by my students, I'll give a brief answer. Technically yes, it does matter. If you change your definition of what the "real-world" population actually is, then the sampling distribution of your observed mean <m>\bar{X}</m> changes too. The <m>t</m>-test relies on an assumption that the observations are sampled at random from an infinitely large population and, to the extent that real life isn't like that, then the <m>t</m>-test can be wrong. In practice, however, this isn't usually a big deal. Even though the assumption is almost always wrong, it doesn't lead to a lot of pathological behaviour from the test, so we tend to just ignore it.</fn> and as usual we'll let <m>\bar{X}_1</m> and <m>\bar{X}_2</m> denote the observed sample means for both of these groups. Our null hypothesis states that the two population means are identical (<m>\mu_1 = \mu_2</m>) and the alternative to this is that they are not (<m>\mu_1 \neq \mu_2</m>) (<xref ref="fig-fig11-8"/>). Written in mathematical-ese, this is:
+      <me>H_0: \mu_1=\mu_2</me>
+      <me>H_1: \mu_1 \neq \mu_2</me></p>
+
+      <p>To construct a hypothesis test that handles this scenario we start by noting that if the null hypothesis is true, then the difference between the population means is <em>exactly</em> zero, <m>\mu_1-\mu_2 = 0</m>. As a consequence, a diagnostic test statistic will be based on the difference between the two sample means. Because if the null hypothesis is true, then we'd expect <m>\bar{X}_1 - \bar{X}_2</m> to be pretty close to zero. However, just like we saw with our one-sample tests (i.e., the one-sample <em>z</em>-test and the one-sample <m>t</m>-test) we have to be precise about exactly how close to zero this difference should be. And the solution to the problem is more or less the same one. We calculate a standard error estimate (SE), just like last time, and then divide the difference between means by this estimate. So our <term>t-statistic</term> will be of the form:
+      <me>t=\frac{\bar{X}_1-\bar{X}_2}{SE}</me></p>
+
+      <figure xml:id="fig-fig11-8">
+        <caption>Graphical illustration of the null and alternative hypotheses assumed by the Student <m>t</m>-test. The null hypothesis assumes that both groups have the same mean <m>\mu</m>, whereas the alternative assumes that they have different means <m>\mu_1</m> and <m>\mu_2</m>. Notice that it is assumed that the population distributions are normal, and that, although the alternative hypothesis allows the group to have different means, it assumes they have the same standard deviation</caption>
+        <image source="images/fig-fig11-8-1.png" width="90%">
+          <description>Two graphs depict hypothesis testing. The left graph shows a single normal distribution curve labeled "null hypothesis" with mu. The right graph shows two overlapping normal distribution curves labeled "alternative hypothesis" with mu-1 and mu-2. Both graphs have "Value of X" on the x-axis.</description>
+        </image>
+      </figure>
+
+      <p>We just need to figure out what this standard error estimate actually is. This is a bit trickier than was the case for either of the two tests we've looked at so far, so we need to go through it a lot more carefully to understand how it works.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-pooled-sd">
+      <title>A "pooled estimate" of the standard deviation</title>
+
+      <p>In the original "Student <m>t</m>-test", we make the assumption that the two groups have the same population standard deviation. That is, regardless of whether the population means are the same, we assume that the population standard deviations are identical, <m>\sigma_1 = \sigma_2</m>. Since we're assuming that the two standard deviations are the same, we drop the subscripts and refer to both of them as <m>\sigma</m>. How should we estimate this? How should we construct a single estimate of a standard deviation when we have two samples? The answer is, basically, we average them. Well, sort of. Actually, what we do is take a <em>weighted</em> average of the <em>variance</em> estimates, which we use as our <term>pooled estimate of the variance</term>. The weight assigned to each sample is equal to the number of observations in that sample, minus 1.</p>
+
+      <p>[Additional technical detail<fn>Mathematically, we can write this as:
+      <me>w_1=N_1-1</me>
+      <me>w_2=N_2-1</me>
+      Now that we've assigned weights to each sample we calculate the pooled estimate of the variance by taking the weighted average of the two variance estimates, <m>\hat{\sigma}_{1}^{2}</m> and <m>\hat{\sigma}_{2}^{2}</m>:
+      <me>\hat{\sigma}_p^2=\frac{w_1\hat{\sigma}_1^2+w_2\hat{\sigma}_2^2}{w_1+w_2}</me>
+      Finally, we convert the pooled variance estimate to a pooled standard deviation estimate, by taking the square root:
+      <me>\hat{\sigma}_p=\sqrt{\frac{w_1\hat{\sigma}_1^2+w_2\hat{\sigma}_2^2}{w_1+w_2}}</me>
+      And if you mentally substitute <m>w_1 = N_1 - 1</m> and <m>w_2 = N_2 - 1</m> into this equation you get a very ugly looking formula. A very ugly formula that actually seems to be the "standard" way of describing the pooled standard deviation estimate. It's not my favourite way of thinking about pooled standard deviations, however. I prefer to think about it like this. Our data set actually corresponds to a set of <m>N</m> observations which are sorted into two groups. So let's use the notation <m>X_{ik}</m> to refer to the grade received by the i-th student in the k-th tutorial group. That is, <m>X_{11}</m> is the grade received by the first student in Anastasia's class, <m>X_{21}</m> is her second student, and so on. And we have two separate group means <m>\bar{X}_1</m> and <m>\bar{X}_2</m>, which we could "generically" refer to using the notation <m>\bar{X}_k</m>, i.e., the mean grade for the k-th tutorial group. So far, so good. Now, since every single student falls into one of the two tutorials, we can describe their deviation from the group mean as the difference: <m>X_{ik}-\bar{X}_k</m>. So why not just use these deviations (i.e., the extent to which each student's grade differs from the mean grade in their tutorial)? Remember, a variance is just the average of a bunch of squared deviations, so let's do that. Mathematically, we could write it like this:
+      <me>\frac{\sum_{ik}(X_{ik}-\bar{X}_k)^2}{N}</me>
+      where the notation "<m>\sum_{ik}</m>" is a lazy way of saying "calculate a sum by looking at all students in all tutorials", since each "<m>_{ik}</m>" corresponds to one student. But, as we saw in the section on estimating unknown quantities from a sample, calculating the variance by dividing by <m>N</m> produces a biased estimate of the population variance. And previously we needed to divide by <m>(N - 1)</m> to fix this. However, as I mentioned at the time, the reason why this bias exists is because the variance estimate relies on the sample mean, and to the extent that the sample mean isn't equal to the population mean it can systematically bias our estimate of the variance. But this time we're relying on two sample means! Does this mean that we've got more bias? Yes, yes it does. And does this mean we now need to divide by <m>(N - 2)</m> instead of <m>(N - 1)</m>, in order to calculate our pooled variance estimate? Why, yes:
+      <me>\hat{\sigma}_p^2=\frac{\sum_{ik}(X_{ik}-\bar{X}_k)^2}{N-2}</me>
+      Oh, and if you take the square root of this then you get <m>\hat{\sigma}_p</m>, the pooled standard deviation estimate. In other words, the pooled standard deviation calculation is nothing special. It's not terribly different to the regular standard deviation calculation.</fn>]</p>
+    </subsection>
+
+    <subsection xml:id="subsec-completing-student-t">
+      <title>Completing the test</title>
+
+      <p>Regardless of which way you want to think about it, we now have our pooled estimate of the standard deviation. From now on, I'll drop the silly p subscript, and just refer to this estimate as <m>\hat{\sigma}</m>. Great. Let's now go back to thinking about the hypothesis test, shall we? Our whole reason for calculating this pooled estimate was that we knew it would be helpful when calculating our standard error estimate. But standard error of what? In the one-sample <m>t</m>-test it was the standard error of the sample mean, <m>SE(\bar{X})</m>, and since <m>SE(\bar{X}) = \frac{\sigma}{\sqrt{N}}</m> that's what the denominator of our <m>t</m>-statistic looked like. This time around, however, we have two sample means. And what we're interested in, specifically, is the difference between the two <m>\bar{X}_1-\bar{X}_2</m>. As a consequence, the standard error that we need to divide by is in fact the <term>standard error of the difference</term> between means.</p>
+
+      <p>[Additional technical detail<fn>As long as the two variables really do have the same standard deviation, then our estimate for the standard error is:
+      <me>SE(\bar{X}_1-\bar{X}_2)=\hat{\sigma}\sqrt{\frac{1}{N_1}+\frac{1}{N_2}}</me>
+      and our <m>t</m>-statistic is therefore:
+      <me>t=\frac{\bar{X}_1-\bar{X}_2}{SE(\bar{X}_1-\bar{X}_2)}</me></fn>]</p>
+
+      <p>Just as we saw with our one-sample test, the sampling distribution of this <m>t</m>-statistic is a <m>t</m>-distribution (shocking, isn't it?) as long as the null hypothesis is true and all of the assumptions of the test are met. The degrees of freedom, however, is slightly different. As usual, we can think of the degrees of freedom to be equal to the number of data points minus the number of constraints. In this case, we have <m>N</m> observations (<m>N_1</m> in sample 1, and <m>N_2</m> in sample 2), and 2 constraints (the sample means). So the total degrees of freedom for this test are <m>N - 2</m>.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-student-t-in-jamovi">
+      <title>Doing the test in jamovi</title>
+
+      <p>Not surprisingly, you can run an independent samples <m>t</m>-test easily in jamovi. The outcome variable for our test is the student grade, and the groups are defined in terms of the tutor for each class. So you probably won't be too surprised that all you have to do in jamovi is go to the relevant analysis ('Analyses' -- 'T-Tests' -- 'Independent Samples T-Test') and move the grade variable across to the 'Dependent Variables' box, and the tutor variable across into the 'Grouping Variable' box, as shown in <xref ref="fig-fig11-9"/>.</p>
+
+      <figure xml:id="fig-fig11-9">
+        <caption>Independent <m>t</m>-test in jamovi, with options checked for useful results</caption>
+        <image source="images/fig11-9.png" width="90%">
+          <description>A jamovi screenshot of the interface for performing an independent samples t-test. The layout includes sections for entering dependent variables, grouping variables, and options for additional statistics, confidence interval, and assumption checks. Statistical output is displayed on the right.</description>
+        </image>
+      </figure>
+
+      <p>The output has a very familiar form. First, it tells you what test was run, and it tells you the name of the dependent variable that you used. It then reports the test results. Just like last time the test results consist of a <m>t</m>-statistic, the degrees of freedom, and the <m>p</m>-value. The final section reports two things: it gives you a confidence interval and an effect size. I'll talk about effect sizes later. The confidence interval, however, I should talk about now.</p>
+
+      <p>It's pretty important to be clear on what this confidence interval actually refers to. It is a confidence interval for the <em>difference</em> between the group means. In our example, Anastasia's students had an average grade of <m>74.53</m>, and Bernadette's students had an average grade of <m>69.06</m>, so the difference between the two sample means is <m>5.48</m>. But of course the difference between population means might be bigger or smaller than this. The confidence interval reported in <xref ref="fig-fig11-9"/> tells you that if we replicated this study again and again, then <m>95\%</m> of the time the true difference in means would lie between <m>0.20</m> and <m>10.76</m>.</p>
+
+      <p>In any case, the difference between the two groups is significant (just barely), so we might write up the result using text like this:</p>
+
+      <blockquote>
+        <p>The mean grade in Anastasia's class was <m>74.5\%</m> (std dev = <m>9.0</m>), whereas the mean in Bernadette's class was <m>69.1\%</m> (std dev = <m>5.8</m>). A Student's independent samples <m>t</m>-test showed that this <m>5.4\%</m> difference was significant <m>(t(31) = 2.1, p&lt;.05, CI_{95} = [0.2, 10.8], d = .74)</m>, suggesting that a genuine difference in learning outcomes has occurred.</p>
+      </blockquote>
+
+      <p>Notice that I've included the confidence interval and the effect size in the stat block. People don't always do this. At a bare minimum, you'd expect to see the <m>t</m>-statistic, the degrees of freedom and the <m>p</m>-value. So you should include something like this at a minimum: <m>t(31) = 2.1, p&lt; .05</m>. If statisticians had their way, everyone would also report the confidence interval and probably the effect size measure too, because they are useful things to know. But real life doesn't always work the way statisticians want it to so you should make a judgement based on whether you think it will help your readers and, if you're writing a scientific paper, the editorial standard for the journal in question.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-positive-negative-t">
+      <title>Positive and negative <m>t</m>-values</title>
+
+      <p>Before moving on to talk about the assumptions of the <m>t</m>-test, there's one additional point I want to make about the use of <m>t</m>-tests in practice. The first one relates to the sign of the <m>t</m>-statistic (that is, whether it is a positive number or a negative one). One very common worry that students have when they start running their first <m>t</m>-test is that they often end up with negative values for the <m>t</m>-statistic and don't know how to interpret it. In fact, it's not at all uncommon for two people working independently to end up with results that are almost identical, except that one person has a negative <m>t</m>-value and the other one has a positive <m>t</m> value. Assuming that you're running a two-sided test then the <m>p</m>-values will be identical. On closer inspection, the students will notice that the confidence intervals also have the opposite signs. This is perfectly okay. Whenever this happens, what you'll find is that the two versions of the results arise from slightly different ways of running the <m>t</m>-test. What's happening here is very simple. The <m>t</m>-statistic that we calculate here is always of the form:
+      <me>t=\frac{\text{mean 1} - \text{mean 2}}{SE}</me></p>
+
+      <p>If "mean 1" is larger than "mean 2" the <m>t</m>-statistic will be positive, whereas if "mean 2" is larger then the <m>t</m>-statistic will be negative. Similarly, the confidence interval that jamovi reports is the confidence interval for the difference "(mean 1) minus (mean 2)", which will be the reverse of what you'd get if you were calculating the confidence interval for the difference "(mean 2) minus (mean 1)".</p>
+
+      <p>Okay, that's pretty straightforward when you think about it, but now consider our <m>t</m>-test comparing Anastasia's class to Bernadette's class. Which one should we call "mean 1" and which one should we call "mean 2"? It's arbitrary. However, you really do need to designate one of them as "mean 1" and the other one as "mean 2". Not surprisingly, the way that jamovi handles this is also pretty arbitrary. Whenever I get a significant <m>t</m>-test result, and I want to figure out which mean is the larger one, I don't try to figure it out by looking at the <m>t</m>-statistic. Why would I bother doing that? It's foolish. It's easier just to look at the actual group means since the jamovi output actually shows them!</p>
+
+      <p>Here's the important thing. Because it really doesn't matter what jamovi shows you, I usually try to report the <m>t</m>-statistic in such a way that the numbers match up with the text. Suppose that what I want to write in my report is: <em>Anastasia's class had higher grades than Bernadette's class</em>. The phrasing here implies that Anastasia's group comes first, so it makes sense to report the <m>t</m>-statistic as if Anastasia's class corresponded to group 1. If so, I would write <em>Anastasia's class had higher grades than Bernadette's class</em> <m>(t(31) = 2.1, p = .04)</m>.</p>
+
+      <p>On the other hand, suppose the phrasing I wanted to use has Bernadette's class listed first. If so, it makes more sense to treat her class as group 1, and if so, the write up looks like this: <em>Bernadette's class had lower grades than Anastasia's class</em> <m>(t(31) = -2.1, p = .04)</m>.</p>
+
+      <p>Because I'm talking about one group having "lower" scores this time around, it is more sensible to use the negative form of the <m>t</m>-statistic. It just makes it read more cleanly.</p>
+
+      <p>One last thing: please note that you can't do this for other types of test statistics. It works for <m>t</m>-tests, but it wouldn't be meaningful for chi-square tests, <m>F</m>-tests or indeed for most of the tests I talk about in this book. So don't over-generalise this advice!</p>
+    </subsection>
+
+    <subsection xml:id="subsec-assumptions-student-t">
+      <title>Assumptions of the Student <m>t</m>-test</title>
+
+      <p>As always, our hypothesis test relies on some assumptions. So what are they? For the Student <m>t</m>-test there are three assumptions, some of which we saw previously in the context of the one sample <m>t</m>-test (see <xref ref="subsec-assumptions-one-sample-t" text="title"/>):</p>
+
+      <ul>
+        <li><p><em>Normality.</em> Like the one-sample <m>t</m>-test, it is assumed that the data are normally distributed. Specifically, we assume that both groups are normally distributed.<fn>Strictly speaking, it is the <term>difference</term> in the means that should be normally distributed, but if both groups have normally distributed data then the difference in means will also be normally distributed. In practice, the central limit theorem assures us that, generally, the distributions of the two sample means being tested will themselves approach normal distributions as the sample sizes get large, regardless of the distributions of the underlying data.</fn> In <xref ref="sec-Checking-the-normality-of-a-sample" text="title"/> we'll discuss how to test for normality, and in <xref ref="sec-testing-non-normal" text="title"/> we'll discuss possible solutions.</p></li>
+        <li><p><em>Independence.</em> Once again, it is assumed that the observations are independently sampled. In the context of the Student test this has two aspects to it. Firstly, we assume that the observations within each sample are independent of one another (exactly the same as for the one-sample test). However, we also assume that there are no cross-sample dependencies. If, for instance, it turns out that you included some participants in both experimental conditions of your study (e.g., by accidentally allowing the same person to sign up to different conditions), then there are some cross sample dependencies that you'd need to take into account.</p></li>
+        <li><p><em>Homogeneity of variance</em> (also called "homoscedasticity"). The third assumption is that the population standard deviation is the same in both groups. You can test this assumption using the Levene test, which I'll talk about later on in the book. However, there's a very simple remedy for this assumption if you are worried, which I'll talk about in the next section.</p></li>
+      </ul>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-the-independent-samples-t-test-welch-test">
+    <title>The independent samples <m>t</m>-test (Welch test)</title>
+
+    <p>The biggest problem with using the Student test in practice is the third assumption listed in the previous section. It assumes that both groups have the same standard deviation. This is rarely true in real life. If two samples don't have the same means, why should we expect them to have the same standard deviation? There's really no reason to expect this assumption to be true. We'll talk a little bit about how you can check this assumption later on because it does crop up in a few different places, not just the <m>t</m>-test. But right now I'll talk about a different form of the <m>t</m>-test (Welch, 1947) that does not rely on this assumption. A graphical illustration of what the Welch <m>t</m>-test assumes about the data is shown in <xref ref="fig-fig11-10"/>, to provide a contrast with the Student test version in <xref ref="fig-fig11-8"/>. I'll admit it's a bit odd to talk about the cure before talking about the diagnosis, but as it happens the Welch test can be specified as one of the 'Independent Samples T-Test' options in jamovi, so this is probably the best place to discuss it.</p>
+
+    <figure xml:id="fig-fig11-10">
+      <caption>Graphical illustration of the null and alternative hypotheses assumed by the Welch <m>t</m>-test. Like the Student test (<xref ref="fig-fig11-8"/>) we assume that both samples are drawn from a normal population; but the alternative hypothesis no longer requires the two populations to have equal variance</caption>
+      <image source="images/fig-fig11-10-1.png" width="90%">
+        <description>Two bell curves depicted side by side. The graph on the left represents the null hypothesis with a single peak labeled mu. The graph on the right represents the alternative hypothesis with two overlapping peaks labeled mu-1 and mu-2, showing different means.</description>
+      </image>
+    </figure>
+
+    <p>The Welch test is very similar to the Student test. For example, the <m>t</m>-statistic that we use in the Welch test is calculated in much the same way as it is for the Student test. That is, we take the difference between the sample means and then divide it by some estimate of the standard error of that difference:
+    <me>t=\frac{\bar{X}_1-\bar{X}_2}{SE(\bar{X}_1-\bar{X}_2)}</me></p>
+
+    <p>The main difference is that the standard error calculations are different. If the two populations have different standard deviations, then it's complete nonsense to try to calculate a pooled standard deviation estimate, because you're averaging apples and oranges.<fn>Well, I guess you can average apples and oranges, and what you end up with is a delicious fruit smoothie. But no one really thinks that a fruit smoothie is a very good way to describe the original fruits, do they?</fn></p>
+
+    <p>[Additional technical detail<fn>But you can still estimate the standard error of the difference between sample means, it just ends up looking different:
+    <me>SE(\bar{X}_1-\bar{X}_2)=\sqrt{\frac{\hat{\sigma}_1^2}{N_1}+\frac{\hat{\sigma}_2^2}{N_2}}</me>
+    The reason why it's calculated this way is beyond the scope of this book. What matters for our purposes is that the <m>t</m>-statistic that comes out of the Welch <m>t</m>-test is actually somewhat different to the one that comes from the Student <m>t</m>-test.</fn>]</p>
+
+    <p>The second difference between Welch and Student is that the degrees of freedom are calculated in a very different way. In the Welch test, the "degrees of freedom" doesn't have to be a whole number any more, and it doesn't correspond all that closely to the "number of data points minus the number of constraints" heuristic that I've been using up to this point.</p>
+
+    <subsection xml:id="subsec-welch-in-jamovi">
+      <title>Doing the Welch test in jamovi</title>
+
+      <p>If you tick the check box for the Welch test in the analysis we did above, then this is what it gives you (<xref ref="fig-fig11-11"/>).</p>
+
+      <figure xml:id="fig-fig11-11">
+        <caption>Results showing the Welch test alongside the default Student's <m>t</m>-test in jamovi</caption>
+        <image source="images/fig11-11.png" width="90%">
+          <description>A jamovi screenshot of a table titled "Independent Samples T-Test" showing results for "Independent Samples T-Test" with rows for Student t-test and Welch t-test. Columns include grade, Statistic, df, p, Mean difference, SE difference, and Effect Size.</description>
+        </image>
+      </figure>
+
+      <p>The interpretation of this output should be fairly obvious. You read the output for the Welch's test in the same way that you would for the Student's test. You've got your descriptive statistics, the test results and some other information. So that's all pretty easy.</p>
+
+      <p>Except, except...our result isn't significant anymore. When we ran the Student test we did get a significant effect, but the Welch test on the same data set is not <m>(t(23.02) = 2.03, p = .054)</m>. What does this mean? Should we panic? Is the sky burning? Probably not. The fact that one test is significant and the other isn't doesn't itself mean very much, especially since I kind of rigged the data so that this would happen. As a general rule, it's not a good idea to go out of your way to try to interpret or explain the difference between a <m>p</m>-value of <m>.049</m> and a <m>p</m>-value of <m>.051</m>. If this sort of thing happens in real life, the <em>difference</em> in these <m>p</m>-values is almost certainly due to chance.</p>
+
+      <p>What does matter is that you take a little bit of care in thinking about what test you use. The Student test and the Welch test have different strengths and weaknesses. If the two populations really do have equal variances, then the Student test is slightly more powerful (lower type II error rate) than the Welch test. However, if they <em>don't</em> have the same variances, then the assumptions of the Student test are violated and you may not be able to trust it; you might end up with a higher type I error rate. So it's a trade off. However, in real life I tend to prefer the Welch test, because almost no-one actually believes that the population variances are identical.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-assumptions-welch">
+      <title>Assumptions of the Welch test</title>
+
+      <p>The assumptions of the Welch test are very similar to those made by the Student <m>t</m>-test (see <xref ref="subsec-assumptions-student-t" text="title"/>), except that the Welch test does not assume homogeneity of variance. This leaves only the assumption of normality and the assumption of independence. The specifics of these assumptions are the same for the Welch test as for the Student test.</p>
+    </subsection>
+  </section>
+
 </chapter>
