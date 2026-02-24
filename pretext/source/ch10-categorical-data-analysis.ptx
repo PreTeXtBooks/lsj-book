@@ -830,5 +830,77 @@ GUARDBOT 1: Choose!</em></p>
     </subsection>
   </section>
 
+  <section xml:id="sec-mcnemar-vs-independence">
+    <title>What's the difference between McNemar and independence?</title>
+
+    <p>Let's go all the way back to the beginning of the chapter and look at the cards data set again. If you recall, the actual experimental design that I described involved people making two choices. Because we have information about the first choice and the second choice that everyone made, we can construct the following contingency table that cross-tabulates the first choice against the second choice (<xref ref="tbl-tab10-14"/>).</p>
+
+    <table xml:id="tbl-tab10-14">
+      <title>Cross-tabulating first against second choice with the <em>Randomness.omv</em> (cards) data</title>
+      <tabular halign="center">
+        <col right="minor"/><col/><col/><col/><col/>
+        <row header="yes" bottom="minor">
+          <cell>choice_1 \ choice_2</cell>
+          <cell>clubs</cell>
+          <cell>diamonds</cell>
+          <cell>hearts</cell>
+          <cell>spades</cell>
+        </row>
+        <row>
+          <cell>clubs</cell>
+          <cell>10</cell>
+          <cell>9</cell>
+          <cell>10</cell>
+          <cell>6</cell>
+        </row>
+        <row>
+          <cell>diamonds</cell>
+          <cell>20</cell>
+          <cell>4</cell>
+          <cell>13</cell>
+          <cell>14</cell>
+        </row>
+        <row>
+          <cell>hearts</cell>
+          <cell>20</cell>
+          <cell>18</cell>
+          <cell>3</cell>
+          <cell>23</cell>
+        </row>
+        <row>
+          <cell>spades</cell>
+          <cell>18</cell>
+          <cell>13</cell>
+          <cell>15</cell>
+          <cell>4</cell>
+        </row>
+      </tabular>
+    </table>
+
+    <p>Suppose I wanted to know whether the choice you make the second time is dependent on the choice you made the first time. This is where a test of independence is useful, and what we're trying to do is see if there's some relationship between the rows and columns of this table. Alternatively, suppose I wanted to know if on average, the frequencies of suit choices were different the second time than the first time. In that situation, what I'm really trying to see is if the row totals are different from the column totals. That's when you use the McNemar test. The different statistics produced by these different analyses are shown in <xref ref="fig-fig10-8"/>. Notice that the results are different! These aren't the same test.</p>
+
+    <figure xml:id="fig-fig10-8">
+      <caption>Independent vs. Paired (McNemar) with the <em>Randomness.omv</em> (cards) data</caption>
+      <image source="images/fig10-8.png" width="90%">
+        <description>The image shows two sections of contingency tables. The first section has a table showing the distribution of choices (clubs, diamonds, hearts, spades) with a chi-squared test result and p-value. The second section has a paired samples contingency table with McNemar test results.</description>
+      </image>
+    </figure>
+  </section>
+
+  <section xml:id="sec-ch10-summary">
+    <title>Summary</title>
+
+    <p>The key ideas discussed in this chapter are:</p>
+
+    <ul>
+      <li><p>The <xref ref="sec-chi-square-goodness-of-fit" text="title"/> is used when you have a table of observed frequencies of different categories, and the null hypothesis gives you a set of "known" probabilities to compare them to.</p></li>
+      <li><p>The <xref ref="sec-chi-square-test-of-independence" text="title"/> is used when you have a contingency table (cross-tabulation) of two categorical variables. The null hypothesis is that there is no relationship or association between the variables.</p></li>
+      <li><p><xref ref="sec-effect-size-chi-square" text="title"/> for a contingency table can be measured in several ways. In particular we noted the Cramér's <m>V</m> statistic.</p></li>
+      <li><p>Both versions of the Pearson test rely on two assumptions: that the expected frequencies are sufficiently large, and that the observations are independent (see <xref ref="sec-assumptions-chi-square" text="title"/>). The <xref ref="sec-fisher-exact-test" text="title"/> can be used when the expected frequencies are small. The <xref ref="sec-mcnemar-test" text="title"/> can be used for some kinds of violations of independence.</p></li>
+    </ul>
+
+    <p>If you're interested in learning more about categorical data analysis a good first choice would be Agresti (1996) which, as the title suggests, provides an <em>Introduction to Categorical Data Analysis</em>. If the introductory book isn't enough for you (or can't solve the problem you're working on) you could consider Agresti (2002), <em>Categorical Data Analysis</em>. The latter is a more advanced text, so it's probably not wise to jump straight from this book to that one.</p>
+  </section>
+
 
 </chapter>
