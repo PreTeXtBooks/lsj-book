@@ -3,6 +3,482 @@
 <chapter xml:id="ch-factorial-anova" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Factorial ANOVA</title>
   <introduction>
-    <p>To be added.</p>
+    <p>Over the course of the last few chapters we have done quite a lot. We have looked at statistical tests you can use when you have one nominal predictor variable with two groups (e.g., the <m>t</m>-test in <xref ref="ch-comparing-two-means"/>) or with three or more groups (<xref ref="ch-anova"/>). <xref ref="ch-correlation-regression"/> introduced a powerful new idea, that is building statistical models with multiple continuous predictor variables used to explain a single outcome variable. For instance, a regression model could be used to predict the number of errors a student makes in a reading comprehension test based on the number of hours they studied for the test and their score on a standardised IQ test.</p>
+
+    <p>The goal in this chapter is to extend the idea of using multiple predictors into the ANOVA framework. For instance, suppose we were interested in using the reading comprehension test to measure student achievements in three different schools, and we suspect that girls and boys are developing at different rates (and so would be expected to have different performance on average). Each student is classified in two different ways: on the basis of their gender and on the basis of their school. What we'd like to do is analyse the reading comprehension scores in terms of both of these grouping variables. The tool for doing so is generically referred to as <term>factorial ANOVA</term>. However, since we have two grouping variables, we sometimes refer to the analysis as a two-way ANOVA, in contrast to the one-way ANOVAs that we ran in <xref ref="ch-anova"/>.</p>
   </introduction>
+
+  <section xml:id="sec-factorial-anova-1">
+    <title>Factorial ANOVA 1: balanced designs, focus on main effects</title>
+
+    <p>When we discussed analysis of variance in <xref ref="ch-anova"/>, we assumed a fairly simple experimental design. Each person is in one of several groups and we want to know whether these groups have different mean scores on some outcome variable. In this section, I'll discuss a broader class of experimental designs known as <term>factorial designs</term>, in which we have more than one grouping variable. I gave one example of how this kind of design might arise above. Another example appears in <xref ref="ch-anova"/> in which we were looking at the effect of different drugs on the mood.gain experienced by each person. In that chapter we did find a significant effect of drug, but at the end of the chapter we also ran an analysis to see if there was an effect of therapy. We didn't find one, but there's something a bit worrying about trying to run two separate analyses trying to predict the same outcome. Maybe there actually is an effect of therapy on mood gain, but we couldn't find it because it was being "hidden" by the effect of drug? In other words, we're going to want to run a single analysis that includes both drug and therapy as predictors. For this analysis each person is cross-classified by the drug they were given (a factor with 3 levels) and what therapy they received (a factor with 2 levels). We refer to this as a <m>3 \times 2</m> factorial design.</p>
+
+    <p>If we cross-tabulate drug by therapy, using the 'Frequencies' -- 'Contingency Tables' analysis in jamovi, we get the table shown in <xref ref="fig-fig14-1"/>.</p>
+
+    <figure xml:id="fig-fig14-1">
+      <caption>jamovi contingency table of drug by therapy</caption>
+      <image source="images/fig14-1.png" width="90%">
+        <description>A jamovi results table titled "Contingency Tables" with data on 'drug' types (anxifree, joyzepam, placebo) and 'therapy' types (CBT, no. therapy, Total). Each drug type has equal counts for both therapy types: 3 CBT, 3 no therapy, totaling to 6 for each drug. Total counts are 9 for CBT, 9 for no therapy, and 18 overall.</description>
+      </image>
+    </figure>
+
+    <p>As you can see, not only do we have participants corresponding to all possible combinations of the two factors, indicating that our design is <term>completely crossed</term>, it turns out that there are an equal number of people in each group. In other words, we have a balanced design. In this section I'll talk about how to analyse data from <term>balanced</term> designs, since this is the simplest case. The story for unbalanced designs is quite tedious, so we'll put it to one side for the moment.</p>
+
+    <subsection xml:id="subsec-what-hypotheses-are-we-testing">
+      <title>What hypotheses are we testing?</title>
+
+      <p>Like one-way ANOVA, factorial ANOVA is a tool for testing certain types of hypotheses about population means. So a sensible place to start would be to be explicit about what our hypotheses actually are. However, before we can even get to that point, it's really useful to have some clean and simple notation to describe the population means. Because of the fact that observations are cross-classified in terms of two different factors, there are quite a lot of different means that one might be interested in. To see this, let's start by thinking about all the different sample means that we can calculate for this kind of design. Firstly, there's the obvious idea that we might be interested in this list of group means (<xref ref="tbl-tab14-1"/>).</p>
+
+      <table xml:id="tbl-tab14-1">
+        <title>Group means for drug and therapy groups in the <em>clinicaltrial.csv</em> data</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell>drug</cell>
+            <cell>therapy</cell>
+            <cell>mood.gain</cell>
+          </row>
+          <row>
+            <cell>placebo</cell>
+            <cell>no.therapy</cell>
+            <cell>0.30</cell>
+          </row>
+          <row>
+            <cell>anxifree</cell>
+            <cell>no.therapy</cell>
+            <cell>0.40</cell>
+          </row>
+          <row>
+            <cell>joyzepam</cell>
+            <cell>no.therapy</cell>
+            <cell>1.47</cell>
+          </row>
+          <row>
+            <cell>placebo</cell>
+            <cell>CBT</cell>
+            <cell>0.60</cell>
+          </row>
+          <row>
+            <cell>anxifree</cell>
+            <cell>CBT</cell>
+            <cell>1.03</cell>
+          </row>
+          <row>
+            <cell>joyzepam</cell>
+            <cell>CBT</cell>
+            <cell>1.50</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>Now, the next Table (<xref ref="tbl-tab14-2"/>) shows a list of the group means for all possible combinations of the two factors (e.g., people who received the placebo and no therapy, people who received the placebo while getting CBT, etc.). It is helpful to organise all these numbers, plus the marginal and grand means, into a single table.</p>
+
+      <table xml:id="tbl-tab14-2">
+        <title>Group and total means for drug and therapy groups in the <em>clinicaltrial.csv</em> data</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell></cell>
+            <cell>no therapy</cell>
+            <cell>CBT</cell>
+            <cell>total</cell>
+          </row>
+          <row>
+            <cell>placebo</cell>
+            <cell>0.30</cell>
+            <cell>0.60</cell>
+            <cell>0.45</cell>
+          </row>
+          <row>
+            <cell>anxifree</cell>
+            <cell>0.40</cell>
+            <cell>1.03</cell>
+            <cell>0.72</cell>
+          </row>
+          <row>
+            <cell>joyzepam</cell>
+            <cell>1.47</cell>
+            <cell>1.50</cell>
+            <cell>1.48</cell>
+          </row>
+          <row>
+            <cell>total</cell>
+            <cell>0.72</cell>
+            <cell>1.04</cell>
+            <cell>0.88</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>Now, each of these different means is of course a sample statistic. It's a quantity that pertains to the specific observations that we've made during our study. What we want to make inferences about are the corresponding population parameters. That is, the true means as they exist within some broader population. Those population means can also be organised into a similar table, but we'll need a little mathematical notation to do so (<xref ref="tbl-tab14-3"/>). As usual, I'll use the symbol <m>\mu</m> to denote a population mean. However, because there are lots of different means, I'll need to use subscripts to distinguish between them.</p>
+
+      <table xml:id="tbl-tab14-3">
+        <title>Notation for population means in a factorial table</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell></cell>
+            <cell>no therapy</cell>
+            <cell>CBT</cell>
+            <cell>total</cell>
+          </row>
+          <row>
+            <cell>placebo</cell>
+            <cell><m>\mu_{11}</m></cell>
+            <cell><m>\mu_{12}</m></cell>
+            <cell></cell>
+          </row>
+          <row>
+            <cell>anxifree</cell>
+            <cell><m>\mu_{21}</m></cell>
+            <cell><m>\mu_{22}</m></cell>
+            <cell></cell>
+          </row>
+          <row>
+            <cell>joyzepam</cell>
+            <cell><m>\mu_{31}</m></cell>
+            <cell><m>\mu_{32}</m></cell>
+            <cell></cell>
+          </row>
+          <row>
+            <cell>total</cell>
+            <cell></cell>
+            <cell></cell>
+            <cell></cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>Here's how the notation works. Our table is defined in terms of two factors. Each row corresponds to a different level of Factor A (in this case drug), and each column corresponds to a different level of Factor B (in this case therapy). If we let <m>R</m> denote the number of rows in the table, and <m>C</m> denote the number of columns, we can refer to this as an <m>R \times C</m> factorial ANOVA. In this case <m>R = 3</m> and <m>C = 2</m>. We'll use lowercase letters to refer to specific rows and columns, so <m>\mu_{rc}</m> refers to the population mean associated with the <m>r</m>-th level of Factor A (i.e. row number <m>r</m>) and the <m>c</m>-th level of Factor B (column number c).<fn>The nice thing about the subscript notation is that it generalises nicely. If our experiment had involved a third factor, then we could just add a third subscript. In principle, the notation extends to as many factors as you might care to include, but in this book we'll rarely consider analyses involving more than two factors, and never more than three.</fn></p>
+
+      <p>Okay, what about the remaining entries? For instance, how should we describe the average mood gain across the entire (hypothetical) population of people who might be given Joyzepam in an experiment like this, regardless of whether they were in CBT? We use the "dot" notation to express this. In the case of Joyzepam, notice that we're talking about the mean associated with the third row in the table. That is, we're averaging across two cell means (i.e., <m>\mu_{31}</m> and <m>\mu_{32}</m>). The result of this averaging is referred to as a marginal mean, and would be denoted <m>\mu_{3.}</m> in this case. The <term>marginal mean</term> for CBT corresponds to the population mean associated with the second column in the table, so we use the notation because it is the mean obtained by averaging (marginalising)<fn>Technically, marginalising isn't quite identical to a regular mean. It's a weighted average where you take into account the frequency of the different events that you're averaging over. However, in a balanced design, all of our cell frequencies are equal by definition so the two are equivalent. We'll discuss unbalanced designs later, and when we do so you'll see that all of our calculations become a real headache. But let's ignore this for now.</fn> over both. So our full table of population means can be written down like in <xref ref="tbl-tab14-4"/>.</p>
+
+      <table xml:id="tbl-tab14-4">
+        <title>Notation for population and total means in a factorial table</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell></cell>
+            <cell>no therapy</cell>
+            <cell>CBT</cell>
+            <cell>total</cell>
+          </row>
+          <row>
+            <cell>placebo</cell>
+            <cell><m>\mu_{11}</m></cell>
+            <cell><m>\mu_{12}</m></cell>
+            <cell><m>\mu_{1.}</m></cell>
+          </row>
+          <row>
+            <cell>anxifree</cell>
+            <cell><m>\mu_{21}</m></cell>
+            <cell><m>\mu_{22}</m></cell>
+            <cell><m>\mu_{2.}</m></cell>
+          </row>
+          <row>
+            <cell>joyzepam</cell>
+            <cell><m>\mu_{31}</m></cell>
+            <cell><m>\mu_{32}</m></cell>
+            <cell><m>\mu_{3.}</m></cell>
+          </row>
+          <row>
+            <cell>total</cell>
+            <cell><m>\mu_{.1}</m></cell>
+            <cell><m>\mu_{.2}</m></cell>
+            <cell><m>\mu_{..}</m></cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>Now that we have this notation, it is straightforward to formulate and express some hypotheses. Let's suppose that the goal is to find out two things. First, does the choice of drug have any effect on mood? And second, does CBT have any effect on mood? These aren't the only hypotheses that we could formulate of course, and we'll see a really important example of a different kind of hypothesis in the section <xref ref="sec-factorial-anova-balanced-interactions"/>, but these are the two simplest hypotheses to test, and so we'll start there. Consider the first test. If the drug has no effect then we would expect all of the row means to be identical, right? So that's our null hypothesis. On the other hand, if the drug does matter then we should expect these row means to be different. Formally, we write down our null and alternative hypotheses in terms of the equality of marginal means:
+      <me>\text{Null hypothesis, } H_0 \text{: row means are the same, i.e., } \mu_{1.} = \mu_{2.} = \mu_{3.}</me>
+      <me>\text{Alternative hypothesis, } H_1 \text{: at least one row mean is different}</me></p>
+
+      <p>It's worth noting that these are exactly the same statistical hypotheses that we formed when we ran a one-way ANOVA on these data in <xref ref="ch-anova"/>. Back then I used the notation <m>\mu_P</m> to refer to the mean mood gain for the placebo group, with <m>\mu_A</m> and <m>\mu_J</m> corresponding to the group means for the two drugs, and the null hypothesis was <m>\mu_P = \mu_A = \mu_J</m>. So we're actually talking about the same hypothesis, it's just that the more complicated ANOVA requires more careful notation due to the presence of multiple grouping variables, so we're now referring to this hypothesis as <m>\mu_{1.} = \mu_{2.} = \mu_{3.}</m>. However, as we'll see shortly, although the hypothesis is identical the test of that hypothesis is subtly different due to the fact that we're now acknowledging the existence of the second grouping variable.</p>
+
+      <p>Speaking of the other grouping variable, you won't be surprised to discover that our second hypothesis test is formulated the same way. However, since we're talking about the psychological therapy rather than drugs our null hypothesis now corresponds to the equality of the column means:
+      <me>\text{Null hypothesis, } H_0 \text{: column means are the same, i.e., } \mu_{.1} = \mu_{.2}</me>
+      <me>\text{Alternative hypothesis, } H_1 \text{: column means are different, i.e., } \mu_{.1} \neq \mu_{.2}</me></p>
+    </subsection>
+
+    <subsection xml:id="subsec-running-analysis-jamovi">
+      <title>Running the analysis in jamovi</title>
+
+      <p>The null and alternative hypotheses that I described in the last section should seem awfully familiar. They're basically the same as the hypotheses that we were testing in our simpler one-way ANOVAs in <xref ref="ch-anova"/>. So you're probably expecting that the hypothesis tests that are used in factorial ANOVA will be essentially the same as the <m>F</m>-test from <xref ref="ch-anova"/>. You're expecting to see references to sums of squares (<m>SS</m>), mean squares (<m>MS</m>), degrees of freedom (<m>df</m>), and finally an <m>F</m>-statistic that we can convert into a <m>p</m>-value, right? Well, you're absolutely and completely right. So much so that I'm going to depart from my usual approach. Throughout this book, I've generally taken the approach of describing the logic (and to an extent the mathematics) that underpins a particular analysis first and only then introducing the analysis in jamovi. This time I'm going to do it the other way around and show you how to do it in jamovi first. The reason for doing this is that I want to highlight the similarities between the simple one-way ANOVA tool that we discussed in <xref ref="ch-anova"/>, and the more complicated approach that we're going to use in this chapter.</p>
+
+      <p>If the data you're trying to analyse correspond to a balanced factorial design then running your analysis of variance is easy. To see how easy it is, let's start by reproducing the original analysis from <xref ref="ch-anova"/>. In case you've forgotten, for that analysis we were using only a single factor (i.e., drug) to predict our outcome variable (i.e., mood.gain), and we got the results shown in <xref ref="fig-fig14-2"/>.</p>
+
+      <figure xml:id="fig-fig14-2">
+        <caption>jamovi one-way ANOVA of mood.gain by drug</caption>
+        <image source="images/fig14-2.png" width="90%">
+          <description>A jamovi results table showing ANOVA results for mood gain with columns for Sum of Squares, df (degrees of freedom), Mean Square, F, p-value, and η² (eta squared). For "drug," Sum of Squares is 3.45, df is 2, Mean Square is 1.73, F is 18.61, p is 0.00009, and η² is 0.71. Residuals have a Sum of Squares of 1.39, df of 15, and Mean Square of 0.09.</description>
+        </image>
+      </figure>
+
+      <p>Now, suppose I'm also curious to find out if therapy has a relationship to mood.gain. In light of what we've seen from our discussion of multiple regression in <xref ref="ch-correlation-regression"/>, you probably won't be surprised that all we have to do is add therapy as a second 'Fixed Factor' in the analysis, see <xref ref="fig-fig14-3"/>.</p>
+
+      <figure xml:id="fig-fig14-3">
+        <caption>jamovi two-way ANOVA of mood.gain by drug and therapy</caption>
+        <image source="images/fig14-3.png" width="90%">
+          <description>A jamovi results table showing ANOVA test results for mood gain with factors "drug," "therapy," and their interaction. Includes Sum of Squares, df, Mean Square, F, p-values, η², η²p, and ω². Key results indicate significant effects for "drug" and "therapy," but not their interaction.</description>
+        </image>
+      </figure>
+
+      <p>This output is pretty simple to read too. The first row of the table reports a between-group sum of squares (<m>SS</m>) value associated with the drug factor, along with a corresponding between-group <m>df</m> value. It also calculates a mean square value (<m>MS</m>), an <m>F</m>-statistic and a <m>p</m>-value. There is also a row corresponding to the therapy factor, a row corresponding to the interaction between the drug factor and the therapy factor (which we won't cover just yet -- more on interactions later), and a row corresponding to the residuals (i.e., the within groups variation).</p>
+
+      <p>Not only are all of the individual quantities pretty familiar, the relationships between these different quantities have remained unchanged, just like we saw with the original one-way ANOVA. Note that the mean square value is calculated by dividing <m>SS</m> by the corresponding <m>df</m>. That is, it's still true that:
+      <me>MS=\frac{SS}{df}</me>
+      regardless of whether we're talking about drug, therapy or the residuals. To see this, let's not worry about how the sums of squares values are calculated. Instead, let's take it on faith that jamovi has calculated the <m>SS</m> values correctly, and try to verify that all the rest of the numbers make sense. First, note that for the drug factor, we divide <m>3.45</m> by <m>2</m> and end up with a mean square value of <m>1.73</m>. For the therapy factor, there's only 1 degree of freedom, so our calculations are even simpler: dividing <m>0.47</m> (the <m>SS</m> value) by 1 gives us an answer of <m>0.47</m> (the <m>MS</m> value).</p>
+
+      <p>Turning to the <m>F</m>-statistics and the <m>p</m>-values, notice that we have one corresponding to the drug factor and one corresponding to the therapy factor. Regardless of which one we're talking about, the <m>F</m>-statistic is calculated by dividing the mean square value associated with the factor by the mean square value associated with the residuals. If we use "A" as shorthand notation to refer to the first factor (Factor A; in this case drug) and "R" as shorthand notation to refer to the residuals, then the <m>F</m>-statistic associated with Factor A is denoted <m>F_A</m>, and is calculated as:
+      <me>F_A=\frac{MS_A}{MS_R}</me>
+      and an equivalent formula exists for Factor B (i.e., therapy). Note that this use of "R" to refer to residuals is a bit awkward, since we also used the letter R to refer to the number of rows in the table, but I'm only going to use "R" to mean residuals in the context of <m>SS_R</m> and <m>MS_R</m>, so hopefully this shouldn't be confusing. Anyway, to apply this formula to the drugs factor we take the mean square of 1.73 and divide it by the residual mean square value of <m>0.05</m>, which gives us an <m>F</m>-statistic of 31.71.<fn>NB There are some rounding errors here, the value of the mean square, to 5 decimal places, is 1.72667. And the value of the residual mean square to 5 decimal places, is 0.05444. jamovi actually uses many more decimal places in its calculations, but the figures shown in the results tables are rounded for clarity. Though you can change the number of decimal places displayed by jamovi if you want.</fn> The corresponding calculation for the therapy variable would be to divide <m>0.47</m> by <m>0.05</m> which gives <m>8.58</m> as the <m>F</m>-statistic. Not surprisingly, of course, these are the same values that jamovi has reported in the ANOVA table above.</p>
+
+      <p>Also in the ANOVA table is the calculation of the <m>p</m>-values. Once again, there is nothing new here. For each of our two factors what we're trying to do is test the null hypothesis that there is no relationship between the factor and the outcome variable (I'll be a bit more precise about this later on). To that end, we've (apparently) followed a similar strategy to what we did in the one-way ANOVA and have calculated an <m>F</m>-statistic for each of these hypotheses. To convert these to <m>p</m>-values, all we need to do is note that the sampling distribution for the <m>F</m>-statistic under the null hypothesis (that the factor in question is irrelevant) is an <m>F</m>-distribution. Also note that the two degrees of freedom values are those corresponding to the factor and those corresponding to the residuals. For the drug factor we're talking about an <m>F</m>-distribution with 2 and 12 degrees of freedom (I'll discuss degrees of freedom in more detail later). In contrast, for the therapy factor the sampling distribution is <m>F</m> with 1 and 12 degrees of freedom.</p>
+
+      <p>At this point, I hope you can see that the ANOVA table for this more complicated factorial analysis should be read in much the same way as the ANOVA table for the simpler one way analysis. In short, it's telling us that the factorial ANOVA for our <m>3 \times 2</m> design found a significant effect of drug (<m>F_{2,12} = 31.71, p &lt; .001</m>) as well as a significant effect of therapy (<m>F_{1,12} = 8.58, p = .013</m>). Or, to use the more technically correct terminology, we would say that there are two <term>main effects</term> of drug and therapy. At the moment, it probably seems a bit redundant to refer to these as "main" effects, but it actually does make sense. Later on, we're going to cover "interactions" between the two factors, and so we generally make a distinction between main effects and interaction effects.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-how-sum-squares-calculated">
+      <title>How are the sum of squares calculated?</title>
+
+      <p>In the previous section I had two goals. Firstly, to show you that the jamovi method needed to do factorial ANOVA is pretty much the same as what we used for a one-way ANOVA. The only difference is the addition of a second factor. Secondly, I wanted to show you what the ANOVA table looks like in this case, so that you can see from the outset that the basic logic and structure behind factorial ANOVA is the same as that which underpins one-way ANOVA. Try to hold onto that feeling. It's genuinely true, insofar as factorial ANOVA is built in more or less the same way as the simpler one-way ANOVA model. It's just that this feeling of familiarity starts to evaporate once you start digging into the details. Traditionally, this comforting sensation is replaced by an urge to hurl abuse at the authors of statistics textbooks.</p>
+
+      <p>Okay, let's start by looking at some of those details. The explanation that I gave in the last section illustrates the fact that the hypothesis tests for the main effects (of drug and therapy in this case) are <m>F</m>-tests, but what it doesn't do is show you how the sum of squares (<m>SS</m>) values are calculated. Nor does it tell you explicitly how to calculate degrees of freedom (<m>df</m> values) though that's a simple thing by comparison. Let's assume for now that we have only two predictor variables, Factor A and Factor B. If we use <m>Y</m> to refer to the outcome variable, then we would use <m>Y_{rci}</m> to refer to the outcome associated with the <m>i</m>-th member of group <m>rc</m> (i.e., level/row <m>r</m> for Factor A and level/column <m>c</m> for Factor B). Thus, if we use <m>\bar{Y}</m> to refer to a sample mean, we can use the same notation as before to refer to group means, marginal means and grand means. That is, <m>\bar{Y}_{rc}</m> is the sample mean associated with the <m>r</m>th level of Factor A and the <m>c</m>th level of Factor B, <m>\bar{Y}_{r.}</m> would be the marginal mean for the <m>r</m>th level of Factor A, <m>\bar{Y}_{.c}</m> would be the marginal mean for the <m>c</m>th level of Factor B, and <m>\bar{Y}_{..}</m> is the grand mean. In other words, our sample means can be organised into the same table as the population means. For our clinical trial data, that table is shown in <xref ref="tbl-tab14-5"/>.</p>
+
+      <table xml:id="tbl-tab14-5">
+        <title>Notation for sample means for the clinical trial data</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell></cell>
+            <cell>no therapy</cell>
+            <cell>CBT</cell>
+            <cell>total</cell>
+          </row>
+          <row>
+            <cell>placebo</cell>
+            <cell><m>\bar{Y}_{11}</m></cell>
+            <cell><m>\bar{Y}_{12}</m></cell>
+            <cell><m>\bar{Y}_{1.}</m></cell>
+          </row>
+          <row>
+            <cell>anxifree</cell>
+            <cell><m>\bar{Y}_{21}</m></cell>
+            <cell><m>\bar{Y}_{22}</m></cell>
+            <cell><m>\bar{Y}_{2.}</m></cell>
+          </row>
+          <row>
+            <cell>joyzepam</cell>
+            <cell><m>\bar{Y}_{31}</m></cell>
+            <cell><m>\bar{Y}_{32}</m></cell>
+            <cell><m>\bar{Y}_{3.}</m></cell>
+          </row>
+          <row>
+            <cell>total</cell>
+            <cell><m>\bar{Y}_{.1}</m></cell>
+            <cell><m>\bar{Y}_{.2}</m></cell>
+            <cell><m>\bar{Y}_{..}</m></cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>And if we look at the sample means that I showed earlier, we have <m>\bar{Y}_{11} = 0.30</m>, <m>\bar{Y}_{12} = 0.60</m> etc. In our clinical trial example, the drugs factor has 3 levels and the therapy factor has 2 levels, and so what we're trying to run is a <m>3 \times 2</m> factorial ANOVA. However, we'll be a little more general and say that Factor A (the row factor) has <m>r</m> levels and Factor B (the column factor) has <m>c</m> levels, and so what we're running here is an <m>r \times c</m> factorial ANOVA.</p>
+
+      <p>Additional technical detail.<fn>Now that we've got our notation straight, we can compute the sum of squares values for each of the two factors in a relatively familiar way. For Factor A, our between group sum of squares is calculated by assessing the extent to which the (row) marginal means <m>\bar{Y}_{1.}, \bar{Y}_{2.}</m> etc, are different from the grand mean <m>\bar{Y}_{..}</m>. We do this in the same way that we did for one-way ANOVA: calculate the sum of squared difference between the <m>\bar{Y}_{i.}</m> values and the <m>\bar{Y}_{..}</m> values. Specifically, if there are <m>N</m> people in each group, then we calculate this: <me>SS_A=(N \times C)\sum_{r=1}^R (\bar{Y}_{r.}-\bar{Y}_{..})^2</me> As with one-way ANOVA, the most interesting part of this formula is the bit, which corresponds to the squared deviation associated with level <m>r</m>. All that this formula does is calculate this squared deviation for all <m>R</m> levels of the factor, add them up, and then multiply the result by <m>N \times C</m>. The reason for this last part is that there are multiple cells in our design that have level <m>r</m> on Factor A. In fact, there are <m>C</m> of them, one corresponding to each possible level of Factor B. For instance, in our example there are two different cells in the design corresponding to the anxifree drug: one for people with no.therapy and one for the CBT group. Not only that, within each of these cells there are <m>N</m> observations. So, if we want to convert our <m>SS</m> value into a quantity that calculates the between groups sum of squares on a "per observation" basis, we have to multiply by <m>N \times C</m>. The formula for Factor B is of course the same thing, just with some subscripts shuffled around: <me>SS_B=(N \times R)\sum_{c=1}^C (\bar{Y}_{.c}-\bar{Y}_{..})^2</me></fn></p>
+    </subsection>
+
+    <subsection xml:id="subsec-degrees-of-freedom-factorial">
+      <title>What are our degrees of freedom?</title>
+
+      <p>The degrees of freedom are calculated in much the same way as for one-way ANOVA. For any given factor, the degrees of freedom is equal to the number of levels minus 1 (i.e., <m>R - 1</m> for the row variable Factor A, and <m>C - 1</m> for the column variable Factor B). So, for the drugs factor we obtain <m>df = 2</m>, and for the therapy factor we obtain <m>df = 1</m>. Later on, when we discuss the interpretation of ANOVA as a regression model (see <xref ref="sec-anova-as-linear-model"/>), I'll give a clearer statement of how we arrive at this number. But for the moment we can use the simple definition of degrees of freedom, namely that the degrees of freedom equals the number of quantities that are observed, minus the number of constraints. So, for the drugs factor, we observe 3 separate group means, but these are constrained by 1 grand mean, and therefore the degrees of freedom is 2.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-factorial-vs-one-way">
+      <title>Factorial ANOVA versus one-way ANOVAs</title>
+
+      <p>Now that we've seen how a factorial ANOVA works, it's worth taking a moment to compare it to the results of the one way analyses, because this will give us a really good sense of why it's a good idea to run the factorial ANOVA. In <xref ref="ch-anova"/> I ran a one-way ANOVA that looked to see if there are any differences between drugs, and a second one-way ANOVA to see if there were any differences between therapies. As we saw in <xref ref="subsec-what-hypotheses-are-we-testing"/>, the null and alternative hypotheses tested by the one-way ANOVAs are in fact identical to the hypotheses tested by the factorial ANOVA. Looking even more carefully at the ANOVA tables, we can see that the sum of squares associated with the factors are identical in the two different analyses (3.45 for drug and 0.92 for therapy), as are the degrees of freedom (2 for drug, 1 for therapy). But they don't give the same answers! Most notably, when we ran the one-way ANOVA for therapy in <xref ref="ch-anova"/> we didn't find a significant effect (the <m>p</m>-value was .21). However, when we look at the main effect of therapy within the context of the two-way ANOVA, we do get a significant effect (<m>p</m> = .019). The two analyses are clearly not the same.</p>
+
+      <p>Why does that happen? The answer lies in understanding how the residuals are calculated. Recall that the whole idea behind an <m>F</m>-test is to compare the variability that can be attributed to a particular factor with the variability that cannot be accounted for (the residuals). If you run a one-way ANOVA for therapy, and therefore ignore the effect of drug, the ANOVA will end up dumping all of the drug-induced variability into the residuals! This has the effect of making the data look more noisy than they really are, and the effect of therapy which is correctly found to be significant in the two-way ANOVA now becomes non-significant. If we ignore something that actually matters (e.g., drug) when trying to assess the contribution of something else (e.g., therapy) then our analysis will be distorted. Of course, it's perfectly okay to ignore variables that are genuinely irrelevant to the phenomenon of interest. If we had recorded the colour of the walls, and that turned out to be a non-significant factor in a three-way ANOVA, it would be perfectly okay to disregard it and just report the simpler two-way ANOVA that doesn't include this irrelevant factor. What you shouldn't do is drop variables that actually make a difference!</p>
+    </subsection>
+
+    <subsection xml:id="subsec-outcomes-analysis-captures">
+      <title>What kinds of outcomes does this analysis capture?</title>
+
+      <p>The ANOVA model that we've been talking about so far covers a range of different patterns that we might observe in our data. For instance, in a two-way ANOVA design there are four possibilities: (a) only Factor A matters, (b) only Factor B matters, (c) both A and B matter, and (d) neither A nor B matters. An example of each of these four possibilities is plotted in <xref ref="fig-fig14-4"/>.</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-factorial-anova-balanced-interactions">
+    <title>Factorial ANOVA 2: balanced designs, interpreting interactions</title>
+
+    <p>The four patterns of data shown in <xref ref="fig-fig14-4"/> are all quite realistic. There are many data sets that produce exactly those patterns. However, they are not the whole story and the ANOVA model that we have been talking about up to this point is not sufficient to fully account for a table of group means. Why not? Well, so far we have the ability to talk about the idea that drugs can influence mood, and therapy can influence mood, but no way of talking about the possibility of an <term>interaction</term> between the two.</p>
+
+    <p>An interaction between A and B is said to occur whenever the effect of Factor <m>A</m> is <em>different</em>, depending on which level of Factor <m>B</m> we're talking about. Several examples of an interaction effect with the context of a <m>2 \times 2</m> ANOVA are shown in <xref ref="fig-fig14-5"/>.</p>
+
+    <figure xml:id="fig-fig14-4">
+      <caption>The four different outcomes for a <m>2 \times 2</m> ANOVA when no interactions are present. In panel (a) we see a main effect of Factor A and no effect of Factor B. Panel (b) shows a main effect of Factor B but no effect of Factor A. Panel (c) shows main effects of both Factor A and Factor B. Finally, panel (d) shows no effect of either factor.</caption>
+      <image source="images/fig-fig14-4-1.png" width="90%">
+        <description>Four graphs showing the interaction of two factors (A and B) on group means. Graph (a): Factor A has an effect, B does not. Graph (b): Factor B has an effect, A does not. Graph (c): Both A and B have an effect. Graph (d): Neither A nor B have an effect.</description>
+      </image>
+    </figure>
+
+    <figure xml:id="fig-fig14-5">
+      <caption>Qualitatively different interactions for a <m>2 \times 2</m> ANOVA.</caption>
+      <image source="images/fig-fig14-5-1.png" width="90%">
+        <description>Four line graphs (a-d) depict interactions between two factors (A and B) at two levels (1 and 2). The y-axis in each graph is labeled "Group mean" and the x-axis "Factor B." Graph (a) shows a crossover interaction. Graphs (b), (c), and (d) highlight different effects for one level of Factor A or B, or one differing cell.</description>
+      </image>
+    </figure>
+
+    <p>To give a more concrete example, suppose that the operation of Anxifree and Joyzepam is governed by quite different physiological mechanisms. One consequence of this is that while Joyzepam has more or less the same effect on mood regardless of whether one is in therapy, Anxifree is actually much more effective when administered in conjunction with CBT. The ANOVA that we developed in the previous section does not capture this idea. To get some idea of whether an interaction is actually happening it helps to plot the various group means. In jamovi this is done via the ANOVA 'Estimated Marginal Means' option -- just move drug and therapy across into the 'Marginal Means' box under 'Term 1'. This should look something like <xref ref="fig-fig14-6"/>.</p>
+
+    <figure xml:id="fig-fig14-6">
+      <caption>jamovi screen showing how to generate a descriptive interaction plot in ANOVA using the clinical trial data</caption>
+      <image source="images/fig14-6.png" width="90%">
+        <description>A jamovi screenshot of the interface for analyzing clinical trial data is shown. The screen features ANOVA outputs, with a graph displaying estimated marginal means of mood gain across different drug therapies. Therapy options are CBT and no therapy, with axes for mood gain and types of drugs.</description>
+      </image>
+    </figure>
+
+    <subsection xml:id="subsec-what-is-interaction-effect">
+      <title>What exactly is an interaction effect?</title>
+
+      <p>The key idea that we're going to introduce in this section is that of an interaction effect. In the ANOVA model we have looked at so far there are only two factors involved in our model (i.e., drug and therapy). But when we add an interaction we add a new component to the model: the combination of drug and therapy. Intuitively, the idea behind an interaction effect is fairly simple. It just means that the effect of Factor A is different, depending on which level of Factor B we're talking about. But what does that actually mean in terms of our data? The plot in <xref ref="fig-fig14-5"/> depicts several different patterns that, although quite different to each other, would all count as an interaction effect. So it's not entirely straightforward to translate this qualitative idea into something mathematical that a statistician can work with.</p>
+
+      <p>Additional technical detail.<fn>As a consequence, the way that the idea of an interaction effect is formalised in terms of null and alternative hypotheses is slightly difficult, and I'm guessing that a lot of readers of this book probably won't be all that interested. Even so, I'll try to give the basic idea here. To start with, we need to be a little more explicit about our main effects. Consider the main effect of Factor A (drug in our running example). We originally formulated this in terms of the null hypothesis that the two marginal means <m>\mu_{r.}</m> are all equal to each other. Obviously, if all of these are equal to each other, then they must also be equal to the grand mean <m>\mu_{..}</m> as well, right? So what we can do is define the effect of Factor A at level <m>r</m> to be equal to the difference between the marginal mean <m>\mu_{r.}</m> and the grand mean <m>\mu_{..}</m>. Let's denote this effect by <m>\alpha_r</m>, and note that: <me>\alpha_r=\mu_{r.}-\mu_{..}</me> Now, by definition all of the <m>\alpha_r</m> values must sum to zero, for the same reason that the average of the marginal means <m>\mu_c</m> must be the grand mean <m>\mu_{..}</m>. We can similarly define the effect of Factor B at level <m>i</m> to be the difference between the column marginal mean <m>\mu_{.c}</m> and the grand mean <m>\mu_{..}</m>: <me>\beta_c=\mu_{.c}-\mu_{..}</me> and once again, these <m>\beta_c</m> values must sum to zero. The reason that statisticians sometimes like to talk about the main effects in terms of these <m>\alpha_r</m> and <m>\beta_c</m> values is that it allows them to be precise about what it means to say that there is no interaction effect. If there is no interaction at all, then these <m>\alpha_r</m> and <m>\beta_c</m> values will perfectly describe the group means <m>\mu_{rc}</m>. Specifically, it means that: <me>\mu_{rc}=\mu_{..}+\alpha_{r}+\beta_{c}</me> That is, there's nothing special about the group means that you couldn't predict perfectly by knowing all the marginal means. And that's our null hypothesis, right there. The alternative hypothesis is that: <me>\mu_{rc} \neq \mu_{..}+\alpha_{r}+\beta_{c}</me> for at least one group <m>rc</m> in our table.</fn></p>
+
+      <p>Our main concern relates to the fact that the two lines aren't parallel. The effect of CBT (difference between solid line and dotted line) when the drug is Joyzepam (right side) appears to be near zero, even smaller than the effect of CBT when a placebo is used (left side). However, when Anxifree is administered, the effect of CBT is larger than the placebo (middle). Is this effect real, or is this just random variation due to chance? Our original ANOVA cannot answer this question, because we make no allowances for the idea that interactions even exist! In this section, we'll fix this problem.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-df-for-interaction">
+      <title>Degrees of freedom for the interaction</title>
+
+      <p>Calculating the degrees of freedom for the interaction is slightly trickier than the corresponding calculation for the main effects. Let's start by thinking about the ANOVA model as a whole. Once we include interaction effects in the model we're allowing every single group to have a unique mean, <m>\mu_{rc}</m>. For an <m>R \times C</m> factorial ANOVA, this means that there are <m>R \times C</m> quantities of interest in the model and only the one constraint: all of the group means need to average out to the grand mean. So the model as a whole needs to have <m>(R \times C)-1</m> degrees of freedom. But the main effect of Factor A has <m>R-1</m> degrees of freedom, and the main effect of Factor B has <m>C-1</m> degrees of freedom. Therefore the degrees of freedom for the interaction is:
+      <md>
+        <mrow>df_{A:B} \amp = (R \times C - 1) - (R - 1) - (C - 1)</mrow>
+        <mrow>\amp = RC - R - C + 1</mrow>
+        <mrow>\amp = (R-1)(C-1)</mrow>
+      </md>
+      which is just the product of the degrees of freedom associated with the row factor and the column factor.</p>
+
+      <p>What about the residual degrees of freedom? Because we've added interaction terms which absorb some degrees of freedom, there are fewer residual degrees of freedom left over. Specifically, note that if the model with interaction has a total of <m>(R \times C) - 1</m>, and there are <m>N</m> observations in your data set that are constrained to satisfy 1 grand mean, your residual degrees of freedom now become <m>N - (R \times C) - 1 + 1</m>, or just <m>N - (R \times C)</m>.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-running-anova-jamovi">
+      <title>Running the ANOVA in jamovi</title>
+
+      <p>Adding interaction terms to the ANOVA model in jamovi is straightforward. In fact it is more than straightforward because it is the default option for ANOVA. This means that when you specify an ANOVA with two factors, e.g., drug and therapy then the interaction component -- drug <m>\times</m> therapy -- is added automatically to the model.<fn>You may have spotted this already when looking at the main effects analysis in jamovi that we described earlier. For the purpose of the explanation in this book I removed the interaction component from the earlier model to keep things clean and simple.</fn> When we run the ANOVA with the interaction term included, then we get the results shown in <xref ref="fig-fig14-7"/>.</p>
+
+      <figure xml:id="fig-fig14-7">
+        <caption>Results for the full factorial model, including the interaction component drug <m>\times</m> therapy</caption>
+        <image source="images/fig14-7.png" width="90%">
+          <description>A jamovi table summarizing the results of an ANOVA test on mood gain. It shows Sum of Squares, degrees of freedom (df), Mean Square, F-value, p-value, η², η²p, and ω² for drug, therapy, their interaction, and residuals.</description>
+        </image>
+      </figure>
+
+      <p>As it turns out, while we do have a significant main effect of drug (<m>F_{2,12} = 31.7, p &lt; .001</m>) and therapy type (<m>F_{1,12} = 8.6, p = .013</m>), there is no significant interaction between the two (<m>F_{2,12} = 2.5, p = 0.125</m>).</p>
+    </subsection>
+
+    <subsection xml:id="subsec-interpreting-results">
+      <title>Interpreting the results</title>
+
+      <p>There's a couple of very important things to consider when interpreting the results of factorial ANOVA. First, there's the same issue that we had with one-way ANOVA, which is that if you obtain a significant main effect of (say) drug, it doesn't tell you anything about which drugs are different to one another. To find that out, you need to run additional analyses. We'll talk about some analyses that you can run in later sections: <xref ref="sec-different-ways-to-specify-contrasts"/> and <xref ref="sec-post-hoc-tests"/>. The same is true for interaction effects. Knowing that there's a significant interaction doesn't tell you anything about what kind of interaction exists. Again, you'll need to run additional analyses.</p>
+
+      <p>Secondly, there's a very peculiar interpretation issue that arises when you obtain a significant interaction effect but no corresponding main effect. This happens sometimes. For instance, in the crossover interaction shown in <xref ref="fig-fig14-5"/>(a), this is exactly what you'd find. In this case, neither of the main effects would be significant, but the interaction effect would be. This is a difficult situation to interpret, and people often get a bit confused about it. The general advice that statisticians like to give in this situation is that you shouldn't pay much attention to the main effects when an interaction is present. The reason they say this is that, although the tests of the main effects are perfectly valid from a mathematical point of view, when there is a significant interaction effect the main effects rarely test interesting hypotheses. Recall from <xref ref="subsec-what-hypotheses-are-we-testing"/> that the null hypothesis for a main effect is that the marginal means are equal to each other, and that a marginal mean is formed by averaging across several different groups. But if you have a significant interaction effect then you know that the groups that comprise the marginal mean aren't homogeneous, so it's not really obvious why you would even care about those marginal means.</p>
+
+      <p>Here's what I mean. Again, let's stick with a clinical example. Suppose that we had a <m>2 \times 2</m> design comparing two different treatments for phobias (e.g., systematic desensitisation vs flooding), and two different anxiety reducing drugs (e.g., Anxifree vs Joyzepam). Now, suppose what we found was that Anxifree had no effect when desensitisation was the treatment, and Joyzepam had no effect when flooding was the treatment. But both were pretty effective for the other treatment. This is a classic crossover interaction, and what we'd find when running the ANOVA is that there is no main effect of drug, but a significant interaction. Now, what does it actually mean to say that there's no main effect? Well, it means that if we average over the two different psychological treatments, then the average effect of Anxifree and Joyzepam is the same. But why would anyone care about that? When treating someone for phobias it is never the case that a person can be treated using an "average" of flooding and desensitisation. That doesn't make a lot of sense. You either get one or the other. For one treatment one drug is effective, and for the other treatment the other drug is effective. The interaction is the important thing and the main effect is kind of irrelevant.</p>
+
+      <p>This sort of thing happens a lot. The main effect are tests of marginal means, and when an interaction is present we often find ourselves not being terribly interested in marginal means because they imply averaging over things that the interaction tells us shouldn't be averaged! Of course, it's not always the case that a main effect is meaningless when an interaction is present. Often you can get a big main effect and a very small interaction, in which case you can still say things like "drug A is generally more effective than drug B" (because there was a big effect of drug), but you'd need to modify it a bit by adding that "the difference in effectiveness was different for different psychological treatments". In any case, the main point here is that whenever you get a significant interaction you should stop and think about what the main effect actually means in this context. Don't automatically assume that the main effect is interesting.</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-effect-size-factorial">
+    <title>Effect size</title>
+
+    <p>The effect size calculation for a factorial ANOVA is pretty similar to those used in one-way ANOVA. Specifically, we can use <m>\eta^2</m> (eta-squared) as a simple way to measure how big the overall effect is for any particular term. As before, <m>\eta^2</m> is defined by dividing the sum of squares associated with that term by the total sum of squares. For instance, to determine the size of the main effect of Factor A, we would use the following formula:
+    <me>\eta_A^2=\frac{SS_A}{SS_T}</me></p>
+
+    <p>As before, this can be interpreted in much the same way as <m>R^2</m> in regression.<fn>This chapter seems to be setting a new record for the number of different things that the letter R can stand for. So far we have R referring to the software package, the number of rows in our table of means, the residuals in the model, and now the correlation coefficient in a regression. Sorry. We clearly don't have enough letters in the alphabet. However, I've tried pretty hard to be clear on which thing R is referring to in each case.</fn> It tells you the proportion of variance in the outcome variable that can be accounted for by the main effect of Factor A. It is therefore a number that ranges from 0 (no effect at all) to 1 (accounts for all of the variability in the outcome). Moreover, the sum of all the <m>\eta^2</m> values, taken across all the terms in the model, will sum to the the total <m>R^2</m> for the ANOVA model. If, for instance, the ANOVA model fits perfectly (i.e., there is no within groups variability at all!), the <m>\eta^2</m> values will sum to 1. Of course, that rarely if ever happens in real life.</p>
+
+    <p>However, when doing a factorial ANOVA, there is a second measure of effect size that people like to report, known as partial <m>\eta^2</m>. The idea behind partial <m>\eta^2</m> (which is sometimes denoted <m>p^{\eta^2}</m> or <m>\eta_p^2</m>) is that, when measuring the effect size for a particular term (say, the main effect of Factor A), you want to deliberately ignore the other effects in the model (e.g., the main effect of Factor B). That is, you would pretend that the effect of all these other terms is zero, and then calculate what the <m>\eta^2</m> value would have been. This is actually pretty easy to calculate. All you have to do is remove the sum of squares associated with the other terms from the denominator. In other words, if you want the partial <m>\eta^2</m> for the main effect of Factor A, the denominator is just the sum of the <m>SS</m> values for Factor A and the residuals:
+    <me>\text{partial }\eta_A^2= \frac{SS_A}{SS_A+SS_R}</me></p>
+
+    <p>This will always give you a larger number than <m>\eta^2</m>, which the cynic in me suspects accounts for the popularity of partial <m>\eta^2</m>. And once again you get a number between 0 and 1, where 0 represents no effect. However, it's slightly trickier to interpret what a large partial <m>\eta^2</m> value means. In particular, you can't actually compare the partial <m>\eta^2</m> values across terms! Suppose, for instance, there is no within groups variability at all: if so, <m>SS_R = 0</m>. What that means is that every term has a partial <m>\eta^2</m> value of 1. But that doesn't mean that all terms in your model are equally important, or indeed that they are equally large. All it mean is that all terms in your model have effect sizes that are large relative to the residual variation. It is not comparable across terms.</p>
+
+    <p>To see what I mean by this, it's useful to see a concrete example. First, let's have a look at the effect sizes for the original ANOVA (<xref ref="tbl-tab14-6"/>) without the interaction term from <xref ref="fig-fig14-3"/>.</p>
+
+    <table xml:id="tbl-tab14-6">
+      <title>Effect sizes when the interaction term <em>is not</em> included in the ANOVA model</title>
+      <tabular halign="center">
+        <row header="yes">
+          <cell></cell>
+          <cell><m>\eta^2</m></cell>
+          <cell>partial <m>\eta^2</m></cell>
+        </row>
+        <row>
+          <cell>drug</cell>
+          <cell>0.71</cell>
+          <cell>0.79</cell>
+        </row>
+        <row>
+          <cell>therapy</cell>
+          <cell>0.10</cell>
+          <cell>0.34</cell>
+        </row>
+      </tabular>
+    </table>
+
+    <p>Looking at the <m>\eta^2</m> values first, we see that drug accounts for 71% of the variance (i.e. <m>\eta^2 = 0.71</m>) in mood.gain, whereas therapy only accounts for 10%. This leaves a total of 19% of the variation unaccounted for (i.e., the residuals constitute 19% of the variation in the outcome). Overall, this implies that we have a very large effect<fn>Implausibly large, I would think. The artificiality of this data set is really starting to show!</fn> of drug and a modest effect of therapy.</p>
+
+    <p>Now let's look at the partial <m>\eta^2</m> values, shown in <xref ref="fig-fig14-3"/>. Because the effect of therapy isn't all that large, controlling for it doesn't make much of a difference, so the partial <m>\eta^2</m> for drug doesn't increase very much, and we obtain a value of <m>p^{\eta^2} = 0.79</m>. In contrast, because the effect of drug was very large, controlling for it makes a big difference, and so when we calculate the partial <m>\eta^2</m> for therapy you can see that it rises to <m>p^{\eta^2} = 0.34</m>. The question that we have to ask ourselves is, what do these partial <m>\eta^2</m> values actually mean? The way I generally interpret the partial <m>\eta^2</m> for the main effect of Factor A is to interpret it as a statement about a hypothetical experiment in which only Factor A was being varied. So, even though in this experiment we varied both A and B, we can easily imagine an experiment in which only Factor A was varied, and the partial <m>\eta^2</m> statistic tells you how much of the variance in the outcome variable you would expect to see accounted for in that experiment. However, it should be noted that this interpretation, like many things associated with main effects, doesn't make a lot of sense when there is a large and significant interaction effect.</p>
+
+    <p>Speaking of interaction effects, <xref ref="tbl-tab14-7"/> shows what we get when we calculate the effect sizes for the model that includes the interaction term, as in <xref ref="fig-fig14-7"/>. As you can see, the <m>\eta^2</m> values for the main effects don't change, but the partial <m>\eta^2</m> values do:</p>
+
+    <table xml:id="tbl-tab14-7">
+      <title>Effect sizes when the interaction term <em>is</em> included in the ANOVA model</title>
+      <tabular halign="center">
+        <row header="yes">
+          <cell></cell>
+          <cell><m>\eta^2</m></cell>
+          <cell>partial <m>\eta^2</m></cell>
+        </row>
+        <row>
+          <cell>drug</cell>
+          <cell>0.71</cell>
+          <cell>0.84</cell>
+        </row>
+        <row>
+          <cell>therapy</cell>
+          <cell>0.10</cell>
+          <cell>0.42</cell>
+        </row>
+        <row>
+          <cell>drug*therapy</cell>
+          <cell>0.06</cell>
+          <cell>0.29</cell>
+        </row>
+      </tabular>
+    </table>
+
+    <subsection xml:id="subsec-estimated-group-means">
+      <title>Estimated group means</title>
+
+      <p>In many situations you will want to report estimates of all the group means from the results of your ANOVA, as well as confidence intervals. You can use the 'Estimated Marginal Means' option in the jamovi ANOVA analysis to do this, as in <xref ref="fig-fig14-8"/>. If the ANOVA that you have run is a saturated model (i.e., contains all possible main effects and all possible interaction effects) then the estimates of the group means are actually identical to the sample means, though the confidence intervals will use a pooled estimate of the standard errors rather than use a separate one for each group.</p>
+
+      <figure xml:id="fig-fig14-8">
+        <caption>jamovi screenshot showing the marginal means for the saturated model, i.e. including the interaction component, with the clinical trial data set</caption>
+        <image source="images/fig14-8.png" width="90%">
+          <description>A jamovi screenshot of a clinical trial analysis software interface displaying an ANOVA analysis. The screen shows sections for Assumptions Checks, Estimates, and Estimated Marginal Means. Data tables illustrate the ANOVA results and Estimated Marginal Means for drug therapy.</description>
+        </image>
+      </figure>
+
+      <p>In the output we see that the estimated mean mood gain for the placebo group with no therapy was <m>0.300</m>, with a <m>95\%</m> confidence interval from <m>0.006</m> to <m>0.594</m>. Note that these are not the same confidence intervals that you would get if you calculated them separately for each group, because of the fact that the ANOVA model assumes homogeneity of variance and therefore uses a pooled estimate of the standard deviation.</p>
+
+      <p>When the model doesn't contain the interaction term then the estimated group means will differ from the sample means. Instead of reporting the sample mean, jamovi calculates the value of the group means that would be expected on the basis of the marginal means (i.e., assuming no interaction).</p>
+
+      <p>Using the notation we developed earlier, the estimate for <m>\mu_{rc}</m>, the mean for level <m>r</m> on the (row) Factor A and level <m>c</m> on the (column) Factor B would be <m>\mu_{..} + \alpha_r + \beta_c</m>. If there are genuinely no interactions between the two factors, this is actually a better estimate of the population mean than the raw sample mean. Removing the interaction term from the model, via the 'Model' options in the jamovi ANOVA analysis, provides the marginal means for the analysis shown in <xref ref="fig-fig14-9"/>.</p>
+
+      <figure xml:id="fig-fig14-9">
+        <caption>jamovi screenshot showing the marginal means for the unsaturated model, i.e. without the interaction component, with the clinical trial data set</caption>
+        <image source="images/fig14-9.png" width="90%">
+          <description>ANOVA table and Estimated Marginal Means table for mood gain analysis. The ANOVA table shows a significant drug effect with F(3,14) = 7.08, p = 0.01866. The Estimated Marginal Means table lists means and confidence intervals for interactions between therapy and drug.</description>
+        </image>
+      </figure>
+    </subsection>
+  </section>
+
 </chapter>
