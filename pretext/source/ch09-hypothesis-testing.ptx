@@ -229,4 +229,137 @@
     </subsection>
   </section>
 
+  <section xml:id="sec-The-p-value-of-a-test">
+    <title>The <m>p</m>-value of a test</title>
+
+    <p>In one sense, our hypothesis test is complete. We've constructed a test statistic, figured out its sampling distribution if the null hypothesis is true, and then constructed the critical region for the test. Nevertheless, I've actually omitted the most important number of all, <term>the <m>p</m>-value</term>. It is to this topic that we now turn. There are two somewhat different ways of interpreting a <m>p</m>-value, one proposed by Sir Ronald Fisher and the other by Jerzy Neyman. Both versions are legitimate, though they reflect very different ways of thinking about hypothesis tests. Most introductory textbooks tend to give Fisher's version only, but I think that's a bit of a shame. To my mind, Neyman's version is cleaner and actually better reflects the logic of the null hypothesis test. You might disagree though, so I've included both. I'll start with Neyman's version.</p>
+
+    <subsection xml:id="subsec-a-softer-view-of-decision-making">
+      <title>A softer view of decision making</title>
+
+      <p>One problem with the hypothesis testing procedure that I've described is that it makes no distinction at all between a result that is "barely significant" and those that are "highly significant". For instance, in my ESP study the data I obtained only just fell inside the critical region, so I did get a significant effect but it was a pretty near thing. In contrast, suppose that I'd run a study in which <m>X = 97</m> out of my <m>N = 100</m> participants got the answer right. This would obviously be significant too but by a much larger margin, such that there's really no ambiguity about this at all. The procedure that I have already described makes no distinction between the two. If I adopt the standard convention of allowing <m>\alpha = .05</m> as my acceptable type I error rate, then both of these are significant results.</p>
+
+      <p>This is where the <m>p</m>-value comes in handy. To understand how it works, let's suppose that we ran lots of hypothesis tests on the same data set, but with a different value of <m>\alpha</m> in each case. When we do that for my original ESP data what we'd get is something like <xref ref="tbl-tab9-4"/>.</p>
+
+      <table xml:id="tbl-tab9-4">
+        <title>Rejecting the null hypothesis at different levels of alpha</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell>Value of <m>\alpha</m></cell>
+            <cell>0.05</cell>
+            <cell>0.04</cell>
+            <cell>0.03</cell>
+            <cell>0.02</cell>
+            <cell>0.01</cell>
+          </row>
+          <row>
+            <cell>Reject the null?</cell>
+            <cell>Yes</cell>
+            <cell>Yes</cell>
+            <cell>Yes</cell>
+            <cell>No</cell>
+            <cell>No</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>When we test the ESP data (<m>X = 62</m> successes out of <m>N = 100</m> observations), using <m>\alpha</m> levels of <m>.03</m> and above, we'd always find ourselves rejecting the null hypothesis. For <m>\alpha</m> levels of <m>.02</m> and below we always end up retaining the null hypothesis. Therefore, somewhere between <m>.02</m> and <m>.03</m> there must be a smallest value of <m>\alpha</m> that would allow us to reject the null hypothesis for this data. This is the <m>p</m>-value. As it turns out the ESP data has <m>p = .021</m>. In short, <m>p</m> is defined to be the smallest type I error rate (<m>\alpha</m>) that you have to be willing to tolerate if you want to reject the null hypothesis.</p>
+
+      <p>If it turns out that <m>p</m> describes an error rate that you find intolerable, then you must retain the null. If you're comfortable with an error rate equal to <m>p</m>, then it's okay to reject the null hypothesis in favour of your preferred alternative.</p>
+
+      <p>In effect, <m>p</m> is a summary of all the possible hypothesis tests that you could have run, taken across all possible <m>\alpha</m> values. And as a consequence it has the effect of "softening" our decision process. For those tests in which <m>p \leq \alpha</m> you would have rejected the null hypothesis, whereas for those tests in which <m>p > \alpha</m> you would have retained the null. In my ESP study I obtained <m>X = 62</m> and as a consequence I've ended up with <m>p = .021</m>. So the error rate I have to tolerate is <m>2.1\%</m>. In contrast, suppose my experiment had yielded <m>X = 97</m>. What happens to my <m>p</m>-value now? This time it's shrunk to <m>p = 1.36 \times 10^{-25}</m>, which is a tiny, tiny<fn>That's <m>p = .000000000000000000000000136</m> for folks that don't like scientific notation!</fn> type I error rate. For this second case I would be able to reject the null hypothesis with a lot more confidence, because I only have to be "willing" to tolerate a type I error rate of about <m>1</m> in <m>10</m> trillion trillion in order to justify my decision to reject.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-the-probability-of-extreme-data">
+      <title>The probability of extreme data</title>
+
+      <p>The second definition of the <m>p</m>-value comes from Sir Ronald Fisher, and it's actually this one that you tend to see in most introductory statistics textbooks. Notice how, when I constructed the critical region, it corresponded to the tails (i.e., extreme values) of the sampling distribution? That's not a coincidence, almost all "good" tests have this characteristic (good in the sense of minimising our type II error rate, <m>\beta</m>). The reason for that is that a good critical region almost always corresponds to those values of the test statistic that are least likely to be observed if the null hypothesis is true. If this rule is true, then we can define the <m>p</m>-value as the probability that we would have observed a test statistic that is at least as extreme as the one we actually did get. In other words, if the data are extremely implausible according to the null hypothesis, then the null hypothesis is probably wrong.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-a-common-mistake">
+      <title>A common mistake</title>
+
+      <p>Okay, so you can see that there are two rather different but legitimate ways to interpret the <m>p</m>-value, one based on Neyman's approach to hypothesis testing and the other based on Fisher's. Unfortunately, there is a third explanation that people sometimes give, especially when they're first learning statistics, and it is <em>absolutely and completely wrong</em>. This mistaken approach is to refer to the <m>p</m>-value as "the probability that the null hypothesis is true". It's an intuitively appealing way to think, but it's wrong in two key respects. First, null hypothesis testing is a frequentist tool and the frequentist approach to probability does not allow you to assign probabilities to the null hypothesis. According to this view of probability, the null hypothesis is either true or it is not, it cannot have a "<m>5\%</m> chance" of being true. Second, even within the Bayesian approach, which does let you assign probabilities to hypotheses, the <m>p</m>-value would not correspond to the probability that the null is true. This interpretation is entirely inconsistent with the mathematics of how the <m>p</m>-value is calculated. Put bluntly, despite the intuitive appeal of thinking this way, there is <em>no</em> justification for interpreting a <m>p</m>-value this way. Never do it.</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-reporting-the-results-of-a-hypothesis-test">
+    <title>Reporting the results of a hypothesis test</title>
+
+    <p>When writing up the results of a hypothesis test there's usually several pieces of information that you need to report, but it varies a fair bit from test to test. Throughout the rest of the book I'll spend a little time talking about how to report the results of different tests, so that you can get a feel for how it's usually done. However, regardless of what test you're doing, the one thing that you always have to do is say something about the <m>p</m>-value and whether or not the outcome was significant.</p>
+
+    <p>The fact that you have to do this is unsurprising, it's the whole point of doing the test. What might be surprising is the fact that there is some contention over exactly how you're supposed to do it. Leaving aside those people who completely disagree with the entire framework underpinning null hypothesis testing, there's a certain amount of tension that exists regarding whether or not to report the exact <m>p</m>-value that you obtained, or if you should state only that <m>p &lt; \alpha</m> for a significance level that you chose in advance (e.g., <m>p &lt; .05</m>).</p>
+
+    <subsection xml:id="subsec-the-issue">
+      <title>The issue</title>
+
+      <p>To see why this is an issue, the key thing to recognise is that <m>p</m>-values are terribly convenient. In practice, the fact that we can compute a <m>p</m>-value means that we don't actually have to specify any <m>\alpha</m> level at all in order to run the test. Instead, what you can do is calculate your <m>p</m>-value and interpret it directly. If you get <m>p = .062</m>, then it means that you'd have to be willing to tolerate a type I error rate of <m>6.2\%</m> to justify rejecting the null. If you personally find <m>6.2\%</m> intolerable then you retain the null. Therefore, the argument goes, why don't we just report the actual <m>p</m>-value and let the reader make up their own minds about what an acceptable type I error rate is? This approach has the big advantage of "softening" the decision making process. In fact, if you accept the Neyman definition of the <m>p</m>-value, that's the whole point of the <m>p</m>-value. We no longer have a fixed significance level of <m>\alpha = .05</m> as a bright line separating "accept" from "reject" decisions, and this removes the rather pathological problem of being forced to treat <m>p = .051</m> in a fundamentally different way to <m>p = .049</m>.</p>
+
+      <p>This flexibility is both the advantage and the disadvantage to the <m>p</m>-value. The reason why a lot of people don't like the idea of reporting an exact <m>p</m>-value is that it gives the researcher a bit too much freedom. In particular, it lets you change your mind about what error tolerance you're willing to put up with after you look at the data. For instance, consider my ESP experiment. Suppose I ran my test and ended up with a <m>p</m>-value of <m>.09</m>. Should I accept or reject? Now, to be honest, I haven't yet bothered to think about what level of type I error I'm "really" willing to accept. I don't have an opinion on that topic. But I <em>do</em> have an opinion about whether or not ESP exists, and I <em>definitely</em> have an opinion about whether my research should be published in a reputable scientific journal. And amazingly, now that I've looked at the data I'm starting to think that a <m>9\%</m> error rate isn't so bad, especially when compared to how annoying it would be to have to admit to the world that my experiment has failed. So, to avoid looking like I just made it up after the fact, I now say that my <m>\alpha</m> is .1, with the argument that a <m>10\%</m> type I error rate isn't too bad and at that level my test is significant! I win.</p>
+
+      <p>In other words, the worry here is that I might have the best of intentions, and be the most honest of people, but the temptation to just "shade" things a little bit here and there is really, really strong. As anyone who has ever run an experiment can attest, it's a long and difficult process and you often get very attached to your hypotheses. It's hard to let go and admit the experiment didn't find what you wanted it to find. And that's the danger here. If we use the "raw" <m>p</m>-value, people will start interpreting the data in terms of what they want to believe, not what the data are actually saying and, if we allow that, why are we even bothering to do science at all? Why not let everyone believe whatever they like about anything, regardless of what the facts are? Okay, that's a bit extreme, but that's where the worry comes from. According to this view, you really must specify your <m>\alpha</m> value in advance and then only report whether the test was significant or not. It's the only way to keep ourselves honest.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-two-proposed-solutions">
+      <title>Two proposed solutions</title>
+
+      <p>In practice, it's pretty rare for a researcher to specify a single <m>\alpha</m> level ahead of time. Instead, the convention is that scientists rely on three standard significance levels: <m>.05</m>, <m>.01</m> and <m>.001</m>. When reporting your results, you indicate which (if any) of these significance levels allow you to reject the null hypothesis. This is summarised in <xref ref="tbl-tab9-5"/>. This allows us to soften the decision rule a little bit, since <m>p &lt; .01</m> implies that the data meet a stronger evidential standard than <m>p &lt; .05</m> would. Nevertheless, since these levels are fixed in advance by convention, it does prevent people choosing their <m>\alpha</m> level after looking at the data.</p>
+
+      <table xml:id="tbl-tab9-5">
+        <title>Typical translations of <m>p</m>-value levels</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell>Usual notation</cell>
+            <cell>Signif. stars</cell>
+            <cell>English translation</cell>
+            <cell>The null is...</cell>
+          </row>
+          <row>
+            <cell><m>p > .05</m></cell>
+            <cell></cell>
+            <cell>The test wasn't significant</cell>
+            <cell>Retained</cell>
+          </row>
+          <row>
+            <cell><m>p &lt; .05</m></cell>
+            <cell>*</cell>
+            <cell>The test was significant at <m>\alpha</m> = .05 but not at <m>\alpha</m> = .01 or <m>\alpha</m> = .001.</cell>
+            <cell>Rejected</cell>
+          </row>
+          <row>
+            <cell><m>p &lt; .01</m></cell>
+            <cell>**</cell>
+            <cell>The test was significant at <m>\alpha</m> = .05 and <m>\alpha</m> = .01 but not at <m>\alpha</m> = .001.</cell>
+            <cell>Rejected</cell>
+          </row>
+          <row>
+            <cell><m>p &lt; .001</m></cell>
+            <cell>***</cell>
+            <cell>The test was significant at all levels</cell>
+            <cell>Rejected</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>Nevertheless, quite a lot of people still prefer to report exact <m>p</m>-values. To many people, the advantage of allowing the reader to make up their own mind about how to interpret <m>p = .06</m> outweighs any disadvantages. In practice, however, even among those researchers who prefer exact <m>p</m>-values it is quite common to just write <m>p &lt; .001</m> instead of reporting an exact value for small <m>p</m>. This is in part because a lot of software doesn't actually print out the <m>p</m>-value when it's that small (e.g., SPSS just writes <m>p = .000</m> whenever <m>p &lt; .001</m>), and in part because a very small <m>p</m>-value can be kind of misleading. The human mind sees a number like .0000000001 and it's hard to suppress the gut feeling that the evidence in favour of the alternative hypothesis is a near certainty. In practice however, this is usually wrong. Life is a big, messy, complicated thing, and every statistical test ever invented relies on simplifications, approximations and assumptions. As a consequence, it's probably not reasonable to walk away from any statistical analysis with a feeling of confidence stronger than <m>p &lt; .001</m> implies. In other words, <m>p &lt; .001</m> is really code for "as far as this test is concerned, the evidence is overwhelming."</p>
+
+      <p>In light of all this, you might be wondering exactly what you should do. There's a fair bit of contradictory advice on the topic, with some people arguing that you should report the exact <m>p</m>-value, and other people arguing that you should use the tiered approach illustrated in <xref ref="tbl-tab9-5"/>. As a result, the best advice I can give is to suggest that you look at papers/reports written in your field and see what the convention seems to be. If there doesn't seem to be any consistent pattern, then use whichever method you prefer.</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-running-the-hypothesis-test-in-practice">
+    <title>Running the hypothesis test in practice</title>
+
+    <p>At this point some of you might be wondering if this is a "real" hypothesis test, or just a toy example that I made up. It's real. In the previous discussion I built the test from first principles, thinking that it was the simplest possible problem that you might ever encounter in real life. However, this test already exists. It's called the <term>binomial test</term>, and it's implemented by jamovi as one of the statistical analyses available when you hit the 'Frequencies' button. To test the null hypothesis that the response probability is one-half <m>p = .5</m>,<fn>Note that the <m>p</m> here has nothing to do with a <m>p</m>-value. The <m>p</m> argument in the jamovi binomial test corresponds to the probability of making a correct response, according to the null hypothesis. In other words, it's the <m>\theta</m> value.</fn> and using data in which <m>x = 62</m> of <m>N = 100</m> people made the correct response, available in the <em>binomialtest.omv</em> data file, we get the results shown in <xref ref="fig-fig9-4"/>.</p>
+
+    <figure xml:id="fig-fig9-4">
+      <caption>Binomial test analysis and results in jamovi</caption>
+      <image source="fig9-4.png" width="90%">
+        <description>A jamovi screenshot of a proportion test with two outcomes. The interface includes sections for selecting variables, adjusting hypotheses, viewing results, and displaying references. The results section shows tabulated proportions and confidence intervals.</description>
+      </image>
+    </figure>
+
+    <p>Right now, this output looks pretty unfamiliar to you, but you can see that it's telling you more or less the right things. Specifically, the <m>p</m>-value of <m>0.02</m> is less than the usual choice of <m>\alpha = .05</m>, so you can reject the null. We'll talk a lot more about how to read this sort of output as we go along, and after a while you'll hopefully find it quite easy to read and understand.</p>
+  </section>
+
 </chapter>
