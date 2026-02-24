@@ -2,7 +2,452 @@
 
 <chapter xml:id="ch-categorical-data-analysis" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Categorical data analysis</title>
+
   <introduction>
-    <p>To be added.</p>
+    <p>Now that we've covered the basic theory behind hypothesis testing it's time to start looking at specific tests that are commonly used in psychology. So where should we start? Not every textbook agrees on where to start, but I'm going to start with <m>\chi^2</m> tests (this chapter, pronounced "chi-square"<fn>Also sometimes referred to as "chi-squared".</fn>) and <m>t</m>-tests in <xref ref="ch-comparing-two-means"/>. Both of these tools are very frequently used in scientific practice, and whilst they're not as powerful as "regression" and "analysis of variance" which we cover in later chapters, they're much easier to understand.</p>
+
+    <p>The term "categorical data" is just another name for "nominal scale data". It's nothing that we haven't already discussed, it's just that in the context of data analysis people tend to use the term "categorical data" rather than "nominal scale data". I don't know why. In any case, <term>categorical data analysis</term> refers to a collection of tools that you can use when your data are nominal scale. However, there are a lot of different tools that can be used for categorical data analysis, and this chapter covers only a few of the more common ones.</p>
   </introduction>
+
+  <section xml:id="sec-chi-square-goodness-of-fit">
+    <title>The <m>\chi^2</m> (chi-square) goodness-of-fit test</title>
+
+    <p>The <m>\chi^2</m> goodness-of-fit test is one of the oldest hypothesis tests around. It was invented by Karl Pearson around the turn of the century, with some corrections made later by Sir Ronald Fisher. It tests whether an observed frequency distribution of a nominal variable matches an expected frequency distribution. For example, suppose a group of patients has been undergoing an experimental treatment and have had their health assessed to see whether their condition has improved, stayed the same or worsened. A goodness-of-fit test could be used to determine whether the numbers in each category -- improved, no change, worsened -- match the numbers that would be expected given the standard treatment option. Let's think about this some more, with some psychology.</p>
+
+    <subsection xml:id="subsec-cards-data">
+      <title>The cards data</title>
+
+      <p>Over the years there have been many studies showing that humans find it difficult to simulate randomness. Try as we might to "act" random, we think in terms of patterns and structure and so, when asked to "do something at random", what people actually do is anything but random. As a consequence, the study of human randomness (or non-randomness, as the case may be) opens up a lot of deep psychological questions about how we think about the world.</p>
+
+      <p>With this in mind, let's consider a very simple study. Suppose I asked people to imagine a shuffled deck of cards, and mentally pick one card from this imaginary deck "at random". After they've chosen one card I ask them to mentally select a second one. For both choices what we're going to look at is the suit (hearts, clubs, spades or diamonds) that people chose. After asking, say, <m>N = 200</m> people to do this, I'd like to look at the data and figure out whether or not the cards that people pretended to select were really random. The data are contained in the <em>randomness.csv</em> file in which, when you open it up in jamovi and take a look at the spreadsheet view, you will see three variables. These are: an id variable that assigns a unique identifier to each participant, and the two variables choice_1 and choice_2 that indicate the card suits that people chose.</p>
+
+      <p>For the moment, let's just focus on the first choice that people made. We'll use the Frequency tables option under 'Exploration' -- 'Descriptives' to count the number of times that we observed people choosing each suit. This is what we get: (<xref ref="tbl-tab10-1"/>).</p>
+
+      <table xml:id="tbl-tab10-1">
+        <title>Number of times each suit was chosen</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell>clubs</cell>
+            <cell>diamonds</cell>
+            <cell>hearts</cell>
+            <cell>spades</cell>
+          </row>
+          <row>
+            <cell>35</cell>
+            <cell>51</cell>
+            <cell>64</cell>
+            <cell>50</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>That little frequency table is quite helpful. Looking at it, there's a bit of a hint that people might be more likely to select hearts than clubs, but it's not completely obvious just from looking at it whether that's really true, or if this is just due to chance. So we'll probably have to do some kind of statistical analysis to find out, which is what I'm going to talk about in the next section.</p>
+
+      <p>Excellent. From this point on, we'll treat this table as the data that we're looking to analyse. However, since I'm going to have to talk about this data in mathematical terms (sorry!) it might be a good idea to be clear about what the notation is. In mathematical notation, we shorten the human-readable word "observed" to the letter <m>O</m>, and we use subscripts to denote the position of the observation. So the second observation in our table is written as <m>O_2</m> in maths. The relationship between the English descriptions and the mathematical symbols are illustrated in <xref ref="tbl-tab10-2"/>.</p>
+
+      <table xml:id="tbl-tab10-2">
+        <title>Relationship between English descriptions and mathematical symbols</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell>label</cell>
+            <cell>index, <m>i</m></cell>
+            <cell>math. symbol</cell>
+            <cell>the value</cell>
+          </row>
+          <row>
+            <cell>clubs</cell>
+            <cell>1</cell>
+            <cell><m>O_1</m></cell>
+            <cell>35</cell>
+          </row>
+          <row>
+            <cell>diamonds</cell>
+            <cell>2</cell>
+            <cell><m>O_2</m></cell>
+            <cell>51</cell>
+          </row>
+          <row>
+            <cell>hearts</cell>
+            <cell>3</cell>
+            <cell><m>O_3</m></cell>
+            <cell>64</cell>
+          </row>
+          <row>
+            <cell>spades</cell>
+            <cell>4</cell>
+            <cell><m>O_4</m></cell>
+            <cell>50</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>Hopefully that's pretty clear. It's also worth noting that mathematicians prefer to talk about general rather than specific things, so you'll also see the notation <m>O_i</m>, which refers to the number of observations that fall within the <m>i</m>-th category (where <m>i</m> could be 1, 2, 3 or 4). Finally, if we want to refer to the set of all observed frequencies, statisticians group all observed values into a vector,<fn>A vector is a sequence of data elements of the same basic type.</fn> which I'll refer to as <m>O</m>:
+      <me>O = (O_1, O_2, O_3, O_4)</me>
+      Again, this is nothing new or interesting. It's just notation. If I say that <m>O = (35, 51, 64, 50)</m> all I'm doing is describing the table of observed frequencies (i.e., observed), but I'm referring to it using mathematical notation.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-null-hypothesis-gof">
+      <title>The null hypothesis and the alternative hypothesis</title>
+
+      <p>As the last section indicated, our research hypothesis is that "people don't choose cards randomly". What we're going to want to do now is translate this into some statistical hypotheses and then construct a statistical test of those hypotheses. The test that I'm going to describe to you is <term>Pearson's <m>\chi^2</m> (chi-square) goodness-of-fit test</term>, and as is so often the case we have to begin by carefully constructing our null hypothesis. In this case, it's pretty easy. First, let's state the null hypothesis in words:
+      <me>H_0: \text{ All four suits are chosen with equal probability}</me>
+      Now, let's say this in a mathematical way. To do this, let's use the notation <m>P_j</m> to refer to the true probability that the <m>j</m>-th suit is chosen. If the null hypothesis is true, then each of the four suits has a 25% chance of being selected. In other words, our null hypothesis claims that <m>P_1 = .25</m>, <m>P_2 = .25</m>, <m>P_3 = .25</m> and finally that <m>P_4 = .25</m>.</p>
+
+      <p>However, in the same way that we can group our observed frequencies into a vector <m>O</m> that summarises the entire data set, we can use <m>P</m> to refer to the probabilities that correspond to our null hypothesis. So if I let the vector <m>P = (P_1, P_2, P_3, P_4)</m> refer to the collection of probabilities that describe our null hypothesis, then we have:
+      <me>H_0: P =(.25, .25, .25, .25)</me></p>
+
+      <p>In this instance, our null hypothesis corresponds to a vector of probabilities <m>P</m> in which all of the probabilities are equal to one another. But this doesn't have to be the case: if the experimental task was for people to imagine they were drawing from a deck that had twice as many clubs as any other suit, then the null hypothesis would be <m>P = (.4, .2, .2, .2)</m>.</p>
+
+      <p>As long as the probabilities are all positive numbers, and they all sum to 1, then it's a perfectly legitimate choice for the null hypothesis. However, the typical use of the goodness-of-fit test is with a null hypothesis that all the categories are equally likely, so we'll stick to that for our example.</p>
+
+      <p>What about our alternative hypothesis, <m>H_1</m>? All we're really interested in is demonstrating that the probabilities involved aren't all identical (that is, people's choices weren't completely random). As a consequence, the "human friendly" versions of our hypotheses look like this:
+      <me>H_0: \text{ All four suits are chosen with equal probability}</me>
+      <me>H_1: \text{ At least one of the suit-choice probabilities isn't 0.25}</me>
+      ...and the "mathematician friendly" version is:
+      <me>H_0: P= (.25, .25, .25, .25)</me>
+      <me>H_1: P \neq (.25, .25, .25, .25)</me></p>
+    </subsection>
+
+    <subsection xml:id="subsec-gof-test-statistic">
+      <title>The "goodness-of-fit" test statistic</title>
+
+      <p>At this point, we have our observed frequencies <m>O</m> and a collection of probabilities <m>P</m> corresponding to the null hypothesis that we want to test. What we now want to do is construct a test of the null hypothesis. As always, if we want to test <m>H_0</m> against <m>H_1</m>, we're going to need a test statistic. The basic trick that a goodness-of-fit test uses is to construct a test statistic that measures how "close" the data are to the null hypothesis. If the data don't resemble what you'd "expect" to see if the null hypothesis were true, then it probably isn't true. Okay, if the null hypothesis were true, what would we expect to see? Or, to use the correct terminology, what are the <term>expected frequencies</term>. There are <m>N = 200</m> observations, and (if the null is true) the probability of any one of them choosing a heart is <m>P_3 = .25</m>, so I guess we're expecting <m>200 \times .25 = 50</m> hearts, right? Or, more specifically, if we let <m>E_i</m> refer to "the number of category <m>i</m> responses that we're expecting if the null is true", then:
+      <me>E_i=N \times P_i</me></p>
+
+      <p>This is pretty easy to calculate. If there are 200 observations that can fall into four categories, and we think that all four categories are equally likely, then on average we'd expect to see 50 observations in each category, right?</p>
+
+      <p>Now, how do we translate this into a test statistic? Clearly, what we want to do is compare the expected number of observations in each category (<m>E_i</m>) with the observed number of observations in that category (<m>O_i</m>). And on the basis of this comparison we ought to be able to come up with a good test statistic. To start with, let's calculate the difference between what the null hypothesis expected us to find and what we actually did find. That is, we calculate the "observed minus expected" difference score, <m>O_i - E_i</m>. This is illustrated in <xref ref="tbl-tab10-3"/>.</p>
+
+      <table xml:id="tbl-tab10-3">
+        <title>Expected and observed frequencies</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell></cell>
+            <cell>clubs</cell>
+            <cell>diamonds</cell>
+            <cell>hearts</cell>
+            <cell>spades</cell>
+          </row>
+          <row>
+            <cell>expected frequency <m>E_i</m></cell>
+            <cell>50</cell>
+            <cell>50</cell>
+            <cell>50</cell>
+            <cell>50</cell>
+          </row>
+          <row>
+            <cell>observed frequency <m>O_i</m></cell>
+            <cell>35</cell>
+            <cell>51</cell>
+            <cell>64</cell>
+            <cell>50</cell>
+          </row>
+          <row>
+            <cell>difference score <m>O_i-E_i</m></cell>
+            <cell>-15</cell>
+            <cell>1</cell>
+            <cell>14</cell>
+            <cell>0</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>So, based on our calculations, it's clear that people chose more hearts and fewer clubs than the null hypothesis predicted. However, a moment's thought suggests that these raw differences aren't quite what we're looking for. Intuitively, it feels like it's just as bad when the null hypothesis predicts too few observations (which is what happened with hearts) as it is when it predicts too many (which is what happened with clubs). So it's a bit weird that we have a negative number for clubs and a positive number for hearts. One easy way to fix this is to square everything, so that we now calculate the squared differences, <m>(E_i - O_i)^2</m>. As before, we can do this by hand (<xref ref="tbl-tab10-4"/>).</p>
+
+      <table xml:id="tbl-tab10-4">
+        <title>Squaring the difference scores</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell>clubs</cell>
+            <cell>diamonds</cell>
+            <cell>hearts</cell>
+            <cell>spades</cell>
+          </row>
+          <row>
+            <cell>225</cell>
+            <cell>1</cell>
+            <cell>196</cell>
+            <cell>0</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>Now we're making progress. What we've got now is a collection of numbers that are big whenever the null hypothesis makes a bad prediction (clubs and hearts), but are small whenever it makes a good one (diamonds and spades). Next, for some technical reasons that I'll explain in a moment, let's also divide all these numbers by the expected frequency <m>E_i</m>, so we're actually calculating <m>\frac{(E_i-O_i)^2}{E_i}</m>. Since <m>E_i = 50</m> for all categories in our example, it's not a very interesting calculation, but let's do it anyway (<xref ref="tbl-tab10-5"/>).</p>
+
+      <table xml:id="tbl-tab10-5">
+        <title>Dividing the squared difference scores by the expected frequency to provide an "error" score</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell>clubs</cell>
+            <cell>diamonds</cell>
+            <cell>hearts</cell>
+            <cell>spades</cell>
+          </row>
+          <row>
+            <cell>4.50</cell>
+            <cell>0.02</cell>
+            <cell>3.92</cell>
+            <cell>0.00</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>In effect, what we've got here are four different "error" scores, each one telling us how big a "mistake" the null hypothesis made when we tried to use it to predict our observed frequencies. So, in order to convert this into a useful test statistic, one thing we could do is just add these numbers up. The result is called the <term>goodness-of-fit</term> statistic, conventionally referred to either as <m>\chi^2</m> (chi-square) or GOF. We can calculate it as:
+      <me>\sum( (\text{observed} - \text{expected})^2 / \text{expected} )</me>
+      This gives us a value of 8.44.<fn>If we let <m>k</m> refer to the total number of categories (i.e., <m>k = 4</m> for our cards data), then the <m>\chi^2</m> statistic is given by: <me>\chi^2 = \sum_{i=1}^{k} \frac{(O_i-E_i)^2}{E_i}</me> Intuitively, it's clear that if <m>\chi^2</m> is small, then the observed data <m>O_i</m> are very close to what the null hypothesis predicted <m>E_i</m>, so we're going to need a large <m>\chi^2</m> statistic in order to reject the null.</fn></p>
+
+      <p>As we've seen from our calculations, in our cards data set we've got a value of <m>\chi^2 = 8.44</m>. So now the question becomes is this a big enough value to reject the null?</p>
+    </subsection>
+
+    <subsection xml:id="subsec-sampling-distribution-gof">
+      <title>The sampling distribution of the GOF statistic</title>
+
+      <p>To determine whether or not a particular value of <m>\chi^2</m> is large enough to justify rejecting the null hypothesis, we're going to need to figure out what the sampling distribution for <m>\chi^2</m> would be if the null hypothesis were true. So that's what I'm going to do in this section. I'll show you in a fair amount of detail how this sampling distribution is constructed, and then, in the next section, use it to build up a hypothesis test. If you want to cut to the chase and are willing to take it on faith that the sampling distribution is a <m>\chi^2</m> (chi-square) distribution with <m>k - 1</m> degrees of freedom, you can skip the rest of this section. However, if you want to understand <em>why</em> the goodness-of-fit test works the way it does, read on.</p>
+
+      <p>Okay, let's suppose that the null hypothesis is actually true. If so, then the true probability that an observation falls in the <m>i</m>-th category is <m>P_i</m>. After all, that's pretty much the definition of our null hypothesis. Let's think about what this actually means. This is kind of like saying that "nature" makes the decision about whether or not the observation ends up in category <m>i</m> by flipping a weighted coin (i.e., one where the probability of getting a head is <m>P_j</m>). And therefore we can think of our observed frequency <m>O_i</m> by imagining that nature flipped <m>N</m> of these coins (one for each observation in the data set), and exactly <m>O_i</m> of them came up heads. Obviously, this is a pretty weird way to think about the experiment. But what it does (I hope) is remind you that we've actually seen this scenario before. It's exactly the same set up that gave rise to <xref ref="sec-the-binomial-distribution"/> in <xref ref="ch-probability"/>. In other words, if the null hypothesis is true, then it follows that our observed frequencies were generated by sampling from a binomial distribution:
+      <me>O_i \sim \text{Binomial}(P_i, N)</me></p>
+
+      <p>Now, if you remember from our discussion of the central limit theorem the binomial distribution starts to look pretty much identical to the normal distribution, especially when <m>N</m> is large and when <m>P_i</m> isn't too close to 0 or 1. In other words as long as <m>N \times P_i</m> is large enough. Or, to put it another way, when the expected frequency <m>E_i</m> is large enough then the theoretical distribution of <m>O_i</m> is approximately normal. Better yet, if <m>O_i</m> is normally distributed, then so is <m>(O_i-E_i)/\sqrt{E_i}</m>. Since <m>E_i</m> is a fixed value, subtracting off <m>E_i</m> and dividing by <m>\sqrt{E_i}</m> changes the mean and standard deviation of the normal distribution but that's all it does. Okay, so now let's have a look at what our goodness-of-fit statistic actually is. What we're doing is taking a bunch of things that are normally-distributed, squaring them, and adding them up. Wait. We've seen that before too! As we discussed in <xref ref="sec-other-useful-distributions"/>, when you take a bunch of things that have a standard normal distribution (i.e., mean 0 and standard deviation 1), square them and then add them up, the resulting quantity has a chi-square distribution. So now we know that the null hypothesis predicts that the sampling distribution of the goodness-of-fit statistic is a chi-square distribution. Cool.</p>
+
+      <p>There's one last detail to talk about, namely the degrees of freedom. If you remember back to <xref ref="sec-other-useful-distributions"/>, I said that if the number of things you're adding up is <m>k</m>, then the degrees of freedom for the resulting chi-square distribution is <m>k</m>. Yet, what I said at the start of this section is that the actual degrees of freedom for the chi-square goodness-of-fit test is <m>k - 1</m>. What's up with that? The answer here is that what we're supposed to be looking at is the number of genuinely independent things that are getting added together. And, as I'll go on to talk about in the next section, even though there are <m>k</m> things that we're adding only <m>k - 1</m> of them are truly independent, and so the degrees of freedom is actually only <m>k - 1</m>. That's the topic of the next section.<fn>If you rewrite the equation for the goodness-of-fit statistic as a sum over <m>k - 1</m> independent things you get the "proper" sampling distribution, which is chi-square with <m>k - 1</m> degrees of freedom. It's beyond the scope of an introductory book to show the maths in that much detail. All I wanted to do is give you a sense of why the goodness-of-fit statistic is associated with the chi-square distribution.</fn></p>
+    </subsection>
+
+    <subsection xml:id="subsec-degrees-of-freedom">
+      <title>Degrees of freedom</title>
+
+      <p>When I introduced the chi-square distribution in <xref ref="sec-other-useful-distributions"/>, I was a bit vague about what <term>degrees of freedom</term> actually means. Obviously, it matters. Looking at <xref ref="fig-fig10-1"/>, you can see that if we change the degrees of freedom then the chi-square distribution changes shape quite substantially. But what exactly is it? Again, when I introduced the distribution and explained its relationship to the normal distribution, I did offer an answer: it's the number of "normally distributed variables" that I'm squaring and adding together. But, for most people, that's kind of abstract and not entirely helpful. What we really need to do is try to understand degrees of freedom in terms of our data. So here goes.</p>
+
+      <figure xml:id="fig-fig10-1">
+        <caption><m>\chi^2</m> (chi-square) distributions with different values for the "degrees of freedom"</caption>
+        <image source="images/fig-fig10-1-1.png" width="90%">
+          <description>Three chi-squared distribution curves are plotted with different degrees of freedom (df): solid line (df = 3), dashed line (df = 4), and dotted line (df = 5). The x-axis shows observed values from 0 to 12, and the y-axis indicates the probability density</description>
+        </image>
+      </figure>
+
+      <p>The basic idea behind degrees of freedom is quite simple. You calculate it by counting up the number of distinct "quantities" that are used to describe your data and then subtracting off all of the "constraints" that those data must satisfy.<fn>I feel obliged to point out that this is an over-simplification. It works nicely for quite a few situations, but every now and then we'll come across degrees of freedom values that aren't whole numbers. Don't let this worry you too much; when you come across this just remind yourself that "degrees of freedom" is actually a bit of a messy concept, and that the nice simple story that I'm telling you here isn't the whole story. For an introductory class it's usually best to stick to the simple story, but I figure it's best to warn you to expect this simple story to fall apart.</fn> This is a bit vague, so let's use our cards data as a concrete example. We describe our data using four numbers, <m>O_1, O_2, O_3</m> and <m>O_4</m> corresponding to the observed frequencies of the four different categories (hearts, clubs, diamonds, spades). These four numbers are the random outcomes of our experiment. But my experiment actually has a fixed constraint built into it: the sample size <m>N</m>.<fn>In practice, the sample size isn't always fixed. For example, we might run the experiment over a fixed period of time and the number of people participating depends on how many people show up. That doesn't matter for the current purposes.</fn></p>
+
+      <p>How many people chose hearts, how many chose diamonds and how many chose clubs, then we'd be able to figure out exactly how many chose spades. In other words, although our data are described using four numbers, they only actually correspond to <m>4 - 1 = 3</m> degrees of freedom. A slightly different way of thinking about it is to notice that there are four probabilities that we're interested in (again, corresponding to the four different categories), but these probabilities must sum to one, which imposes a constraint. Therefore the degrees of freedom is <m>4 - 1 = 3</m>. Regardless of whether you want to think about it in terms of the observed frequencies or in terms of the probabilities, the answer is the same. In general, when running the <m>\chi^2</m> (chi-square) goodness-of-fit test for an experiment involving <m>k</m> groups, then the degrees of freedom will be <m>k - 1</m>.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-testing-null-gof">
+      <title>Testing the null hypothesis</title>
+
+      <p>The final step in the process of constructing our hypothesis test is to figure out what the rejection region is. That is, what values of <m>\chi^2</m> would lead us to reject the null hypothesis. As we saw earlier, large values of <m>\chi^2</m> imply that the null hypothesis has done a poor job of predicting the data from our experiment, whereas small values of <m>\chi^2</m> imply that it's actually done pretty well. Therefore, a pretty sensible strategy would be to say there is some critical value such that if <m>\chi^2</m> is bigger than the critical value we reject the null, but if <m>\chi^2</m> is smaller than this value we retain the null. In other words, to use the language we introduced in <xref ref="ch-hypothesis-testing"/> the chi-square goodness-of-fit test is always a <term>one-sided test</term>. Right, so all we have to do is figure out what this critical value is. And it's pretty straightforward. If we want our test to have significance level of <m>\alpha = .05</m> (that is, we are willing to tolerate a type I error rate of 5%), then we have to choose our critical value so that there is only a 5% chance that <m>\chi^2</m> could get to be that big if the null hypothesis is true. This is illustrated in <xref ref="fig-fig10-2"/>.</p>
+
+      <figure xml:id="fig-fig10-2">
+        <caption>Illustration of how the hypothesis testing works for the <m>\chi^2</m> (chi-square) goodness-of-fit test</caption>
+        <image source="images/fig-fig10-2-1.png" width="90%">
+          <description>A chi-square distribution graph shows a right-skewed curve. An arrow points to 7.82 on the x-axis, labeled "The critical value is 7.82." Another arrow points to 8.44 with the label "The observed GOF value is 8.44", highlighting an area under the curve beyond the critical value.</description>
+        </image>
+      </figure>
+
+      <p>Ah but, I hear you ask, how do I find the critical value of a chi-square distribution with <m>k-1</m> degrees of freedom? Many many years ago when I first took a psychology statistics class we used to look up these critical values in a book of critical value tables, like the one in <xref ref="tbl-tab10-6"/>. Looking at this table, we can see that the critical value for a <m>\chi^2</m> distribution with 3 degrees of freedom and <m>p=0.05</m> is 7.815.</p>
+
+      <table xml:id="tbl-tab10-6">
+        <title>Table of critical values for the chi-square distribution</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell>Degrees of freedom</cell>
+            <cell>0.95</cell>
+            <cell>0.9</cell>
+            <cell>0.7</cell>
+            <cell>0.5</cell>
+            <cell>0.1</cell>
+            <cell>0.05</cell>
+            <cell>0.01</cell>
+            <cell>0.001</cell>
+          </row>
+          <row>
+            <cell>1</cell>
+            <cell>0.004</cell>
+            <cell>0.016</cell>
+            <cell>0.148</cell>
+            <cell>0.455</cell>
+            <cell>2.706</cell>
+            <cell>3.841</cell>
+            <cell>6.635</cell>
+            <cell>10.828</cell>
+          </row>
+          <row>
+            <cell>2</cell>
+            <cell>0.103</cell>
+            <cell>0.211</cell>
+            <cell>0.713</cell>
+            <cell>1.386</cell>
+            <cell>4.605</cell>
+            <cell>5.991</cell>
+            <cell>9.210</cell>
+            <cell>13.816</cell>
+          </row>
+          <row>
+            <cell>3</cell>
+            <cell>0.352</cell>
+            <cell>0.584</cell>
+            <cell>1.424</cell>
+            <cell>2.366</cell>
+            <cell>6.251</cell>
+            <cell>7.815</cell>
+            <cell>11.345</cell>
+            <cell>16.266</cell>
+          </row>
+          <row>
+            <cell>4</cell>
+            <cell>0.711</cell>
+            <cell>1.064</cell>
+            <cell>2.195</cell>
+            <cell>3.357</cell>
+            <cell>7.779</cell>
+            <cell>9.488</cell>
+            <cell>13.277</cell>
+            <cell>18.467</cell>
+          </row>
+          <row>
+            <cell>5</cell>
+            <cell>1.145</cell>
+            <cell>1.610</cell>
+            <cell>3.000</cell>
+            <cell>4.351</cell>
+            <cell>9.236</cell>
+            <cell>11.070</cell>
+            <cell>15.086</cell>
+            <cell>20.515</cell>
+          </row>
+          <row>
+            <cell>6</cell>
+            <cell>1.635</cell>
+            <cell>2.204</cell>
+            <cell>3.828</cell>
+            <cell>5.348</cell>
+            <cell>10.645</cell>
+            <cell>12.592</cell>
+            <cell>16.812</cell>
+            <cell>22.458</cell>
+          </row>
+          <row>
+            <cell>7</cell>
+            <cell>2.167</cell>
+            <cell>2.833</cell>
+            <cell>4.671</cell>
+            <cell>6.346</cell>
+            <cell>12.017</cell>
+            <cell>14.067</cell>
+            <cell>18.475</cell>
+            <cell>24.322</cell>
+          </row>
+          <row>
+            <cell>8</cell>
+            <cell>2.733</cell>
+            <cell>3.490</cell>
+            <cell>5.527</cell>
+            <cell>7.344</cell>
+            <cell>13.362</cell>
+            <cell>15.507</cell>
+            <cell>20.090</cell>
+            <cell>26.124</cell>
+          </row>
+          <row>
+            <cell>9</cell>
+            <cell>3.325</cell>
+            <cell>4.168</cell>
+            <cell>6.393</cell>
+            <cell>8.343</cell>
+            <cell>14.684</cell>
+            <cell>16.919</cell>
+            <cell>21.666</cell>
+            <cell>27.877</cell>
+          </row>
+          <row>
+            <cell>10</cell>
+            <cell>3.940</cell>
+            <cell>4.865</cell>
+            <cell>7.267</cell>
+            <cell>9.342</cell>
+            <cell>15.987</cell>
+            <cell>18.307</cell>
+            <cell>23.209</cell>
+            <cell>29.588</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>So, if our calculated <m>\chi^2</m> statistic is bigger than the critical value of <m>7.815</m>, then we can reject the null hypothesis (remember that the null hypothesis, <m>H_0</m>, is that all four suits are chosen with equal probability). Since we actually already calculated that before (i.e., <m>\chi^2 = 8.44</m>) we can reject the null hypothesis. And that's it, basically. You now know "Pearson's <m>\chi^2</m> test for the goodness-of-fit". Lucky you.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-gof-in-jamovi">
+      <title>Doing the test in jamovi</title>
+
+      <p>Not surprisingly, jamovi provides an analysis that will do these calculations for you. Let's use the <em>Randomness.omv</em> file. From the main 'Analyses' toolbar select 'Frequencies' -- 'One Sample Proportion Tests' -- '<m>N</m> Outcomes'. Then in the analysis window that appears move the variable you want to analyse (choice 1) across into the 'Variable' box. Also, click on the 'Expected counts' check box so that these are shown on the results table. When you have done all this, you should see the analysis results in jamovi as in <xref ref="fig-fig10-3"/>. No surprise then that jamovi provides the same expected counts and statistics that we calculated by hand above, with a <m>\chi^2</m> value of <m>8.44</m> with <m>3</m> df and <m>p=0.038</m>. Note that we don't need to look up a critical <m>p</m>-value threshold value any more, as jamovi gives us the actual <m>p</m>-value of the calculated <m>\chi^2</m> for 3 df.</p>
+
+      <figure xml:id="fig-fig10-3">
+        <caption>A <m>\chi^2</m> One Sample Proportion Test in jamovi, with table showing both observed and expected frequencies and proportions</caption>
+        <image source="images/fig10-3.png" width="90%">
+          <description>A jamovi screenshot showing a Proportion Test (N Outcomes) analysis. The "Variable" selected is "choice_1" with observed and expected counts for clubs, diamonds, hearts, spades. The chi-squared test results are at the bottom with a p-value</description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-different-null">
+      <title>Specifying a different null hypothesis</title>
+
+      <p>At this point you might be wondering what to do if you want to run a goodness-of-fit test but your null hypothesis is not that all categories are equally likely. For instance, let's suppose that someone had made the theoretical prediction that people should choose red cards <m>60\%</m> of the time, and black cards <m>40\%</m> of the time (I've no idea why you'd predict that), but had no other preferences. If that were the case, the null hypothesis would be to expect <m>30\%</m> of the choices to be hearts, <m>30\%</m> to be diamonds, <m>20\%</m> to be spades and <m>20\%</m> to be clubs. In other words we would expect hearts and diamonds to appear 1.5 times more often than spades and clubs (the ratio <m>30\%</m> : <m>20\%</m> is the same as 1.5 : 1). The expected counts are now shown in <xref ref="tbl-tab10-7"/>.</p>
+
+      <table xml:id="tbl-tab10-7">
+        <title>Expected counts for a different null hypothesis</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell></cell>
+            <cell>clubs</cell>
+            <cell>diamonds</cell>
+            <cell>hearts</cell>
+            <cell>spades</cell>
+          </row>
+          <row>
+            <cell>expected frequency <m>E_i</m></cell>
+            <cell>40</cell>
+            <cell>60</cell>
+            <cell>60</cell>
+            <cell>40</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>This seems like a silly theory to me, and it's pretty easy to test this explicitly specified null hypothesis with the data in our jamovi analysis. In the analysis window (labelled 'Proportion Test (N Outcomes)') you can expand the options for 'Expected Proportions'. When you do this, there are options for entering different ratio values for the variable you have selected, in our case this is choice 1. Change the ratio to reflect the new null hypothesis, as in <xref ref="fig-fig10-4"/>, and check the results.</p>
+
+      <figure xml:id="fig-fig10-4">
+        <caption>Changing the expected proportions in the <m>\chi^2</m> One Sample Proportion Test in jamovi</caption>
+        <image source="images/fig10-4.png" width="80%">
+          <description>A jamovi screenshot of a table titled "Expected Proportions" displaying values for different card suits. The columns are labeled Level, Ratio, and Proportion. The ratios for clubs, diamonds, hearts, and spades are 1, 1.5, 1.5, and 1 respectively, with proportions of 0.200, 0.300, 0.300, and 0.200.</description>
+        </image>
+      </figure>
+
+      <p>You can see that the <m>\chi^2</m> statistic is 4.74, 3 df, <m>p = 0.192</m>. Now, the results of our updated hypotheses and the expected frequencies are different from what they were last time. As a consequence our <m>\chi^2</m> test statistic is different, and our <m>p</m>-value is different too. Annoyingly, the <m>p</m>-value is <m>.192</m>, so we can't reject the null hypothesis. Sadly, despite the fact that the null hypothesis corresponds to a very silly theory, these data don't provide enough evidence against it.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-how-to-report-gof">
+      <title>How to report the results of the test</title>
+
+      <p>So now you know how the test works, and you know how to do the test using a wonderful jamovi flavoured magic computing box. The next thing you need to know is how to write up the results. After all, there's no point in designing and running an experiment and then analysing the data if you don't tell anyone about it! So let's now talk about what you need to do when reporting your analysis. Let's stick with our card-suits example. If I wanted to write this result up for a paper or something, then the conventional way to report this would be to write something like this:</p>
+
+      <blockquote>
+        <p>Of the 200 participants in the experiment, 64 selected hearts for their first choice, 51 selected diamonds, 50 selected spades, and 35 selected clubs. A chi-square goodness-of-fit test was conducted to test whether the choice probabilities were identical for all four suits. The results were significant (<m>\chi^2(3) = 8.44, p &lt; .05</m>), suggesting that people did not select suits purely at random.</p>
+      </blockquote>
+
+      <p>This is pretty straightforward and hopefully it seems pretty unremarkable. That said, there's a few things that you should note about this description:</p>
+
+      <ul>
+        <li><p><em>The statistical test is preceded by the descriptive statistics</em>. That is, I told the reader something about what the data look like before going on to do the test. In general, this is good practice. Always remember that your reader doesn't know your data anywhere near as well as you do. So, unless you describe it to them properly, the statistical tests won't make any sense to them and they'll get frustrated and cry.</p></li>
+        <li><p><em>The description tells you what the null hypothesis being tested is</em>. To be honest, writers don't always do this but it's often a good idea in those situations where some ambiguity exists, or when you can't rely on your readership being intimately familiar with the statistical tools that you're using. Quite often the reader might not know (or remember) all the details of the test that your using, so it's a kind of politeness to "remind" them! As far as the goodness-of-fit test goes, you can usually rely on a scientific audience knowing how it works (since it's covered in most intro stats classes). However, it's still a good idea to be explicit about stating the null hypothesis (briefly!) because the null hypothesis can be different depending on what you're using the test for. For instance, in the cards example my null hypothesis was that all the four suit probabilities were identical (i.e., <m>P_1 = P_2 = P_3 = P_4 = 0.25</m>), but there's nothing special about that hypothesis. I could just as easily have tested the null hypothesis that <m>P_1 = 0.7</m> and <m>P_2 = P_3 = P_4 = 0.1</m> using a goodness-of-fit test. So it's helpful to the reader if you explain to them what your null hypothesis was. Also, notice that I described the null hypothesis in words, not in maths. That's perfectly acceptable. You can describe it in maths if you like, but since most readers find words easier to read than symbols, most writers tend to describe the null using words if they can.</p></li>
+        <li><p><em>A "stat block" is included</em>. When reporting the results of the test itself, I didn't just say that the result was significant, I included a "stat block" (i.e., the dense mathematical looking part in the parentheses) which reports all the "key" statistical information. For the chi-square goodness-of-fit test, the information that gets reported is the test statistic (that the goodness-of-fit statistic was 8.44), the information about the distribution used in the test (<m>\chi^2</m> with 3 degrees of freedom which is usually shortened to <m>\chi^2(3)</m>), and then the information about whether the result was significant (in this case <m>p &lt; .05</m>). The particular information that needs to go into the stat block is different for every test, and so each time I introduce a new test I'll show you what the stat block should look like.<fn>Well, sort of. The conventions for how statistics should be reported tend to differ somewhat from discipline to discipline. I've tended to stick with how things are done in psychology, since that's what I do. But the general principle of providing enough information to the reader to allow them to check your results is pretty universal, I think.</fn> However the general principle is that you should always provide enough information so that the reader could check the test results themselves if they really wanted to.</p></li>
+        <li><p><em>The results are interpreted</em>. In addition to indicating that the result was significant, I provided an interpretation of the result (i.e., that people didn't choose randomly). This is also a kindness to the reader, because it tells them something about what they should believe about what's going on in your data. If you don't include something like this, it's really hard for your reader to understand what's going on.<fn>To some people, this advice might sound odd, or at least in conflict with the "usual" advice on how to write a technical report. Very typically, students are told that the "results" section of a report is for describing the data and reporting statistical analysis, and the "discussion" section is for providing interpretation. That's true as far as it goes, but I think people often interpret it way too literally. The way I usually approach it is to provide a quick and simple interpretation of the data in the results section, so that my reader understands what the data are telling us. Then, in the discussion, I try to tell a bigger story about how my results fit with the rest of the scientific literature. In short, don't let the "interpretation goes in the discussion" advice turn your results section into incomprehensible garbage. Being understood by your reader is much more important.</fn></p></li>
+      </ul>
+
+      <p>As with everything else, your overriding concern should be that you explain things to your reader. Always remember that the point of reporting your results is to communicate to another human being. I cannot tell you just how many times I've seen the results section of a report or a thesis or even a scientific article that is just gibberish, because the writer has focused solely on making sure they've included all the numbers and forgotten to actually communicate with the human reader.</p>
+
+      <blockquote>
+        <p><em>Satan delights equally in statistics and in quoting scripture</em></p>
+        <attribution>H.G. Wells</attribution>
+      </blockquote>
+    </subsection>
+  </section>
+
 </chapter>
