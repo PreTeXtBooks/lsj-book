@@ -2,7 +2,1055 @@
 
 <chapter xml:id="ch-anova" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Comparing several means (one-way ANOVA)</title>
+
   <introduction>
-    <p>To be added.</p>
+    <p>This chapter introduces one of the most widely used tools in psychological statistics, known as "the analysis of variance", but usually referred to as ANOVA. The basic technique was developed by Sir Ronald Fisher in the early 20th century and it is to him that we owe the rather unfortunate terminology. The term ANOVA is a little misleading, in two respects. Firstly, although the name of the technique refers to variances, ANOVA is concerned with investigating differences in means. Secondly, there are several different things out there that are all referred to as ANOVAs, some of which have only a very tenuous connection to one another. Later on in the book we'll encounter a range of different ANOVA methods that apply in quite different situations, but for the purposes of this chapter we'll only consider the simplest form of ANOVA, in which we have several different groups of observations, and we're interested in finding out whether those groups differ in terms of some outcome variable of interest. This is the question that is addressed by a one-way ANOVA.</p>
+
+    <p>The structure of this chapter is as follows: first I'll introduce a fictitious data set that we'll use as a running example throughout the chapter. After introducing the data, I'll describe the mechanics of how a one-way ANOVA actually works (<xref ref="sec-how-anova-works"/>) and then focus on how you can run one in jamovi (<xref ref="sec-running-anova-jamovi"/>). These two sections are the core of the chapter.</p>
+
+    <p>The remainder of the chapter discusses a range of important topics that inevitably arise when running an ANOVA, namely how to calculate effect sizes, post hoc tests and corrections for multiple comparisons and the assumptions that ANOVA relies upon. We'll also talk about how to check those assumptions and some of the things you can do if the assumptions are violated. Then we'll cover repeated measures ANOVA.</p>
   </introduction>
+
+  <section xml:id="sec-illustrative-data-set">
+    <title>An illustrative data set</title>
+
+    <p>Suppose you've become involved in a clinical trial in which you are testing a new antidepressant drug called <em>Joyzepam</em>. In order to construct a fair test of the drug's effectiveness, the study involves three separate drugs to be administered. One is a placebo, and the other is an existing antidepressant / anti-anxiety drug called <em>Anxifree</em>. A collection of 18 participants with moderate to severe depression are recruited for your initial testing. Because the drugs are sometimes administered in conjunction with psychological therapy, your study includes 9 people undergoing cognitive behavioural therapy (CBT) and 9 who are not. Participants are randomly assigned (doubly blinded, of course) a treatment, such that there are 3 CBT people and 3 no-therapy people assigned to each of the 3 drugs. A psychologist assesses the mood of each person after a 3-month run with each drug, and the overall improvement in each person's mood is assessed on a scale ranging from <m>-5</m> to <m>+5</m>. With that as the study design, let's now load up the data file in <em>clinicaltrial.csv</em>. We can see that this data set contains the three variables drug, therapy and mood.gain.</p>
+
+    <p>For the purposes of this chapter, what we're really interested in is the effect of drug on mood.gain. The first thing to do is calculate some descriptive statistics and draw some graphs. In the <xref ref="ch-descriptive-statistics"/> chapter we showed you how to do this, and some of the descriptive statistics we can calculate in jamovi are shown in <xref ref="fig-fig13-1"/>. As the plot makes clear, there is a larger improvement in mood for participants in the Joyzepam group than for either the Anxifree group or the placebo group. The Anxifree group shows a larger mood gain than the control group, but the difference isn't as large. The question that we want to answer is are these differences "real", or are they just due to chance?</p>
+
+    <figure xml:id="fig-fig13-1">
+      <caption>Descriptives for mood gain, and box plots by drug administered</caption>
+      <image source="images/fig13-1.png" width="95%">
+        <description>A jamovi screenshot displaying clinical trial results. The interface shows variable selection, descriptive statistics with mean and standard deviation for mood gain across three drugs, and a box plot graph comparing the mood gain for each drug.</description>
+      </image>
+    </figure>
+  </section>
+
+  <section xml:id="sec-how-anova-works">
+    <title>How ANOVA works</title>
+
+    <p>In order to answer the question posed by our clinical trial data we're going to run a one-way ANOVA. I'm going to start by showing you how to do it the hard way, building the statistical tool from the ground up and showing you how you could do it if you didn't have access to any of the cool built-in ANOVA functions in jamovi. And I hope you'll read it carefully, try to do it the long way once or twice to make sure you really understand how ANOVA works.</p>
+
+    <p>The experimental design that I described in the previous section strongly suggests that we're interested in comparing the average mood change for the three different drugs. In that sense, we're talking about an analysis similar to the <m>t</m>-test (see <xref ref="ch-comparing-two-means"/>) but involving more than two groups. If we let <m>\mu_P</m> denote the population mean for the mood change induced by the placebo, and let <m>\mu_A</m> and <m>\mu_J</m> denote the corresponding means for our two drugs, Anxifree and Joyzepam, then the (somewhat pessimistic) null hypothesis that we want to test is that all three population means are identical. That is, neither of the two drugs is any more effective than a placebo. We can write out this null hypothesis as:
+    <me>H_0: \text{ it is true that } \mu_P=\mu_A=\mu_J</me></p>
+
+    <p>As a consequence, our alternative hypothesis is that at least one of the three different treatments is different from the others. It's a bit tricky to write this mathematically, because (as we'll discuss) there are quite a few different ways in which the null hypothesis can be false. So for now we'll just write the alternative hypothesis like this:
+    <me>H_1: \text{ it is } \underline{\text{not}} \text{ true that } \mu_P=\mu_A=\mu_J</me></p>
+
+    <p>This null hypothesis is a lot trickier to test than any of the ones we've seen previously. Given the title of this chapter, a sensible guess for how to test this would be to "do an ANOVA", but it's not particularly clear why "analysis of variances" will help us learn anything useful about the means. In fact, this is one of the biggest conceptual difficulties that people have when first encountering ANOVA. To see how this works, let's start by talking about variances, specifically between group variability and within-group variability (<xref ref="fig-fig13-2"/>).</p>
+
+    <figure xml:id="fig-fig13-2">
+      <caption>Graphical illustration of "between groups" variation (panel (a)) and "within groups" variation (panel (b)). On the left the arrows show the differences in the group means. On the right the arrows highlight the variability within each group.</caption>
+      <image source="images/fig-fig13-2-1.png" width="90%">
+        <description>Two graphs. (a) "Between-group variation" shows three overlapping bell curves for groups 1, 2, and 3 with horizontal arrows between peaks. (b) "Within-group variation" has three same-position bell curves with horizontal arrows within each curve's peak.</description>
+      </image>
+    </figure>
+
+    <subsection xml:id="subsec-two-formulas-variance">
+      <title>Two formulas for the variance of <m>Y</m></title>
+
+      <p>First, let's start by introducing some notation. We'll use <m>G</m> to refer to the total number of groups. For our data set there are three drugs, so there are <m>G = 3</m> groups. Next, we'll use <m>N</m> to refer to the total sample size; there are a total of <m>N = 18</m> people in our data set. Similarly, let's use <m>N_k</m> to denote the number of people in the <m>k</m>-th group. In our fake clinical trial, the sample size is <m>N_k = 6</m> for all three groups.<fn>When all groups have the same number of observations, the experimental design is said to be "balanced". Balance isn't such a big deal for one-way ANOVA, which is the topic of this chapter. It becomes more important when you start doing more complicated ANOVAs.</fn> Finally, we'll use <m>Y</m> to denote the outcome variable. In our case, <m>Y</m> refers to mood change. Specifically, we'll use <m>Y_{ik}</m> to refer to the mood change experienced by the <m>i</m>-th member of the <m>k</m>-th group. Similarly, we'll use <m>\bar{Y}</m> to be the average mood change, taken across all 18 people in the experiment, and <m>\bar{Y}_k</m> to refer to the average mood change experienced by the 6 people in group <m>k</m>.</p>
+
+      <p>Now that we've got our notation sorted out we can start writing down formulas. To start with, let's recall the formula for the variance that we used in <xref ref="sec-measures-of-variability"/>, way back in those kinder days when we were just doing descriptive statistics. The sample variance of <m>Y</m> is defined as follows:
+      <me>Var(Y)=\frac{1}{N}\sum_{k=1}^{G}\sum_{i=1}^{N_k}(Y_{ik}-\bar{Y})^2</me>
+      This formula looks pretty much identical to the formula for the variance in <xref ref="sec-measures-of-variability"/>. The only difference is that this time around I've got two summations here: I'm summing over groups (i.e., values for <m>k</m>) and over the people within the groups (i.e., values for <m>i</m>). This is purely a cosmetic detail. If I'd instead used the notation <m>Y_p</m> to refer to the value of the outcome variable for person <m>p</m> in the sample, then I'd only have a single summation. The only reason that we have a double summation here is that I've classified people into groups, and then assigned numbers to people within groups.</p>
+
+      <p>A concrete example might be useful here. Let's consider <xref ref="tbl-tab13-1"/>, in which we have a total of <m>N = 5</m> people sorted into <m>G = 2</m> groups. Arbitrarily, let's say that the "cool" people are group 1 and the "uncool" people are group 2. It turns out that we have three cool people (<m>N_1 = 3</m>) and two uncool people (<m>N_2 = 2</m>).</p>
+
+      <p>Notice that I've constructed two different labelling schemes here. We have a "person" variable <m>p</m> so it would be perfectly sensible to refer to <m>Y_p</m> as the grumpiness of the <m>p</m>-th person in the sample. For instance, the table shows that Tim is the fourth so we'd say <m>p = 4</m>. So, when talking about the grumpiness <m>Y</m> of this "Tim" person, whoever he might be, we could refer to his grumpiness by saying that <m>Y_p = 91</m>, for person <m>p = 4</m>.</p>
+
+      <table xml:id="tbl-tab13-1">
+        <title>Grumpiness for people in cool and uncool groups</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell>name</cell>
+            <cell>person <m>p</m></cell>
+            <cell>group</cell>
+            <cell>group num. <m>k</m></cell>
+            <cell>index in group</cell>
+            <cell>grumpiness <m>Y_{ik}</m> or <m>Y_p</m></cell>
+          </row>
+          <row>
+            <cell>Ann</cell>
+            <cell>1</cell>
+            <cell>cool</cell>
+            <cell>1</cell>
+            <cell>1</cell>
+            <cell>20</cell>
+          </row>
+          <row>
+            <cell>Ben</cell>
+            <cell>2</cell>
+            <cell>cool</cell>
+            <cell>1</cell>
+            <cell>2</cell>
+            <cell>55</cell>
+          </row>
+          <row>
+            <cell>Cat</cell>
+            <cell>3</cell>
+            <cell>cool</cell>
+            <cell>1</cell>
+            <cell>3</cell>
+            <cell>21</cell>
+          </row>
+          <row>
+            <cell>Tim</cell>
+            <cell>4</cell>
+            <cell>uncool</cell>
+            <cell>2</cell>
+            <cell>1</cell>
+            <cell>91</cell>
+          </row>
+          <row>
+            <cell>Egg</cell>
+            <cell>5</cell>
+            <cell>uncool</cell>
+            <cell>2</cell>
+            <cell>2</cell>
+            <cell>22</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>However, that's not the only way we could refer to Tim. As an alternative we could note that Tim belongs to the "uncool" group (<m>k = 2</m>), and is in fact the first person listed in the uncool group (<m>i = 1</m>). So it's equally valid to refer to Tim's grumpiness by saying that <m>Y_{ik} = 91</m>, where <m>k = 2</m> and <m>i = 1</m>. In other words, each person <m>p</m> corresponds to a unique <m>ik</m> combination, and so the formula that I gave above is actually identical to our original formula for the variance, which would be:
+      <me>Var(Y)=\frac{1}{N}\sum_{p=1}^{N}(Y_p-\bar{Y})^2</me></p>
+
+      <p>In both formulas, all we're doing is summing over all of the observations in the sample. Most of the time we would just use the simpler <m>Y_p</m> notation; the equation using <m>Y_p</m> is clearly the simpler of the two. However, when doing an ANOVA it's important to keep track of which participants belong in which groups, and we need to use the <m>Y_{ik}</m> notation to do this.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-variances-to-sums-of-squares">
+      <title>From variances to sums of squares</title>
+
+      <p>Okay, now that we've got a good grasp on how the variance is calculated, let's define something called the <term>total sum of squares</term>, which is denoted <m>SS_{tot}</m>. This is very simple. Instead of averaging the squared deviations, which is what we do when calculating the variance, we just add them up.<fn>So the formula for the total sum of squares is almost identical to the formula for the variance: <me>SS_{tot}=\sum_{k=1}^{G} \sum_{i=1}^{N_k} (Y_{ik} - \bar{Y})^2</me></fn></p>
+
+      <p>When we talk about analysing variances in the context of ANOVA, what we're really doing is working with the total sums of squares rather than the actual variance.<fn>One very nice thing about the total sum of squares is that we can break it up into two different kinds of variation. First, we can talk about the within-group sum of squares, in which we look to see how different each individual person is from their own group mean: <me>SS_{w}= \sum_{k=1}^{G} \sum_{i=1}^{N_k} (Y_{ik} - \bar{Y}_k)^2</me> where <m>\bar{Y}_k</m> is a group mean. In our example, <m>\bar{Y}_k</m> would be the average mood change experienced by those people given the <m>k</m>-th drug. So, instead of comparing individuals to the average of all people in the experiment, we're only comparing them to those people in the same group. As a consequence, you'd expect the value of <m>SS_w</m> to be smaller than the total sum of squares, because it's completely ignoring any group differences, i.e., whether the drugs will have different effects on people's moods.</fn></p>
+
+      <p>Next, we can define a third notion of variation which captures only the differences between groups. We do this by looking at the differences between the group means <m>\bar{Y}_k</m> and grand mean <m>\bar{Y}</m>.<fn>In order to quantify the extent of this variation, what we do is calculate the between-group sum of squares:
+      <md>
+        <mrow>SS_{b} \amp = \sum_{k=1}^{G} \sum_{i=1}^{N_k} ( \bar{Y}_{k} - \bar{Y} )^2</mrow>
+        <mrow>\amp = \sum_{k=1}^{G} N_k ( \bar{Y}_{k} - \bar{Y} )^2</mrow>
+      </md></fn></p>
+
+      <p>It's not too difficult to show that the total variation among people in the experiment <m>SS_{tot}</m> is actually the sum of the differences between the groups <m>SS_b</m> and the variation inside the groups <m>SS_w</m>. That is:
+      <me>SS_w+SS_b=SS_{tot}</me></p>
+
+      <p>Okay, so what have we found out? We've discovered that the total variability associated with the outcome variable (<m>SS_{tot}</m>) can be mathematically carved up into the sum of "the variation due to the differences in the sample means for the different groups" (<m>SS_b</m>) plus "all the rest of the variation" (<m>SS_w</m>).<fn><m>SS_w</m> is also referred to in an independent ANOVA as the error variance, or <m>SS_{error}</m>.</fn></p>
+
+      <p>How does that help me find out whether the groups have different population means? Um. Wait. Hold on a second. Now that I think about it, this is exactly what we were looking for. If the null hypothesis is true then you'd expect all the sample means to be pretty similar to each other, right? And that would imply that you'd expect <m>SS_b</m> to be really small, or at least you'd expect it to be a lot smaller than "the variation associated with everything else", <m>SS_w</m>. Hmm. I detect a hypothesis test coming on.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-sums-of-squares-to-f-test">
+      <title>From sums of squares to the <m>F</m>-test</title>
+
+      <p>As we saw in the last section, the qualitative idea behind ANOVA is to compare the two sums of squares values <m>SS_b</m> and <m>SS_w</m> to each other. If the between-group variation <m>SS_b</m> is large relative to the within-group variation <m>SS_w</m> then we have reason to suspect that the population means for the different groups aren't identical to each other. In order to convert this into a workable hypothesis test, there's a little bit of "fiddling around" needed. What I'll do is first show you what we do to calculate our test statistic, the <term><m>F</m>-ratio</term>, and then try to give you a feel for why we do it this way.</p>
+
+      <p>In order to convert our <m>SS</m> values into an <m>F</m>-ratio the first thing we need to calculate is the <term>degrees of freedom</term> associated with the <m>SS_b</m> and <m>SS_w</m> values. As usual, the degrees of freedom corresponds to the number of unique "data points" that contribute to a particular calculation, minus the number of "constraints" that they need to satisfy. For the within groups variability what we're calculating is the variation of the individual observations (<m>N</m> data points) around the group means (<m>G</m> constraints). In contrast, for the between groups variability we're interested in the variation of the group means (<m>G</m> data points) around the grand mean (1 constraint). Therefore, the degrees of freedom here are:
+      <me>df_b=G-1 \qquad df_w=N-G</me></p>
+
+      <p>Okay, that seems simple enough. What we do next is convert our summed squares value into a "mean squares" value, which we do by dividing by the degrees of freedom:
+      <me>MS_b=\frac{SS_b}{df_b} \qquad MS_w=\frac{SS_w}{df_w}</me></p>
+
+      <p>Finally, we calculate the <m>F</m>-ratio by dividing the between groups <m>MS</m> by the within groups <m>MS</m>:
+      <me>F=\frac{MS_b}{MS_w}</me></p>
+
+      <p>At a very general level, the intuition behind the <m>F</m>-statistic is straightforward. Bigger values of <m>F</m> means that the between groups variation is large relative to the within groups variation. As a consequence, the larger the value of <m>F</m> the more evidence we have against the null hypothesis. But how large does <m>F</m> have to be in order to actually reject <m>H_0</m>? In order to understand this, you need a slightly deeper understanding of what ANOVA is and what the mean squares values actually are.</p>
+
+      <p>The next section discusses that in a bit of detail, but for readers that aren't interested in the details of what the test is actually measuring I'll cut to the chase. In order to complete our hypothesis test we need to know the sampling distribution for <m>F</m> if the null hypothesis is true. Not surprisingly, the sampling distribution for the <m>F</m>-statistic under the null hypothesis is an <m>F</m>-distribution. If you recall our discussion of the <m>F</m>-distribution in <xref ref="ch-probability"/>, the <m>F</m>-distribution has two parameters, corresponding to the two degrees of freedom involved. The first one <m>df_1</m> is the between groups degrees of freedom <m>df_b</m>, and the second one <m>df_2</m> is the within groups degrees of freedom <m>df_w</m>.</p>
+
+      <p>A summary of all the key quantities involved in a one-way ANOVA, including the formulas showing how they are calculated, is shown in <xref ref="tbl-tab13-2"/>.</p>
+
+      <table xml:id="tbl-tab13-2">
+        <title>All of the key quantities involved in an ANOVA organised into a "standard" ANOVA table. The formulas for all quantities (except the <m>p</m>-value which has a very ugly formula and would be nightmarishly hard to calculate without a computer) are shown.</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell></cell>
+            <cell>between groups</cell>
+            <cell>within groups</cell>
+          </row>
+          <row>
+            <cell><m>df</m></cell>
+            <cell><m>df_b=G-1</m></cell>
+            <cell><m>df_w=N-G</m></cell>
+          </row>
+          <row>
+            <cell>sum of squares</cell>
+            <cell><m>SS_b=\displaystyle\sum_{k=1}^{G} N_k (\bar{Y}_k-\bar{Y})^2</m></cell>
+            <cell><m>SS_w=\displaystyle\sum_{k=1}^{G} \sum_{i=1}^{N_k} (Y_{ik}-\bar{Y}_k)^2</m></cell>
+          </row>
+          <row>
+            <cell>mean squares</cell>
+            <cell><m>MS_b=\dfrac{SS_b}{df_b}</m></cell>
+            <cell><m>MS_w=\dfrac{SS_w}{df_w}</m></cell>
+          </row>
+          <row>
+            <cell><m>F</m>-statistic</cell>
+            <cell><m>F=\dfrac{MS_b}{MS_w}</m></cell>
+            <cell>--</cell>
+          </row>
+          <row>
+            <cell><m>p</m>-value</cell>
+            <cell>[complicated]</cell>
+            <cell>--</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>Additional technical detail.<fn>At a fundamental level ANOVA is a competition between two different statistical models, <m>H_0</m> and <m>H_1</m>. When I described the null and alternative hypotheses at the start of the section, I was a little imprecise about what these models actually are. I'll remedy that now, though you probably won't like me for doing so. If you recall, our null hypothesis was that all of the group means are identical to one another. If so, then a natural way to think about the outcome variable <m>Y_{ik}</m> is to describe individual scores in terms of a single population mean <m>\mu</m>, plus the deviation from that population mean. This deviation is usually denoted <m>\epsilon_{ik}</m> and is traditionally called the error or residual associated with that observation. Be careful though. Just like we saw with the word "significant", the word "error" has a technical meaning in statistics that isn't quite the same as its everyday English definition. In everyday language, "error" implies a mistake of some kind, but in statistics it doesn't (or at least, not necessarily). With that in mind, the word "residual" is a better term than the word "error". In statistics both words mean "leftover variability", that is "stuff" that the model can't explain. In any case, here's what the null hypothesis looks like when we write it as a statistical model: <me>Y_{ik}=\mu+\epsilon_{ik}</me> where we make the assumption (discussed later) that the residual values <m>\epsilon_{ik}</m> are normally distributed, with mean <m>0</m> and a standard deviation <m>\sigma</m> that is the same for all groups. To use the notation that we introduced in <xref ref="ch-probability"/> we would write this assumption like this: <me>\epsilon_{ik} \sim Normal(0,\sigma^2)</me> What about the alternative hypothesis, <m>H_1</m>? The only difference between the null hypothesis and the alternative hypothesis is that we allow each group to have a different population mean. So, if we let <m>\mu_k</m> denote the population mean for the <m>k</m>-th group in our experiment, then the statistical model corresponding to <m>H_1</m> is: <me>Y_{ik}=\mu_k+\epsilon_{ik}</me> where, once again, we assume that the error terms are normally distributed with mean 0 and standard deviation <m>\sigma</m>. That is, the alternative hypothesis also assumes that <m>\epsilon \sim Normal(0,\sigma^2)</m>. Okay, now that we've described the statistical models underpinning <m>H_0</m> and <m>H_1</m> in more detail, it's now pretty straightforward to say what the mean square values are measuring, and what this means for the interpretation of <m>F</m>. I won't bore you with the proof of this but it turns out that the within-groups mean square, <m>MS_w</m>, can be viewed as an estimator of the error variance <m>\sigma^2</m>. The between-groups mean square <m>MS_b</m> is also an estimator, but what it estimates is the error variance plus a quantity that depends on the true differences among the group means. If we call this quantity <m>Q</m>, then we can see that the <m>F</m> statistic is basically: <me>F=\frac{\hat{Q}+\hat{\sigma}^2}{\hat{\sigma}^2}</me> where the true value <m>Q = 0</m> if the null hypothesis is true, and <m>Q > 0</m> if the alternative hypothesis is true. Therefore, at a bare minimum the <m>F</m> value must be larger than 1 to have any chance of rejecting the null hypothesis. Note that this doesn't mean that it's impossible to get an <m>F</m>-value less than 1. What it means is that if the null hypothesis is true the sampling distribution of the <m>F</m>-ratio has a mean of 1, and so we need to see <m>F</m>-values larger than 1 in order to safely reject the null.</fn></p>
+    </subsection>
+
+    <subsection xml:id="subsec-worked-example-anova">
+      <title>A worked example</title>
+
+      <p>The previous discussion was fairly abstract and a little on the technical side, so I think that at this point it might be useful to see a worked example. For that, let's go back to the clinical trial data that I introduced at the start of the chapter. The descriptive statistics that we calculated at the beginning tell us our group means: an average mood gain of <m>0.45</m> for the placebo, <m>0.72</m> for Anxifree, and <m>1.48</m> for Joyzepam. With that in mind, let's party like it's 1899<fn>Or, to be precise, party like "it's 1899 and we've got no friends and nothing better to do with our time than do some calculations that wouldn't have made any sense in 1899 because ANOVA didn't exist until about the 1920s".</fn> and start doing some pencil and paper calculations. I'll only do this for the first <m>5</m> observations because it's not bloody <m>1899</m> and I'm very lazy. Let's start by calculating <m>SS_w</m>, the within-group sums of squares. First, let's draw up a nice table to help us with our calculations (<xref ref="tbl-tab13-3"/>).</p>
+
+      <table xml:id="tbl-tab13-3">
+        <title>A worked example -- raw data for the first 5 observations</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell>group <m>k</m></cell>
+            <cell>outcome <m>Y_{ik}</m></cell>
+          </row>
+          <row>
+            <cell>placebo</cell>
+            <cell>0.5</cell>
+          </row>
+          <row>
+            <cell>placebo</cell>
+            <cell>0.3</cell>
+          </row>
+          <row>
+            <cell>placebo</cell>
+            <cell>0.1</cell>
+          </row>
+          <row>
+            <cell>anxifree</cell>
+            <cell>0.6</cell>
+          </row>
+          <row>
+            <cell>anxifree</cell>
+            <cell>0.4</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>At this stage, the only thing I've included in the table is the raw data itself. That is, the grouping variable (i.e., drug) and outcome variable (i.e. mood.gain) for each person. Note that the outcome variable here corresponds to the <m>Y_{ik}</m> value in our equation previously. The next step in the calculation is to write down, for each person in the study, the corresponding group mean, <m>\bar{Y}_k</m>. This is slightly repetitive but not particularly difficult since we already calculated those group means when doing our descriptive statistics, see <xref ref="tbl-tab13-4"/>.</p>
+
+      <table xml:id="tbl-tab13-4">
+        <title>A worked example -- adding group means</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell>group <m>k</m></cell>
+            <cell>outcome <m>Y_{ik}</m></cell>
+            <cell>group mean <m>\bar{Y}_k</m></cell>
+          </row>
+          <row>
+            <cell>placebo</cell>
+            <cell>0.5</cell>
+            <cell>0.45</cell>
+          </row>
+          <row>
+            <cell>placebo</cell>
+            <cell>0.3</cell>
+            <cell>0.45</cell>
+          </row>
+          <row>
+            <cell>placebo</cell>
+            <cell>0.1</cell>
+            <cell>0.45</cell>
+          </row>
+          <row>
+            <cell>anxifree</cell>
+            <cell>0.6</cell>
+            <cell>0.72</cell>
+          </row>
+          <row>
+            <cell>anxifree</cell>
+            <cell>0.4</cell>
+            <cell>0.72</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>Now that we've written those down, we need to calculate, again for every person, the deviation from the corresponding group mean. That is, we want to subtract <m>Y_{ik} - \bar{Y}_k</m>. After we've done that, we need to square everything. When we do that, here's what we get (<xref ref="tbl-tab13-5"/>).</p>
+
+      <table xml:id="tbl-tab13-5">
+        <title>A worked example -- deviations and squared deviations from group means</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell>group <m>k</m></cell>
+            <cell>outcome <m>Y_{ik}</m></cell>
+            <cell>group mean <m>\bar{Y}_k</m></cell>
+            <cell>dev. from group mean <m>Y_{ik} - \bar{Y}_k</m></cell>
+            <cell>squared deviation <m>(Y_{ik}-\bar{Y}_k)^2</m></cell>
+          </row>
+          <row>
+            <cell>placebo</cell>
+            <cell>0.5</cell>
+            <cell>0.45</cell>
+            <cell>0.05</cell>
+            <cell>0.0025</cell>
+          </row>
+          <row>
+            <cell>placebo</cell>
+            <cell>0.3</cell>
+            <cell>0.45</cell>
+            <cell>-0.15</cell>
+            <cell>0.0225</cell>
+          </row>
+          <row>
+            <cell>placebo</cell>
+            <cell>0.1</cell>
+            <cell>0.45</cell>
+            <cell>-0.35</cell>
+            <cell>0.1225</cell>
+          </row>
+          <row>
+            <cell>anxifree</cell>
+            <cell>0.6</cell>
+            <cell>0.72</cell>
+            <cell>-0.12</cell>
+            <cell>0.0136</cell>
+          </row>
+          <row>
+            <cell>anxifree</cell>
+            <cell>0.4</cell>
+            <cell>0.72</cell>
+            <cell>-0.32</cell>
+            <cell>0.1003</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>The last step is equally straightforward. In order to calculate the within-group sum of squares we just add up the squared deviations across all observations:
+      <md>
+        <mrow>SS_w \amp = 0.0025 + 0.0225 + 0.1225 + 0.0136 + 0.1003</mrow>
+        <mrow>\amp = 0.2614</mrow>
+      </md></p>
+
+      <p>Of course, if we actually wanted to get the right answer we'd need to do this for all 18 observations in the data set, not just the first five. We could continue with the pencil and paper calculations if we wanted to, but it's pretty tedious. Alternatively, it's not too hard to do this in a dedicated spreadsheet programme such as OpenOffice or Excel. Try and do it yourself. The one that I did, in Excel, is in the file clinicaltrial_anova.xls. When you do it you should end up with a within-group sum of squares value of <m>1.39</m>.</p>
+
+      <p>Okay. Now that we've calculated the within groups variation, <m>SS_w</m>, it's time to turn our attention to the between-group sum of squares, <m>SS_b</m>. The calculations for this case are very similar. The main difference is that instead of calculating the differences between an observation <m>Y_{ik}</m> and a group mean <m>\bar{Y}_k</m> for all of the observations, we calculate the differences between the group means <m>\bar{Y}_k</m> and the grand mean <m>\bar{Y}</m> (in this case <m>0.88</m>) for all of the groups (<xref ref="tbl-tab13-6"/>).</p>
+
+      <table xml:id="tbl-tab13-6">
+        <title>A worked example -- between-group deviations</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell>group <m>k</m></cell>
+            <cell>group mean <m>\bar{Y}_k</m></cell>
+            <cell>grand mean <m>\bar{Y}</m></cell>
+            <cell>deviation <m>\bar{Y}_k - \bar{Y}</m></cell>
+            <cell>squared deviation <m>(\bar{Y}_k-\bar{Y})^2</m></cell>
+          </row>
+          <row>
+            <cell>placebo</cell>
+            <cell>0.45</cell>
+            <cell>0.88</cell>
+            <cell>-0.43</cell>
+            <cell>0.19</cell>
+          </row>
+          <row>
+            <cell>anxifree</cell>
+            <cell>0.72</cell>
+            <cell>0.88</cell>
+            <cell>-0.16</cell>
+            <cell>0.03</cell>
+          </row>
+          <row>
+            <cell>joyzepam</cell>
+            <cell>1.48</cell>
+            <cell>0.88</cell>
+            <cell>0.60</cell>
+            <cell>0.36</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>However, for the between group calculations we need to multiply each of these squared deviations by <m>N_k</m>, the number of observations in the group. We do this because every observation in the group (all <m>N_k</m> of them) is associated with a between group difference. So if there are six people in the placebo group and the placebo group mean differs from the grand mean by <m>0.19</m>, then the total between group variation associated with these six people is <m>6 \times 0.19 = 1.14</m>. So we have to extend our little table of calculations (<xref ref="tbl-tab13-7"/>).</p>
+
+      <table xml:id="tbl-tab13-7">
+        <title>A worked example -- weighted squared deviations between groups</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell>group <m>k</m></cell>
+            <cell>...</cell>
+            <cell>squared deviations <m>(\bar{Y}_k-\bar{Y})^2</m></cell>
+            <cell>sample size <m>N_k</m></cell>
+            <cell>weighted squared dev. <m>N_k (\bar{Y}_k-\bar{Y})^2</m></cell>
+          </row>
+          <row>
+            <cell>placebo</cell>
+            <cell>...</cell>
+            <cell>0.19</cell>
+            <cell>6</cell>
+            <cell>1.14</cell>
+          </row>
+          <row>
+            <cell>anxifree</cell>
+            <cell>...</cell>
+            <cell>0.03</cell>
+            <cell>6</cell>
+            <cell>0.18</cell>
+          </row>
+          <row>
+            <cell>joyzepam</cell>
+            <cell>...</cell>
+            <cell>0.36</cell>
+            <cell>6</cell>
+            <cell>2.16</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>And so now our between group sum of squares is obtained by summing these "weighted squared deviations" over all three groups in the study:
+      <md>
+        <mrow>SS_b \amp = 1.14 + 0.18 + 2.16</mrow>
+        <mrow>\amp = 3.48</mrow>
+      </md></p>
+
+      <p>As you can see, the between group calculations are a lot shorter.<fn>In the Excel <em>clinicaltrial-anova.xls</em> the value for <m>SS_b</m> worked out to be very slightly different, <m>3.45</m>, than that shown in the text above (rounding errors!).</fn> Now that we've calculated our sums of squares values, <m>SS_b</m> and <m>SS_w</m>, the rest of the ANOVA is pretty painless. The next step is to calculate the degrees of freedom. Since we have <m>G = 3</m> groups and <m>N = 18</m> observations in total our degrees of freedom can be calculated by simple subtraction:
+      <md>
+        <mrow>df_b \amp = G-1 = 2</mrow>
+        <mrow>df_w \amp = N-G = 15</mrow>
+      </md></p>
+
+      <p>Next, since we've now calculated the values for the sums of squares and the degrees of freedom, for both the within groups variability and the between groups variability, we can obtain the mean square values by dividing one by the other:
+      <md>
+        <mrow>MS_b \amp = \frac{SS_b}{df_b} = \frac{3.48}{2} = 1.74</mrow>
+        <mrow>MS_w \amp = \frac{SS_w}{df_w} = \frac{1.39}{15} = 0.09</mrow>
+      </md></p>
+
+      <p>We're almost done. The mean square values can be used to calculate the <m>F</m>-value, which is the test statistic that we're interested in. We do this by dividing the between groups <m>MS</m> value by the within groups <m>MS</m> value:
+      <md>
+        <mrow>F \amp = \frac{MS_b}{MS_w} = \frac{1.74}{0.09}</mrow>
+        <mrow>\amp = 19.3</mrow>
+      </md></p>
+
+      <p>Woohooo! Now that we have our test statistic, the last step is to find out whether the test itself gives us a significant result. As discussed in <xref ref="ch-hypothesis-testing"/> what we'd do in the old days is open up a statistics textbook and in a huge lookup table we would find the threshold <m>F</m>-value corresponding to a particular value of alpha (the null hypothesis rejection region), e.g. <m>0.05</m>, <m>0.01</m> or <m>0.001</m>, for 2 and 15 degrees of freedom. Doing it this way would give us a threshold <m>F</m>-value for an alpha of <m>0.001</m> of <m>11.34</m>. As this is less than our calculated <m>F</m>-value we say that <m>p &lt; 0.001</m>. But nowadays fancy stats software calculates the exact <m>p</m>-value for you, which is <m>0.000071</m>. So, unless we're being <em>extremely</em> conservative about our type I error rate, we're pretty much guaranteed to reject the null hypothesis.</p>
+
+      <p>At this point, we're basically done. Having completed our calculations, it's traditional to organise all these numbers into an ANOVA table like the one in <xref ref="tbl-tab13-2"/>. For our clinical trial data, the ANOVA table would look like <xref ref="tbl-tab13-8"/>.</p>
+
+      <table xml:id="tbl-tab13-8">
+        <title>The ANOVA results table</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell></cell>
+            <cell><m>df</m></cell>
+            <cell>sum of squares</cell>
+            <cell>mean squares</cell>
+            <cell><m>F</m>-statistic</cell>
+            <cell><m>p</m>-value</cell>
+          </row>
+          <row>
+            <cell>between groups</cell>
+            <cell>2</cell>
+            <cell>3.48</cell>
+            <cell>1.74</cell>
+            <cell>19.3</cell>
+            <cell>0.000071</cell>
+          </row>
+          <row>
+            <cell>within groups</cell>
+            <cell>15</cell>
+            <cell>1.39</cell>
+            <cell>0.09</cell>
+            <cell>--</cell>
+            <cell>--</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>These days, you'll probably never have much reason to want to construct one of these tables yourself, but you will find that almost all statistical software (jamovi included) tends to organise the output of an ANOVA into a table like this, so it's a good idea to get used to reading them. However, although the software will output a full ANOVA table, there's almost never a good reason to include the whole table in your write up. A pretty standard way of reporting the stats block for this result would be to write something like this:</p>
+
+      <blockquote>
+        <p>One-way ANOVA showed a significant effect of drug on mood gain (<m>F(2,15) = 19.3, p &lt; .001</m>).</p>
+      </blockquote>
+
+      <p>Sigh. So much work for one short sentence.</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-running-anova-jamovi">
+    <title>Running an ANOVA in jamovi</title>
+
+    <p>I'm pretty sure I know what you're thinking after reading the last section, especially if you followed my advice and did all of that by pencil and paper (i.e., in a spreadsheet) yourself. Doing the ANOVA calculations yourself sucks. There's quite a lot of calculations that we needed to do along the way, and it would be tedious to have to do this over and over again every time you wanted to do an ANOVA.</p>
+
+    <subsection xml:id="subsec-using-jamovi-anova">
+      <title>Using jamovi to specify your ANOVA</title>
+
+      <p>To make life easier for you, jamovi can do ANOVA...hurrah! Go to the 'ANOVA' -- 'ANOVA' analysis, and move the mood.gain variable across so it is in the 'Dependent Variable' box, and then move the drug variable across so it is in the 'Fixed Factors' box. This should give the results as shown in <xref ref="fig-fig13-3"/>.<fn>The jamovi results are more accurate than the ones in the text above, due to rounding errors.</fn> Note I have also checked the <m>\eta^2</m> checkbox, pronounced "eta" squared, under the 'Effect Size' option and this is also shown on the results table. We will come back to effect sizes a bit later.</p>
+
+      <figure xml:id="fig-fig13-3">
+        <caption>jamovi results table for ANOVA of mood gain by drug administered</caption>
+        <image source="images/fig13-3.png" width="95%">
+          <description>A table from jamovi titled "ANOVA - mood.gain" displays results for an ANOVA test with the columns: "Sum of Squares," "df," "Mean Square," "F," "p," and "η²." The rows present data for "drug" with values (3.45, 2, 1.73, 18.61, 0.00009, 0.71) and "Residuals" with values (1.39, 15, 0.09).</description>
+        </image>
+      </figure>
+
+      <p>The jamovi results table shows you the sums of squares values, the degrees of freedom, and a couple of other quantities that we're not really interested in right now. Notice, however, that jamovi doesn't use the names "between group" and "within group". Instead, it tries to assign more meaningful names. In our particular example, the between groups variance corresponds to the effect that the drug has on the outcome variable, and the within groups variance corresponds to the "leftover" variability so it calls that the residuals.</p>
+
+      <p>If we compare these numbers to the numbers that I calculated by hand in <xref ref="subsec-worked-example-anova"/>, you can see that they're more or less the same, apart from rounding errors. The between groups sums of squares is <m>SS_b = 3.45</m>, the within groups sums of squares is <m>SS_w = 1.39</m>, and the degrees of freedom are <m>2</m> and <m>15</m> respectively. We also get the <m>F</m>-value and the <m>p</m>-value and, again, these are more or less the same, give or take rounding errors, to the numbers that we calculated ourselves when doing it the long and tedious way.</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-anova-effect-size">
+    <title>Effect size</title>
+
+    <p>There's a few different ways you could measure the effect size in an ANOVA, but the most commonly used measures are <m>\eta^2</m> (eta squared) and partial <m>\eta^2</m>. For a one-way analysis of variance they're identical to each other, so for the moment I'll just explain <m>\eta^2</m>. The definition of <m>\eta^2</m> is actually really simple:
+    <me>\eta^2=\frac{SS_b}{SS_{tot}}</me></p>
+
+    <p>That's all it is. So when I look at the ANOVA table in <xref ref="fig-fig13-3"/>, I see that <m>SS_b = 3.45</m> and <m>SS_{tot} = 3.45 + 1.39 = 4.84</m>. Thus we get an <m>\eta^2</m> value of:
+    <me>\eta^2=\frac{3.45}{4.84}=0.71</me></p>
+
+    <p>The interpretation of <m>\eta^2</m> is equally straightforward. It refers to the proportion of the variability in the outcome variable (mood.gain) that can be explained in terms of the predictor (drug). A value of <m>\eta^2=0</m> means that there is no relationship at all between the two, whereas a value of <m>\eta^2=1</m> means that the relationship is perfect. Better yet, the <m>\eta^2</m> value is very closely related to <m>R^2</m>, as discussed previously in <xref ref="sec-r-squared-value"/>, and has an equivalent interpretation. Although many statistics textbooks suggest <m>\eta^2</m> as the default effect size measure in ANOVA, there's an interesting blog post by Daniel Lakens suggesting that eta-squared is perhaps not the best measure of effect size in real-world data analysis, because it can be a biased estimator. Usefully, there is also an option in jamovi to specify omega-squared (<m>\omega^2</m>), which is less biased, alongside eta-squared.</p>
+  </section>
+
+  <section xml:id="sec-multiple-comparisons-post-hoc">
+    <title>Multiple comparisons and post hoc tests</title>
+
+    <p>Any time you run an ANOVA with more than two groups and you end up with a significant effect, the first thing you'll probably want to ask is which groups are actually different from one another. In our drugs example, our null hypothesis was that all three drugs (placebo, Anxifree and Joyzepam) have the exact same effect on mood. But if you think about it, the null hypothesis is actually claiming three different things all at once here. Specifically, it claims that:</p>
+
+    <ul>
+      <li><p>Your competitor's drug (Anxifree) is no better than a placebo (i.e., <m>\mu_A = \mu_P</m>)</p></li>
+      <li><p>Your drug (Joyzepam) is no better than a placebo (i.e., <m>\mu_J = \mu_P</m>)</p></li>
+      <li><p>Anxifree and Joyzepam are equally effective (i.e., <m>\mu_J = \mu_A</m>)</p></li>
+    </ul>
+
+    <p>If any one of those three claims is false, then the null hypothesis is also false. So, now that we've rejected our null hypothesis, we're thinking that at least one of those things isn't true. But which ones? All three of these propositions are of interest. Since you certainly want to know if your new drug Joyzepam is better than a placebo, it would be nice to know how well it stacks up against an existing commercial alternative (i.e., Anxifree). It would even be useful to check the performance of Anxifree against the placebo. Even if Anxifree has already been extensively tested against placebos by other researchers, it can still be very useful to check that your study is producing similar results to earlier work.</p>
+
+    <p>When we characterise the null hypothesis in terms of these three distinct propositions, it becomes clear that there are eight possible "states of the world" that we need to distinguish between (<xref ref="tbl-tab13-9"/>).</p>
+
+    <table xml:id="tbl-tab13-9">
+      <title>The null hypothesis and eight possible "states of the world"</title>
+      <tabular halign="center">
+        <row header="yes">
+          <cell></cell>
+          <cell><m>\mu_A = \mu_P</m></cell>
+          <cell><m>\mu_J = \mu_P</m></cell>
+          <cell><m>\mu_J = \mu_A</m></cell>
+        </row>
+        <row>
+          <cell>1</cell>
+          <cell>TRUE</cell>
+          <cell>TRUE</cell>
+          <cell>TRUE</cell>
+        </row>
+        <row>
+          <cell>2</cell>
+          <cell>TRUE</cell>
+          <cell>TRUE</cell>
+          <cell>FALSE</cell>
+        </row>
+        <row>
+          <cell>3</cell>
+          <cell>TRUE</cell>
+          <cell>FALSE</cell>
+          <cell>TRUE</cell>
+        </row>
+        <row>
+          <cell>4</cell>
+          <cell>TRUE</cell>
+          <cell>FALSE</cell>
+          <cell>FALSE</cell>
+        </row>
+        <row>
+          <cell>5</cell>
+          <cell>FALSE</cell>
+          <cell>TRUE</cell>
+          <cell>TRUE</cell>
+        </row>
+        <row>
+          <cell>6</cell>
+          <cell>FALSE</cell>
+          <cell>TRUE</cell>
+          <cell>FALSE</cell>
+        </row>
+        <row>
+          <cell>7</cell>
+          <cell>FALSE</cell>
+          <cell>FALSE</cell>
+          <cell>TRUE</cell>
+        </row>
+        <row>
+          <cell>8</cell>
+          <cell>FALSE</cell>
+          <cell>FALSE</cell>
+          <cell>FALSE</cell>
+        </row>
+      </tabular>
+    </table>
+
+    <p>By rejecting the null hypothesis, we've decided that we don't believe that #1 is the true state of the world. The next question to ask is, which of the other seven possibilities <em>do</em> we think is right? When faced with this situation, it's usually helps to look at the data. For instance, if we look at the plots in <xref ref="fig-fig13-1"/>, it's tempting to conclude that Joyzepam is better than the placebo and better than Anxifree, but there's no real difference between Anxifree and the placebo. However, if we want to get a clearer answer about this, it might help to run some tests.</p>
+
+    <subsection xml:id="subsec-pairwise-t-tests">
+      <title>Running "pairwise" <m>t</m>-tests</title>
+
+      <p>How might we go about solving our problem? Given that we've got three separate pairs of means (placebo versus Anxifree, placebo versus Joyzepam, and Anxifree versus Joyzepam) to compare, what we could do is run three separate <m>t</m>-tests and see what happens. This is easy to do in jamovi. Go to the ANOVA 'Post Hoc Tests' options, move the 'drug' variable across into the active box on the right, and then click on the 'No correction' checkbox. This will produce a neat table showing all the pairwise <m>t</m>-test comparisons amongst the three levels of the drug variable, as in <xref ref="fig-fig13-4"/>.</p>
+
+      <figure xml:id="fig-fig13-4">
+        <caption>Uncorrected pairwise <m>t</m>-tests as post hoc comparisons in jamovi</caption>
+        <image source="images/fig13-4.png" width="95%">
+          <description>Image showing results of Post Hoc tests for drug comparisons. Table lists the mean differences, standard error (SE), degrees of freedom (df), t-values (t), and p-values (p) for three drug comparisons: anxifree vs. joyzepam, anxifree vs. placebo, and joyzepam vs. placebo. Note states comparisons are based on estimated marginal means.</description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-corrections-multiple-testing">
+      <title>Corrections for multiple testing</title>
+
+      <p>In the previous section I hinted that there's a problem with just running lots and lots of <m>t</m>-tests. The concern is that, when running these analyses, what we're doing is going on a "fishing expedition". We're running lots and lots of tests without much theoretical guidance in the hope that some of them come up significant. This kind of theory-free search for group differences is referred to as <term>post hoc analysis</term> ("post hoc" being Latin for "after this").<fn>If you <em>do</em> have some theoretical basis for wanting to investigate some comparisons but not others, it's a different story. In those circumstances you're not really running "post hoc" analyses at all, you're making "planned comparisons". I do talk about this situation later in the book, but for now I want to keep things simple.</fn></p>
+
+      <p>It's okay to run post hoc analyses, but a lot of care is required. For instance, the analysis that I ran in the previous section should be avoided, as each individual <m>t</m>-test is designed to have a 5% type I error rate (i.e., <m>\alpha = .05</m>) and I ran three of these tests. Imagine what would have happened if my ANOVA involved 10 different groups, and I had decided to run 45 "post hoc" <m>t</m>-tests to try to find out which ones were significantly different from each other, you'd expect 2 or 3 of them to come up significant by chance alone.</p>
+
+      <p>As we saw in <xref ref="ch-hypothesis-testing"/>, the central organising principle behind null hypothesis testing is that we seek to control our type I error rate, but now that I'm running lots of <m>t</m>-tests at once in order to determine the source of my ANOVA results, my actual type I error rate across this whole family of tests has gotten completely out of control.</p>
+
+      <p>The usual solution to this problem is to introduce an adjustment to the <m>p</m>-value, which aims to control the total error rate across the family of tests. An adjustment of this form, which is usually (but not always) applied because one is doing post hoc analysis, is often referred to as a <term>correction for multiple comparisons</term>, though it is sometimes referred to as "simultaneous inference".</p>
+
+      <p>In any case, there are quite a few different ways of doing this adjustment. I'll discuss a few of them in this section and in the next chapter, but you should be aware that there are many other methods out there.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-bonferroni-corrections">
+      <title>Bonferroni corrections</title>
+
+      <p>The simplest of these adjustments is called the <term>Bonferroni correction</term>, and it's very very simple indeed. Suppose that my post hoc analysis consists of <m>m</m> separate tests, and I want to ensure that the total probability of making <em>any</em> type I errors at all is at most <m>\alpha</m>.<fn>It's worth noting in passing that not all adjustment methods try to do this. What I've described here is an approach for controlling "family wise type I error rate". However, there are other post hoc tests that seek to control the "false discovery rate", which is a somewhat different thing.</fn></p>
+
+      <p>If so, then the Bonferroni correction just says "multiply all your raw <m>p</m>-values by <m>m</m>". If we let <m>p</m> denote the original <m>p</m>-value, and let <m>p_j^{'}</m> be the corrected value, then the Bonferroni correction tells that:
+      <me>p_j^{'}=m \times p</me></p>
+
+      <p>And therefore, if you're using the Bonferroni correction, you would reject the null hypothesis if <m>p_j^{'} &lt; \alpha</m>. The logic behind this correction is very straightforward. We're doing <m>m</m> different tests, so if we arrange it so that each test has a type I error rate of at most <m>\frac{\alpha}{m}</m>, then the <em>total</em> type I error rate across these tests cannot be larger than <m>\alpha</m>. That's pretty simple, so much so that in the original paper, the author writes:</p>
+
+      <blockquote>
+        <p><em>The method given here is so simple and so general that I am sure it must have been used before this. I do not find it, however, so can only conclude that perhaps its very simplicity has kept statisticians from realizing that it is a very good method in some situations.</em></p>
+      </blockquote>
+
+      <p>To use the Bonferroni correction in jamovi, just click on the 'Bonferroni' checkbox in the 'Correction' options, and you will see another column added to the post hoc tests table showing the adjusted <m>p</m>-values for the Bonferroni correction (<xref ref="fig-fig13-4"/>). If we compare these three <m>p</m>-values to those for the uncorrected, pairwise <m>t</m>-tests, it is clear that the only thing that jamovi has done is multiply them by <m>3</m>.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-holm-corrections">
+      <title>Holm corrections</title>
+
+      <p>Although the Bonferroni correction is the simplest adjustment out there, it's not usually the best one to use. One method that is often used instead is the <term>Holm correction</term>. The idea behind the Holm correction is to pretend that you're doing the tests sequentially, starting with the smallest (raw) <m>p</m>-value and moving onto the largest one. For the <m>j</m>-th largest of the <m>p</m>-values, the adjustment is <em>either</em>:
+      <me>p_j^{'}=j \times p_j</me>
+      (i.e., the biggest <m>p</m>-value remains unchanged, the second biggest <m>p</m>-value is doubled, the third biggest <m>p</m>-value is tripled, and so on), <em>or</em>:
+      <me>p_j^{'}=p_{j+1}^{'}</me>
+      whichever one is larger. This might sound a little confusing, so let's go through it a little more slowly. Here's what the Holm correction does. First, you sort all of your <m>p</m>-values in order, from smallest to largest. For the smallest <m>p</m>-value all you do is multiply it by <m>m</m>, and you're done. However, for all the other ones it's a two-stage process. For instance, when you move to the second smallest <m>p</m>-value, you first multiply it by <m>m - 1</m>. If this produces a number that is bigger than the adjusted <m>p</m>-value that you got last time, then you keep it. But if it's smaller than the last one, then you copy the last <m>p</m>-value. To illustrate how this works, consider <xref ref="tbl-tab13-10"/> which shows the calculations of a Holm correction for a collection of five <m>p</m>-values.</p>
+
+      <table xml:id="tbl-tab13-10">
+        <title>Holm corrected <m>p</m>-values</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell>rank (smallest to largest)</cell>
+            <cell>raw <m>p</m>-value</cell>
+            <cell>correction</cell>
+            <cell>corrected <m>p</m>-value</cell>
+          </row>
+          <row>
+            <cell>1 (smallest)</cell>
+            <cell>0.01</cell>
+            <cell><m>\times 5</m></cell>
+            <cell>0.05</cell>
+          </row>
+          <row>
+            <cell>2</cell>
+            <cell>0.03</cell>
+            <cell><m>\times 4</m></cell>
+            <cell>0.12</cell>
+          </row>
+          <row>
+            <cell>3</cell>
+            <cell>0.04</cell>
+            <cell><m>\times 3</m></cell>
+            <cell>0.12</cell>
+          </row>
+          <row>
+            <cell>4</cell>
+            <cell>0.07</cell>
+            <cell><m>\times 2</m></cell>
+            <cell>0.14</cell>
+          </row>
+          <row>
+            <cell>5 (largest)</cell>
+            <cell>0.15</cell>
+            <cell><m>\times 1</m></cell>
+            <cell>0.15</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p><xref ref="fig-fig13-4"/> also shows the Holm corrected <m>p</m>-values and, as you can see, the biggest <m>p</m>-value (corresponding to the comparison between Anxifree and the placebo) is unaltered. At a value of <m>.15</m>, it is exactly the same as the value we got originally when we applied no correction at all. In contrast, the smallest <m>p</m>-value (Joyzepam versus placebo) has been multiplied by three.</p>
+
+      <p>Hopefully that makes things clear.</p>
+
+      <p>Although it's a little harder to calculate, the Holm correction has some very nice properties. It's more powerful than Bonferroni (i.e., it has a lower type II error rate) but, counter-intuitive as it might seem, it has the same type I error rate. As a consequence, in practice there's never any reason to use the simpler Bonferroni correction since it is always outperformed by the slightly more elaborate Holm correction. Because of this, the Holm correction should be your <em>go to</em> multiple comparison correction.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-writing-up-post-hoc">
+      <title>Writing up the post hoc test</title>
+
+      <p>Finally, having run the post hoc analysis to determine which groups are significantly different to one another, you might write up the result like this:</p>
+
+      <blockquote>
+        <p>Post hoc tests (using the Holm correction to adjust <m>p</m>) indicated that Joyzepam produced a significantly larger mood change than both Anxifree (<m>p = .001</m>) and the placebo (<m>p = 9.0 \times 10^{-5}</m>). We found no evidence that Anxifree performed better than the placebo (<m>p = .15</m>).</p>
+      </blockquote>
+
+      <p>Or, if you don't like the idea of reporting exact <m>p</m>-values, then you'd change those numbers to <m>p &lt; .01</m>, <m>p &lt; .001</m> and <m>p > .05</m> respectively. Either way, the key thing is that you indicate that you used Holm's correction to adjust the <m>p</m>-values. And of course, I'm assuming that elsewhere in the write up you've included the relevant descriptive statistics (i.e., the group means and standard deviations), since these <m>p</m>-values on their own aren't terribly informative.</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-anova-assumptions">
+    <title>The assumptions of one-way ANOVA</title>
+
+    <p>Like any statistical test, analysis of variance relies on some assumptions about the data, specifically the residuals. There are three key assumptions that you need to be aware of: normality, homogeneity of variance and independence.<fn>If you remember back to <xref ref="subsec-worked-example-anova"/>, which I hope you at least skimmed even if you didn't read the whole thing, I described the statistical models underpinning ANOVA in this way:
+    <me>H_0: Y_{ik} = \mu + \epsilon_{ik}</me>
+    <me>H_1: Y_{ik} = \mu_k + \epsilon_{ik}</me>
+    In these equations <m>\mu</m> refers to a single grand population mean which is the same for all groups, and <m>\mu_k</m> is the population mean for the <m>k</m>-th group. Up to this point we've been mostly interested in whether our data are best described in terms of a single grand mean (the null hypothesis) or in terms of different group-specific means (the alternative hypothesis). This makes sense, of course, as that's actually the important research question! However, all of our testing procedures have, implicitly, relied on a specific assumption about the residuals, <m>\epsilon_{ik}</m>, namely that:
+    <me>\epsilon_{ik} \sim \text{Normal}(0, \sigma^2)</me>
+    None of the maths works properly without this bit. Or, to be precise, you can still do all the calculations and you'll end up with an <m>F</m>-statistic, but you have no guarantee that this <m>F</m>-statistic actually measures what you think it's measuring, and so any conclusions that you might draw on the basis of the <m>F</m>-test might be wrong.</fn></p>
+
+    <p>So, how do we check whether the assumption about the residuals is accurate? Well, as I indicated above, there are three distinct claims buried in this one statement, and we'll consider them separately.</p>
+
+    <ul>
+      <li><p><term>Homogeneity of variance</term>. Notice that we've only got the one value for the population standard deviation (i.e., <m>\sigma</m>), rather than allowing each group to have its own value (i.e., <m>\sigma_k</m>). This is referred to as the homogeneity of variance (sometimes called homoscedasticity) assumption. ANOVA assumes that the population standard deviation is the same for all groups. We'll talk about this extensively in the <xref ref="subsec-checking-homogeneity-variance"/> section.</p></li>
+      <li><p><term>Normality</term>. The residuals are assumed to be normally distributed. As we saw in <xref ref="sec-checking-normality-sample"/>, we can assess this by looking at QQ plots or running a Shapiro-Wilk test. I'll talk about this more in an ANOVA context in the <xref ref="subsec-checking-normality"/> section.</p></li>
+      <li><p><term>Independence</term>. The independence assumption is a little trickier. What it basically means is that, knowing one residual tells you nothing about any other residual. All of the <m>\epsilon_{ik}</m> values are assumed to have been generated without any "regard for" or "relationship to" any of the other ones. There's not an obvious or simple way to test for this, but there are some situations that are clear violations of this. For instance, if you have a repeated measures design, where each participant in your study appears in more than one condition, then independence doesn't hold. There's a special relationship between some observations, namely those that correspond to the same person! When that happens, you need to use something like a <xref ref="sec-repeated-measures-anova"/>.</p></li>
+    </ul>
+
+    <subsection xml:id="subsec-checking-homogeneity-variance">
+      <title>Checking the homogeneity of variance assumption</title>
+
+      <blockquote>
+        <p><em>To make the preliminary test on variances is rather like putting to sea in a rowing boat to find out whether conditions are sufficiently calm for an ocean liner to leave port!</em></p>
+        <attribution>George Box</attribution>
+      </blockquote>
+
+      <p>There's more than one way to skin a cat, as the saying goes, and more than one way to test the homogeneity of variance assumption, too (though for some reason no-one made a saying out of that). The most commonly used test for this that I've seen in the literature is the Levene test, and the closely related Brown-Forsythe test.<fn>The Levene test is shockingly simple. Suppose we have our outcome variable <m>Y_{ik}</m>. All we do is define a new variable, which I'll call <m>Z_{ik}</m>, corresponding to the absolute deviation from the group mean:
+      <me>Z_{ik} = \lvert Y_{ik} - \bar{Y}_k \rvert</me>
+      Okay, what good does this do us? Well, let's take a moment to think about what <m>Z_{ik}</m> actually is and what we're trying to test. The value of <m>Z_{ik}</m> is a measure of how the <m>i</m>-th observation in the <m>k</m>-th group deviates from its group mean. And our null hypothesis is that all groups have the same variance, i.e., the same overall deviations from the group means! So the null hypothesis in a Levene test is that the population means of <m>Z</m> are identical for all groups. Hmm. So what we need now is a statistical test of the null hypothesis that all group means are identical. Where have we seen that before? Oh right, that's what ANOVA is, and so all that the Levene test does is run an ANOVA on the new variable <m>Z_{ik}</m>. What about the Brown-Forsythe test? Does that do anything particularly different? Nope. The only change from the Levene test is that it constructs the transformed variable <m>Z</m> in a slightly different way, using deviations from the group medians rather than deviations from the group means. That is, for the Brown-Forsythe test:
+      <me>Z_{ik} = \lvert Y_{ik} - \text{median}_k(Y) \rvert</me>
+      where <m>\text{median}_k(Y)</m> is the median for group <m>k</m>.</fn></p>
+
+      <p>Regardless of whether you're doing the standard Levene test or the Brown-Forsythe test, the test statistic, which is sometimes denoted <m>F</m> but also sometimes written as <m>W</m>, is calculated in exactly the same way that the <m>F</m>-statistic for the regular ANOVA is calculated, just using a <m>Z_{ik}</m> rather than <m>Y_{ik}</m>. With that in mind, we can go on to look at how to run the test in jamovi.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-levene-test-jamovi">
+      <title>Running the Levene test in jamovi</title>
+
+      <p>Okay, so how do we run the Levene test? Simple really -- under the ANOVA 'Assumption Checks' option, just click on the 'Homogeneity tests' checkbox. If we look at the output, shown in <xref ref="fig-fig13-5"/>, we see that the test is non-significant (<m>F_{2,15} = 1.45, p = .266</m>), so it looks like the homogeneity of variance assumption is fine. However, looks can be deceptive! If your sample size is pretty big, then the Levene test could show up a significant effect (i.e. <m>p &lt; .05</m>) even when the homogeneity of variance assumption is not violated to an extent which troubles the robustness of ANOVA. This was the point George Box was making in the quote above. Similarly, if your sample size is quite small, then the homogeneity of variance assumption might not be satisfied and yet a Levene test could be non-significant (i.e. <m>p > .05</m>). What this means is that, alongside any statistical test of the assumption being met, you should always plot the standard deviation around the means for each group / category in the analysis...just to see if they look fairly similar (i.e. homogeneity of variance) or not.</p>
+
+      <figure xml:id="fig-fig13-5">
+        <caption>Levene test output for one-way ANOVA in jamovi</caption>
+        <image source="images/fig13-5.png" width="70%">
+          <description>A table from jamovi showing an assumption check for Homogeneity of Variances Test (Levene). The table includes columns labeled F, df1, df2, and p. The values are 1.45, 2, 15, and 0.26569 respectively.</description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-removing-homogeneity-variance">
+      <title>Removing the homogeneity of variance assumption</title>
+
+      <p>In our example, the homogeneity of variance assumption turned out to be a pretty safe one: the Levene test came back non-significant (notwithstanding that we should also look at the plot of standard deviations), so we probably don't need to worry. However, in real life we aren't always that lucky. How do we save our ANOVA when the homogeneity of variance assumption is violated? If you recall from our discussion of <m>t</m>-tests, we've seen this problem before. The Student <m>t</m>-test assumes equal variances, so the solution was to use the Welch <m>t</m>-test, which does not. In fact, Welch also showed how we can solve this problem for ANOVA too (the <term>Welch one-way test</term>). It's implemented in jamovi using the One-Way ANOVA analysis. This is a specific analysis approach just for one-way ANOVA, and to run the Welch one-way ANOVA for our example, we would re-run the analysis as previously, but this time use the jamovi ANOVA - one-way ANOVA analysis command, and check the option for Welch's test (see <xref ref="fig-fig13-6"/>). To understand what's happening here, let's compare these numbers to what we got earlier when <xref ref="subsec-using-jamovi-anova"/> originally. To save you the trouble of flicking back, this is what we got last time: <m>F(2, 15) = 18.611, p = .00009</m>, also shown as the Fisher's test in the One-Way ANOVA shown in <xref ref="fig-fig13-6"/>.</p>
+
+      <figure xml:id="fig-fig13-6">
+        <caption>Welch test as part of the one-way ANOVA analysis in jamovi</caption>
+        <image source="images/fig13-6.png" width="95%">
+          <description>A jamovi screenshot displaying a one-way ANOVA analysis. The left panel shows input options and variables for the analysis, including variances, missing values, and assumption checks. The right panel shows the analysis results and assumption checks.</description>
+        </image>
+      </figure>
+
+      <p>Okay, so originally our ANOVA gave us the result <m>F(2, 15) = 18.6</m>, whereas the Welch one-way test gave us <m>F(2, 9.49) = 26.32</m>. In other words, the Welch test has reduced the within groups degrees of freedom from 15 to 9.49, and the <m>F</m>-value has increased from 18.6 to 26.32.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-checking-normality">
+      <title>Checking the normality assumption</title>
+
+      <p>Testing the normality assumption is relatively straightforward. We covered most of what you need to know in <xref ref="sec-checking-normality-sample"/>. The only thing we really need to do is draw a QQ plot and, in addition if it is available, run the Shapiro-Wilk test. The QQ plot is shown in <xref ref="fig-fig13-7"/> and it looks pretty normal to me.</p>
+
+      <figure xml:id="fig-fig13-7">
+        <caption>QQ plot in the one-way ANOVA analysis in jamovi</caption>
+        <image source="images/fig13-7.png" width="80%">
+          <description>A Q-Q plot comparing standardized residuals to theoretical quantiles, showing dots near a 45-degree reference line, indicating the data points follow a normal distribution closely. The axes are labeled "Standardized Residuals" and "Theoretical Quantiles".</description>
+        </image>
+      </figure>
+
+      <p>If the Shapiro-Wilk test is not significant (i.e. <m>p > .05</m>) then this indicates that the assumption of normality is not violated. However, as with Levene's test, if the sample size is large then a significant Shapiro-Wilk test may in fact be a false positive, where the assumption of normality is not violated in any substantive problematic sense for the analysis. And, similarly, a very small sample can produce false negatives. That's why a visual inspection of the QQ plot is important.</p>
+
+      <p>Alongside inspecting the QQ plot for any deviations from normality, the Shapiro-Wilk test for our data does show a non-significant effect, with <m>p = 0.6053</m> (see <xref ref="fig-fig13-6"/>). This therefore supports the QQ plot assessment; both checks find no indication that normality is violated.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-removing-normality">
+      <title>Removing the normality assumption</title>
+
+      <p>Now that we've seen how to check for normality, we are led naturally to ask what we can do to address violations of normality. In the context of a one-way ANOVA, the easiest solution is probably to switch to a non-parametric test (i.e., one that doesn't rely on any particular assumption about the kind of distribution involved). We've seen non-parametric tests before, in <xref ref="ch-comparing-two-means"/>. When you only have two groups, the Mann-Whitney or the Wilcoxon test provides the non-parametric alternative that you need. When you've got three or more groups, you can use the <term>Kruskal-Wallis rank sum test</term>. So that's the test we'll talk about next.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-kruskal-wallis-logic">
+      <title>The logic behind the Kruskal-Wallis test</title>
+
+      <p>The Kruskal-Wallis test is surprisingly similar to ANOVA, in some ways. In ANOVA we started with <m>Y_{ik}</m>, the value of the outcome variable for the <m>i</m>th person in the <m>k</m>th group. For the Kruskal-Wallis test what we'll do is rank order all of these <m>Y_{ik}</m> values and conduct our analysis on the ranked data.<fn>So let's let <m>R_{ik}</m> refer to the ranking given to the <m>i</m>th member of the <m>k</m>th group. Now, let's calculate <m>\bar{R}_k</m>, the average rank given to observations in the <m>k</m>th group:
+      <me>\bar{R}_k = \frac{1}{N_k} \sum_i R_{ik}</me>
+      and let's also calculate <m>\bar{R}</m>, the grand mean rank:
+      <me>\bar{R} = \frac{1}{N} \sum_i \sum_k R_{ik}</me>
+      Now that we've done this, we can calculate the squared deviations from the grand mean rank <m>\bar{R}</m>. When we do this for the individual scores, i.e., if we calculate <m>(R_{ik} - \bar{R})^2</m>, what we have is a "nonparametric" measure of how far the <m>ik</m>-th observation deviates from the grand mean rank. When we calculate the squared deviation of the group means from the grand means, i.e., if we calculate <m>(\bar{R}_k - \bar{R})^2</m>, then what we have is a nonparametric measure of how much the group deviates from the grand mean rank. With this in mind, we'll follow the same logic that we did with ANOVA and define our ranked sums of squares measures, much like we did earlier. First, we have our "total ranked sums of squares":
+      <me>RSS_{tot} = \sum_k \sum_i (R_{ik} - \bar{R})^2</me>
+      and we can define the "between groups ranked sums of squares" like this:
+      <md>
+        <mrow>RSS_b &amp;= \sum_k \sum_i (\bar{R}_k - \bar{R})^2</mrow>
+        <mrow>&amp;= \sum_k N_k (\bar{R}_k - \bar{R})^2</mrow>
+      </md>
+      So, if the null hypothesis is true and there are no true group differences at all, you'd expect the between group rank sums <m>RSS_b</m> to be very small, much smaller than the total rank sums <m>RSS_{tot}</m>. Qualitatively this is very much the same as what we found when we went about constructing the ANOVA <m>F</m>-statistic, but for technical reasons the Kruskal-Wallis test statistic, usually denoted <m>K</m>, is constructed in a slightly different way:
+      <me>K = (N-1) \times \frac{RSS_b}{RSS_{tot}}</me>
+      and if the null hypothesis is true, then the sampling distribution of <m>K</m> is approximately chi-square with <m>G-1</m> degrees of freedom (where <m>G</m> is the number of groups). The larger the value of <m>K</m>, the less consistent the data are with the null hypothesis, so this is a one-sided test. We reject <m>H_0</m> when <m>K</m> is sufficiently large.</fn></p>
+    </subsection>
+
+    <subsection xml:id="subsec-kruskal-wallis-details">
+      <title>Additional details</title>
+
+      <p>The description in the previous section illustrates the logic behind the Kruskal-Wallis test. At a conceptual level, this is the right way to think about how the test works.<fn>However, from a purely mathematical perspective it's needlessly complicated. I won't show you the derivation, but you can use a bit of algebraic jiggery-pokery<m>^a</m> to show that the equation for <m>K</m> can be:
+      <me>K = \frac{12}{N(N-1)} \sum_k N_k \bar{R}_k^2 - 3(N+1)</me>
+      It's this last equation that you sometimes see given for <m>K</m>. This is way easier to calculate than the version I described in the previous section, but it's just that it's totally meaningless to actual humans. It's probably best to think of <m>K</m> the way I described it earlier, as an analogue of ANOVA based on ranks. But keep in mind that the test statistic that gets calculated ends up with a rather different look to it than the one we used for our original ANOVA. --- <m>^a</m>A technical term.</fn></p>
+
+      <p>But wait, there's more! Dear lord, why is there always more? The story I've told so far is only actually true when there are no ties in the raw data. That is, if there are no two observations that have exactly the same value. If there are ties, then we have to introduce a correction factor to these calculations. At this point I'm assuming that even the most diligent reader has stopped caring (or at least formed the opinion that the tie-correction factor is something that doesn't require their immediate attention). So I'll very quickly tell you how it's calculated, and omit the tedious details about why it's done this way. Suppose we construct a frequency table for the raw data, and let <m>f_j</m> be the number of observations that have the <m>j</m>-th unique value. This might sound a bit abstract, so here's a concrete example from the frequency table of mood.gain from the <em>clinicaltrials.csv</em> data set (<xref ref="tbl-tab13-11"/>).</p>
+
+      <table xml:id="tbl-tab13-11">
+        <title>Frequency table of mood gain from the <em>clinicaltrials.csv</em> data</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell>0.1</cell>
+            <cell>0.2</cell>
+            <cell>0.3</cell>
+            <cell>0.4</cell>
+            <cell>0.5</cell>
+            <cell>0.6</cell>
+            <cell>0.8</cell>
+            <cell>0.9</cell>
+            <cell>1.1</cell>
+            <cell>1.2</cell>
+            <cell>1.3</cell>
+            <cell>1.4</cell>
+            <cell>1.7</cell>
+            <cell>1.8</cell>
+          </row>
+          <row>
+            <cell>1</cell>
+            <cell>1</cell>
+            <cell>2</cell>
+            <cell>1</cell>
+            <cell>1</cell>
+            <cell>2</cell>
+            <cell>1</cell>
+            <cell>1</cell>
+            <cell>1</cell>
+            <cell>1</cell>
+            <cell>2</cell>
+            <cell>2</cell>
+            <cell>1</cell>
+            <cell>1</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>Looking at this table, notice that the third entry in the frequency table has a value of 2. Since this corresponds to a mood.gain of 0.3, this table is telling us that two people's mood increased by 0.3.<fn>More to the point, in the mathematical notation I introduced above, this is telling us that <m>f_3 = 2</m>. Yay. So, now that we know this, the tie correction factor (TCF) is:
+      <me>TCF = 1 - \frac{\sum_j f_j^3 - f_j}{N^3 - N}</me>
+      The tie-corrected value of the Kruskal-Wallis statistic is obtained by dividing the value of <m>K</m> by this quantity. It is this tie-corrected version that jamovi calculates.</fn></p>
+
+      <p>And so jamovi uses a tie-correction factor to calculate the tie-corrected Kruskall-Wallis statistic. And at long last, we're actually finished with the theory of the Kruskal-Wallis test. I'm sure you're all terribly relieved that I've cured you of the existential anxiety that naturally arises when you realise that you don't know how to calculate the tie-correction factor for the Kruskal-Wallis test. Right?</p>
+    </subsection>
+
+    <subsection xml:id="subsec-kruskal-wallis-jamovi">
+      <title>How to run the Kruskal-Wallis test in jamovi</title>
+
+      <p>Despite the horror that we've gone through in trying to understand what the Kruskal-Wallis test actually does, it turns out that running the test is pretty painless, since jamovi has an analysis as part of the ANOVA analysis set called 'Non-Parametric' -- 'one-way ANOVA (Kruskal-Wallis)' Most of the time you'll have data like the <em>clinicaltrial.csv</em> data set, in which you have your outcome variable mood.gain and a grouping variable drug. If so, you can just go ahead and run the analysis in jamovi. What this gives us is a Kruskal-Wallis <m>\chi^2 = 12.076, df = 2, p = 0.00239</m>, as in <xref ref="fig-fig13-8"/>.</p>
+
+      <figure xml:id="fig-fig13-8">
+        <caption>Kruskal-Wallis one-way non-parametric ANOVA in jamovi</caption>
+        <image source="images/fig13-8.png" width="95%">
+          <description>A jamovi screenshot showing a One-Way ANOVA (Non-parametric) test in a clinical trial. The interface displays the dependent variable "mood.gain," the grouping variable "drug," analysis results, and a list of references on the right.</description>
+        </image>
+      </figure>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-repeated-measures-anova">
+    <title>Repeated measures one-way ANOVA</title>
+
+    <p>The one-way repeated measures ANOVA is a statistical test for significant differences between three or more groups where the same participants are in each group (or each participant is closely matched with participants in other experimental groups). For this reason, there should always be an equal number of scores (data points) in each experimental group. This type of design and analysis can also be called a "related ANOVA" or a "within subjects ANOVA".</p>
+
+    <p>The logic behind a repeated measures ANOVA is very similar to that of an independent ANOVA (sometimes called a "between subjects" ANOVA). You'll remember that earlier we showed that in a between subjects ANOVA total variability is partitioned into between groups variability (<m>SS_b</m>) and within groups variability (<m>SS_w</m>), then divided by the respective degrees of freedom to give <m>MS_b</m> and <m>MS_w</m> (see <xref ref="tbl-tab13-1"/>), whereupon the <m>F</m>-ratio is calculated as:
+    <me>F = \frac{MS_b}{MS_w}</me></p>
+
+    <p>In a repeated measures ANOVA, the <m>F</m>-ratio is calculated in a similar way, but whereas in an independent ANOVA the within-group variability (<m>SS_w</m>) is used as the basis for the <m>MS_w</m> denominator, in a repeated measures ANOVA the <m>SS_w</m> is partitioned into two parts. As we are using the same subjects in each group, we can remove the variability due to the individual differences between subjects (referred to as <m>SS_{subjects}</m>) from the within groups variability.</p>
+
+    <p>We won't go into too much technical detail about how this is done, but essentially each subject becomes a level of a factor called subjects. The variability in this within subjects factor is then calculated in the same way as any between subjects factor.</p>
+
+    <p>And then we can subtract <m>SS_{subjects}</m> from <m>SS_w</m> to provide a smaller <m>SS_{error}</m> term:
+    <me>\text{Independent ANOVA: } SS_{error} = SS_w</me>
+    <me>\text{Repeated Measures ANOVA: } SS_{error} = SS_w - SS_{subjects}</me></p>
+
+    <p>This change in <m>SS_{error}</m> term often leads to a more powerful statistical test, but this does depend on whether the reduction in the <m>SS_{error}</m> more than compensates for the reduction in degrees of freedom for the error term (as degrees of freedom go from <m>(n - k)</m><fn><m>(n - k)</m>: (number of subjects - number of groups)</fn> to <m>(n - 1)(k - 1)</m> (remembering that there are more subjects in the independent ANOVA design).</p>
+
+    <subsection xml:id="subsec-repeated-measures-jamovi">
+      <title>Repeated measures ANOVA in jamovi</title>
+
+      <p>First, we need some data. Geschwind (1972) has suggested that the exact nature of a patient's language deficit following a stroke can be used to diagnose the specific region of the brain that has been damaged. A researcher is concerned with identifying the specific communication difficulties experienced by six patients suffering from Broca's Aphasia (a language deficit commonly experienced following a stroke) (<xref ref="tbl-tab13-12"/>).</p>
+
+      <table xml:id="tbl-tab13-12">
+        <title>Word recognition task scores in stroke patients</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell>Participant</cell>
+            <cell>Speech</cell>
+            <cell>Conceptual</cell>
+            <cell>Syntax</cell>
+          </row>
+          <row>
+            <cell>1</cell>
+            <cell>8</cell>
+            <cell>7</cell>
+            <cell>6</cell>
+          </row>
+          <row>
+            <cell>2</cell>
+            <cell>7</cell>
+            <cell>8</cell>
+            <cell>6</cell>
+          </row>
+          <row>
+            <cell>3</cell>
+            <cell>9</cell>
+            <cell>5</cell>
+            <cell>3</cell>
+          </row>
+          <row>
+            <cell>4</cell>
+            <cell>5</cell>
+            <cell>4</cell>
+            <cell>5</cell>
+          </row>
+          <row>
+            <cell>5</cell>
+            <cell>6</cell>
+            <cell>6</cell>
+            <cell>2</cell>
+          </row>
+          <row>
+            <cell>6</cell>
+            <cell>8</cell>
+            <cell>7</cell>
+            <cell>4</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>The patients were required to complete three word recognition tasks. On the first (speech production) task, patients were required to repeat single words read out aloud by the researcher. On the second (conceptual) task, designed to test word comprehension, patients were required to match a series of pictures with their correct name. On the third (syntax) task, designed to test knowledge of correct word order, patients were asked to reorder syntactically incorrect sentences. Each patient completed all three tasks. The order in which patients attempted the tasks was counterbalanced between participants. Each task consisted of a series of 10 attempts. The number of attempts successfully completed by each patient are shown in <xref ref="tbl-tab13-11"/>. Enter these data into jamovi ready for analysis (or take a short-cut and load up the <em>broca.csv</em> file).</p>
+
+      <p>To perform a one-way related ANOVA in jamovi, open the one-way repeated measures ANOVA dialogue box, as in <xref ref="fig-fig13-9"/>, via 'ANOVA - Repeated Measures ANOVA'.</p>
+
+      <figure xml:id="fig-fig13-9">
+        <caption>Repeated measures ANOVA dialogue box in jamovi</caption>
+        <image source="images/fig13-9.png" width="80%">
+          <description>A jamovi screenshot showing the setup for a Repeated Measures ANOVA analysis. The interface includes fields for participants, speech, conceptual, and syntax variables, along with options to define repeated measures factors and cells, between subject factors, and covariates.</description>
+        </image>
+      </figure>
+
+      <p>Then:</p>
+
+      <ul>
+        <li><p>Enter a 'Repeated Measures' factor name. This should be a label that you choose to describe the conditions repeated by all participants. For example, to describe the speech, conceptual and syntax tasks completed by all participants a suitable label would be 'Task'. Note that this new factor name represents the independent variable in the analysis.</p></li>
+        <li><p>Add a third level in the 'Repeated Measures Factors' text box, as there are three levels representing the three tasks: speech, conceptual and syntax. Change the labels of the levels accordingly.</p></li>
+        <li><p>Then move each of the levels variables across to the 'Repeated Measures' Cells text box.</p></li>
+        <li><p>Finally, under the 'Assumption Checks' option, tick the 'Sphericity checks' text box.</p></li>
+      </ul>
+
+      <p>The jamovi output for a one-way repeated measures ANOVA is produced as shown in <xref ref="fig-fig13-10"/> to <xref ref="fig-fig13-13"/>. The first output we should look at is Mauchly's Test of Sphericity, which tests the hypothesis that the variances of the differences between the conditions are equal (meaning that the spread of difference scores between the study conditions is approximately the same). In <xref ref="fig-fig13-10"/> the significance level in Mauchly's test is <m>p = .720</m>. If Mauchly's test is non-significant (i.e. <m>p > .05</m>, as is the case in this analysis) then it is reasonable to conclude that the variances of the differences are not significantly different (i.e. they are roughly equal and sphericity can be assumed).</p>
+
+      <figure xml:id="fig-fig13-10">
+        <caption>One-way repeated measures ANOVA output -- Mauchly Test of Sphericity</caption>
+        <image source="images/fig13-10.png" width="95%">
+          <description>A jamovi results table titled "Tests of Sphericity" shows three columns for Mauchly W, p-value, Greenhouse-Geisser epsilon, and Huynh-Feldt epsilon. Under the task row, the values are 0.85, 0.72009, 0.87, and 1.00, respectively. The heading 'Assumptions' is above the table.</description>
+        </image>
+      </figure>
+
+      <p>If, on the other hand, Mauchly's test had been significant (<m>p &lt; .05</m>) then we would conclude that there are significant differences between the variance of the differences, and the requirement of sphericity has not been met. In this case, we should apply a correction to the <m>F</m>-value obtained in the one-way related ANOVA analysis:</p>
+
+      <ul>
+        <li><p>If the Greenhouse-Geisser value in the 'Tests of Sphericity' table is <m>> .75</m> then you should use the Huynh-Feldt correction</p></li>
+        <li><p>But if the Greenhouse-Geisser value is <m>&lt; .75</m>, then you should use the Greenhouse-Geisser correction.</p></li>
+      </ul>
+
+      <p>Both these corrected <m>F</m>-values can be specified in the 'Sphericity Corrections' check boxes under the 'Assumption Checks' options, and the corrected <m>F</m>-values are then shown in the results table, as in <xref ref="fig-fig13-11"/>.</p>
+
+      <p>In our analysis, we saw that the significance of Mauchly's Test of Sphericity was <m>p = .720</m> (i.e., <m>p > 0.05</m>). So, this means we can assume that the requirement of sphericity has been met so no correction to the <m>F</m>-value is needed. Therefore, we can use the 'None' Sphericity Correction output values for the repeated measure 'Task': <m>F = 6.93</m>, <m>df = 2</m>, <m>p = .013</m>, and we can conclude that the number of tests successfully completed on each language task did vary significantly depending on whether the task was speech, comprehension or syntax based (<m>F(2, 10) = 6.93</m>, <m>p = .013</m>).</p>
+
+      <figure xml:id="fig-fig13-11">
+        <caption>One-way repeated measures ANOVA output -- Tests of Within Subjects Effects</caption>
+        <image source="images/fig13-11.png" width="95%">
+          <description>A jamovi results table displaying repeated measures ANOVA results. The columns include Sphericity Correction (None, Greenhouse-Geisser, Huynh-Feldt), Sum of Squares, degrees of freedom (df), Mean Square, F-values, and p-values for Task and Residual effects. Note: Type 3 Sums of Squares.</description>
+        </image>
+      </figure>
+
+      <p>Post hoc tests can also be specified in jamovi for repeated measures ANOVA in the same way as for independent ANOVA. The results are shown in <xref ref="fig-fig13-12"/>. These indicate that there is a significant difference between Speech and Syntax, but not between other levels.</p>
+
+      <figure xml:id="fig-fig13-12">
+        <caption>Post hoc tests in repeated measures ANOVA in jamovi</caption>
+        <image source="images/fig13-12.png" width="95%">
+          <description>A jamovi results table titled 'Post Hoc Comparisons -- Task' with columns for Comparison, Mean Difference, SE, df, t, and P_tukey. The tasks compared are Speech vs. Conceptual, Speech vs. Syntax, and Conceptual vs. Syntax. Values for each comparison are provided.</description>
+        </image>
+      </figure>
+
+      <p>Descriptive statistics (marginal means) can be reviewed to help interpret the results, produced in the jamovi output as in <xref ref="fig-fig13-13"/>. Comparison of the mean number of trials successfully completed by participants shows that Broca's Aphasics perform reasonably well on speech production (mean = 7.17) and language comprehension (mean = 6.17) tasks. However, their performance was considerably worse on the syntax task (mean = 4.33), with a significant difference in post hoc tests between Speech and Syntax task performance.</p>
+
+      <figure xml:id="fig-fig13-13">
+        <caption>One-way repeated measures ANOVA output -- Descriptive Statistics</caption>
+        <image source="images/fig13-13.png" width="70%">
+          <description>A jamovi results table titled 'Estimated Marginal Means - Task' shows the mean, standard error, and 95% confidence intervals for three tasks: Speech (Mean: 7.17, SE: 0.60, CI: 5.62-8.71), Conceptual (Mean: 6.17, SE: 0.60, CI: 4.62-7.71), and Syntax (Mean: 4.33, SE: 0.67, CI: 2.62-6.05).</description>
+        </image>
+      </figure>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-friedman-test">
+    <title>The Friedman non-parametric repeated measures ANOVA test</title>
+
+    <p>The Friedman test is a non-parametric version of a repeated measures ANOVA and can be used instead of the Kruskal-Wallis test when testing for differences between three or more groups where the same participants are in each group, or each participant is closely matched with participants in other conditions. If the dependent variable is ordinal, or if the assumption of normality is not met, then the Friedman test can be used.</p>
+
+    <p>As with the Kruskal-Wallis test, the underlying mathematics is complicated, and won't be presented here. For the purpose of this book, it is sufficient to note that jamovi calculates the tie-corrected version of the Friedman test, and in <xref ref="fig-fig13-14"/> there is an example using the Broca's Aphasia data we have already looked at.</p>
+
+    <figure xml:id="fig-fig13-14">
+      <caption>The 'Repeated Measures ANOVA (Non-parametric)' dialogue box and results in jamovi</caption>
+      <image source="images/fig13-14.png" width="95%">
+        <description>A jamovi screenshot displaying the results of a Repeated Measures ANOVA (Non-parametric). The sections shown include data from participants, measures (Speech, Conceptual, Syntax), pairwise comparisons, and descriptive statistics.</description>
+      </image>
+    </figure>
+
+    <p>It's pretty straightforward to run a Friedman test in jamovi. Just select 'Analyses - ANOVA - Repeated Measures ANOVA (Non-parametric)' as in <xref ref="fig-fig13-14"/>. Then highlight and transfer the names of the repeated measures variables you wish to compare (Speech, Conceptual, Syntax) into the 'Measures:' text box. To produce descriptive statistics (means and medians) for the three repeated measures variables, click on the 'Descriptives' button.</p>
+
+    <p>The jamovi results show descriptive statistics, chi-square value, degrees of freedom, and the <m>p</m>-value (<xref ref="fig-fig13-14"/>). Since the <m>p</m>-value is less than the level conventionally used to determine significance (<m>p &lt; .05</m>), we can conclude that Broca's Aphasics perform reasonably well on speech production (median = 7.5) and language comprehension (median = 6.5) tasks. However, their performance was considerably worse on the syntax task (median = 4.5), with a significant difference in post hoc tests between Speech and Syntax task performance.</p>
+  </section>
+
+  <section xml:id="sec-anova-and-t-test">
+    <title>On the relationship between ANOVA and the Student <m>t</m>-test</title>
+
+    <p>There's one last thing I want to point out before finishing. It's something that a lot of people find kind of surprising, but it's worth knowing about. An ANOVA with two groups is identical to the Student <m>t</m>-test. No, really. It's not just that they are similar, but they are actually equivalent in every meaningful way. I won't try to prove that this is always true, but I will show you a single concrete demonstration.</p>
+
+    <p>Suppose that, instead of running an ANOVA on our mood.gain ~ drug model, let's instead do it using therapy as the predictor. If we run this ANOVA we get an <m>F</m>-statistic of <m>F(1,16) = 1.71</m>, and a <m>p</m>-value = <m>0.21</m>. Since we only have two groups, I didn't actually need to resort to an ANOVA, I could have just decided to run a Student <m>t</m>-test. So let's see what happens when I do that: I get a <m>t</m>-statistic of <m>t(16) = -1.3068</m> and a <m>p</m>-value = 0.21. Curiously, the <m>p</m>-values are identical. Once again we obtain a value of <m>p = .21</m>.</p>
+
+    <p>But what about the test statistic? Having run a <m>t</m>-test instead of an ANOVA, we get a somewhat different answer, namely <m>t(16) = -1.3068</m>. However, there is a fairly straightforward relationship here. If we square the <m>t</m>-statistic then we get the <m>F</m>-statistic from before: <m>-1.3068^2 = 1.7077</m>.</p>
+  </section>
+
+  <section xml:id="sec-anova-summary">
+    <title>Summary</title>
+
+    <p>There's a fair bit covered in this chapter, but there's still a lot missing.<fn>As with all of the chapters in this book, there are quite a few different sources that I've relied upon, but the one stand-out text that I've been most heavily influenced by is Sahai and Ageel (2000). It's not a good book for beginners, but it's an excellent book for more advanced readers who are interested in understanding the mathematics behind ANOVA.</fn> Most obviously, I haven't discussed how to run an ANOVA when you are interested in more than one grouping variable, but that will be discussed in a lot of detail in <xref ref="ch-factorial-anova"/>. In terms of what we have discussed, the key topics were:</p>
+
+    <ul>
+      <li><p>The basic logic behind <xref ref="sec-how-anova-works"/> and <xref ref="sec-running-anova-jamovi"/>.</p></li>
+      <li><p>How to compute an <xref ref="sec-anova-effect-size"/> for an ANOVA.</p></li>
+      <li><p><xref ref="sec-multiple-comparisons-post-hoc"/> for multiple testing.</p></li>
+      <li><p><xref ref="sec-anova-assumptions"/>.</p></li>
+      <li><p><xref ref="subsec-checking-homogeneity-variance"/> and what to do if it is violated: <xref ref="subsec-removing-homogeneity-variance"/>.</p></li>
+      <li><p><xref ref="subsec-checking-normality"/> and what to do if it is violated: <xref ref="subsec-removing-normality"/>.</p></li>
+      <li><p><xref ref="sec-repeated-measures-anova"/> and the non-parametric equivalent, <xref ref="sec-friedman-test"/>.</p></li>
+    </ul>
+  </section>
+
 </chapter>
