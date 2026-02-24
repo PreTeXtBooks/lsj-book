@@ -3,6 +3,426 @@
 <chapter xml:id="ch-correlation-regression" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Correlation and linear regression</title>
   <introduction>
-    <p>To be added.</p>
+    <p>The goal in this chapter is to introduce <term>correlation</term> and <term>linear regression</term>. These are the standard tools that statisticians rely on when analysing the relationship between continuous predictors and continuous outcomes.</p>
   </introduction>
+
+  <section xml:id="sec-correlations">
+    <title>Correlations</title>
+
+    <p>In this section we'll talk about how to describe the relationships between variables in the data. To do that, we want to talk mostly about the <term>correlation</term> between variables. But first, we need some data (<xref ref="tbl-tab12-1"/>).</p>
+
+    <subsection xml:id="subsec-correlation-data">
+      <title>The data</title>
+
+      <table xml:id="tbl-tab12-1">
+        <title>Data for correlation analysis — descriptive statistics for the <em>parenthood</em> data</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell>variable</cell>
+            <cell>min</cell>
+            <cell>max</cell>
+            <cell>mean</cell>
+            <cell>median</cell>
+            <cell>std. dev</cell>
+            <cell>IQR</cell>
+          </row>
+          <row>
+            <cell>Dani's grumpiness</cell>
+            <cell>41</cell>
+            <cell>91</cell>
+            <cell>63.71</cell>
+            <cell>62</cell>
+            <cell>10.05</cell>
+            <cell>14</cell>
+          </row>
+          <row>
+            <cell>Dani's hours slept</cell>
+            <cell>4.84</cell>
+            <cell>9.00</cell>
+            <cell>6.97</cell>
+            <cell>7.03</cell>
+            <cell>1.02</cell>
+            <cell>1.45</cell>
+          </row>
+          <row>
+            <cell>Dani's son's hours slept</cell>
+            <cell>3.25</cell>
+            <cell>12.07</cell>
+            <cell>8.05</cell>
+            <cell>7.95</cell>
+            <cell>2.07</cell>
+            <cell>3.21</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>Let's turn to a topic close to every parent's heart: sleep. The data set we'll use is fictitious, but based on real events. Suppose I'm curious to find out how much my infant son's sleeping habits affect my mood. Let's say that I can rate my grumpiness very precisely, on a scale from 0 (not at all grumpy) to <m>100</m> (grumpy as a very, very grumpy old man or woman). And lets also assume that I've been measuring my grumpiness, my sleeping patterns and my son's sleeping patterns for quite some time now. Let's say, for <m>100</m> days. And, being a nerd, I've saved the data as a file called <em>parenthood.csv</em>.</p>
+
+      <p>If we load the data we can see that the file contains four variables dani.sleep, baby.sleep, dani.grump and day. Note that when you first load this data set jamovi may not have guessed the data type for each variable correctly, in which case you should fix it: dani.sleep, baby.sleep, dani.grump and day can be specified as continuous variables, and ID is a nominal(integer) variable.<fn>I've noticed that in jamovi you can also specify an 'ID' variable type, but for our purposes it does not matter how we specify the ID variable as we won't be including it in any analyses.</fn></p>
+
+      <p>Next, I'll take a look at some basic descriptive statistics and, to give a graphical depiction of what each of the three interesting variables looks like, <xref ref="fig-fig12-1"/> plots histograms. One thing to note: just because jamovi can calculate dozens of different statistics doesn't mean you should report all of them. If I were writing this up for a report, I'd probably pick out those statistics that are of most interest to me (and to my readership), and then put them into a nice, simple table like the one in <xref ref="tbl-tab12-1"/>.<fn>Actually, even that table is more than I'd bother with. In practice most people pick one measure of central tendency, and one measure of variability only.</fn></p>
+
+      <p>Notice that when I put it into a table, I gave everything "human readable" names. This is always good practice. Notice also that I'm not getting enough sleep. This isn't good practice, but other parents tell me that it's pretty standard.</p>
+
+      <figure xml:id="fig-fig12-1">
+        <caption>Histograms from jamovi for the three interesting variables in the <em>parenthood</em> data set</caption>
+        <sidebyside widths="33% 33% 33%">
+          <figure xml:id="fig-fig12-1a">
+            <caption></caption>
+            <image source="images/fig12-1a.png">
+              <description>A histogram displaying the density distribution of baby sleep durations. The bars range from about 3.5 to 12.5 hours of sleep. There is a higher concentration of data points between 7 and 10 hours. The y-axis is labeled 'density' and the x-axis is labeled 'baby.sleep'.</description>
+            </image>
+          </figure>
+          <figure xml:id="fig-fig12-1b">
+            <caption></caption>
+            <image source="images/fig12-1b.png">
+              <description>A histogram with labelled axes 'density' on the y-axis and 'dan.sleep' on the x-axis. The histogram has bars of varying heights, peaking between the values 6 and 7 on the x-axis. The bars are shaded in light blue.</description>
+            </image>
+          </figure>
+          <figure xml:id="fig-fig12-1c">
+            <caption></caption>
+            <image source="images/fig12-1c.png">
+              <description>A histogram displays the density of data points for the variable 'dan.grump'. The x-axis ranges from 40 to 90, and the y-axis is labeled 'density'. The bars show a distribution peaking around 60 and tapering off towards the lower and higher ends.</description>
+            </image>
+          </figure>
+        </sidebyside>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-correlation-strength-direction">
+      <title>The strength and direction of a relationship</title>
+
+      <p>We can draw scatterplots to give us a general sense of how closely related two variables are. Ideally though, we might want to say a bit more about it than that. For instance, let's compare the relationship between baby.sleep and dani.grump (<xref ref="fig-fig12-2a"/>), left, with that between dani.sleep and dani.grump (<xref ref="fig-fig12-2b"/>), right. When looking at these two plots side by side, it's clear that the relationship is qualitatively the same in both cases: more sleep equals less grump!</p>
+
+      <p>However, it's also pretty obvious that the relationship between dani.sleep and dani.grump is stronger than the relationship between baby.sleep and dani.grump. The plot on the right is "neater" than the one on the left. What it feels like is that if you want to predict what my mood is, it'd help you a little bit to know how many hours my son slept, but it'd be more helpful to know how many hours I slept.</p>
+
+      <figure xml:id="fig-fig12-2">
+        <caption>Scatterplots from jamovi showing the relationship between baby.sleep and dani.grump (left) and the relationship between dani.sleep and dani.grump (right)</caption>
+        <sidebyside widths="48% 48%">
+          <figure xml:id="fig-fig12-2a">
+            <caption></caption>
+            <image source="images/fig12-2a.png">
+              <description>Scatter plot showing the relationship between 'Baby sleep (hours)' on the x-axis and 'My grumpiness' on the y-axis. The trend indicates that as the baby sleeps more, grumpiness decreases.</description>
+            </image>
+          </figure>
+          <figure xml:id="fig-fig12-2b">
+            <caption></caption>
+            <image source="images/fig12-2b.png">
+              <description>A scatter plot titled 'My grumpiness vs. My sleep (hours)'. The x-axis is labeled 'My sleep (hours)' ranging from 5 to 9, and the y-axis is labeled 'My grumpiness' ranging from 40 to 90. The data points show a negative correlation between sleep and grumpiness.</description>
+            </image>
+          </figure>
+        </sidebyside>
+      </figure>
+
+      <p>In contrast, let's consider the two scatterplots shown in <xref ref="fig-fig12-3"/>. If we compare the scatterplot of "baby.sleep v dani.grump" (left) to the scatterplot of "baby.sleep v dani.sleep" (right), the overall strength of the relationship is the same, but the direction is different. That is, if my son sleeps more, I get more sleep (positive relationship, right-hand side), but if he sleeps more then I get less grumpy (negative relationship, left-hand side).</p>
+
+      <figure xml:id="fig-fig12-3">
+        <caption>Scatterplots from jamovi showing the relationship between baby.sleep and dani.grump (left), as compared to the relationship between baby.sleep and dani.sleep (right)</caption>
+        <sidebyside widths="48% 48%">
+          <figure xml:id="fig-fig12-3a">
+            <caption></caption>
+            <image source="images/fig12-2a.png">
+              <description>Scatter plot showing the relationship between 'Baby sleep (hours)' on the x-axis and 'My grumpiness' on the y-axis. The trend indicates that as the baby sleeps more, grumpiness decreases.</description>
+            </image>
+          </figure>
+          <figure xml:id="fig-fig12-3b">
+            <caption></caption>
+            <image source="images/fig12-3b.png">
+              <description>Scatter plot showing the relationship between 'Baby sleep (hours)' on the x-axis and 'My sleep (hours)' on the y-axis. Data points indicate that as the baby's sleep increases from 5 to 12.5 hours, the parent's sleep also tends to increase from 5 to 9 hours.</description>
+            </image>
+          </figure>
+        </sidebyside>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-correlation-coefficient">
+      <title>The correlation coefficient</title>
+
+      <p>We can make these ideas a bit more explicit by introducing the idea of a <term>correlation coefficient</term> (or, more specifically, Pearson's correlation coefficient), which is traditionally denoted as r. The correlation coefficient between two variables <m>X</m> and <m>Y</m> (sometimes denoted <m>r_{XY}</m>), which we'll define more precisely in the next section, is a measure that varies from -1 to 1. When <m>r = -1</m> it means that we have a perfect negative relationship, and when <m>r = 1</m> it means we have a perfect positive relationship. When <m>r = 0</m>, there's no relationship at all. If you look at <xref ref="fig-fig12-4"/>, you can see several plots showing what different correlations look like.</p>
+
+      <p>[Additional technical detail<fn>The formula for the Pearson's correlation coefficient can be written in several different ways. I think the simplest way to write down the formula is to break it into two steps. Firstly, let's introduce the idea of a <term>covariance</term>. The covariance between two variables <m>X</m> and <m>Y</m> is a generalisation of the notion of the variance and is a mathematically simple way of describing the relationship between two variables that isn't terribly informative to humans: <me>Cov(X,Y)=\frac{1}{N-1}\sum_{i=1}^N(X_i-\bar{X})(Y_i-\bar{Y})</me> Because we're multiplying (i.e., taking the "product" of) a quantity that depends on X by a quantity that depends on Y and then averaging, you can think of the formula for the covariance as an "average cross product" between <m>X</m> and <m>Y</m>. The covariance has the nice property that, if <m>X</m> and <m>Y</m> are entirely unrelated, then the covariance is exactly zero. If the relationship between them is positive then the covariance is also positive, and if the relationship is negative then the covariance is also negative. In other words, the covariance captures the basic qualitative idea of correlation. Unfortunately, the raw magnitude of the covariance isn't easy to interpret as it depends on the units in which <m>X</m> and <m>Y</m> are expressed and, worse yet, the actual units that the covariance itself is expressed in are really weird. The Pearson correlation coefficient r fixes this interpretation problem by standardising the covariance, in pretty much the exact same way that the <m>z</m>-score standardises a raw score, by dividing by the standard deviation. However, because we have two variables that contribute to the covariance, the standardisation only works if we divide by both standard deviations. In other words, the correlation between <m>X</m> and <m>Y</m> can be written as follows: <me>r_{XY}=\frac{Cov(X,Y)}{\hat{\sigma}_X\hat{\sigma}_Y}</me></fn>]</p>
+
+      <figure xml:id="fig-fig12-4">
+        <caption>Illustration of the effect of varying the strength and direction of a correlation. In the left-hand column, the correlations are <m>0, .33, .66</m> and <m>1</m>. In the right-hand column, the correlations are <m>0, -.33, -.66</m> and <m>-1</m></caption>
+        <image source="images/fig-fig12-4-1.png" width="80%">
+          <description>Scatter plots are shown with varying degrees of positive and negative correlations. Positive correlations: 0, 0.33, 0.66, and 1. Negative correlations: 0, -0.33, -0.66, and -1. 0 shows no correlation, and 1, -1 show perfect correlations.</description>
+        </image>
+      </figure>
+
+      <p>By standardising the covariance, not only do we keep all of the nice properties of the covariance discussed earlier, but the actual values of r are on a meaningful scale: r = 1 implies a perfect positive relationship and <m>r = -1</m> implies a perfect negative relationship. I'll expand a little more on this point later, in the section on interpreting a correlation. But before I do, let's look at how to calculate correlations in jamovi.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-correlations-jamovi">
+      <title>Calculating correlations in jamovi</title>
+
+      <p>Calculating correlations in jamovi can be done by clicking on the 'Regression' — 'Correlation Matrix' button. Transfer all four continuous variables across into the box on the right to get the output in <xref ref="fig-fig12-5"/>.</p>
+
+      <figure xml:id="fig-fig12-5">
+        <caption>Correlations between variables in the <em>parenthood.csv</em> file</caption>
+        <image source="images/fig12-5.png" width="90%">
+          <description>A jamovi screenshot showing data analysis tools. The main focus is on a Correlation Matrix section with variable labels such as "dan sleep," "baby sleep," and "dan grump." Options for Pearson correlation, significance reporting, and confidence intervals are visible.</description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-interpreting-correlation">
+      <title>Interpreting a correlation</title>
+
+      <p>Naturally, in real life you don't see many correlations of <m>1</m>. So how should you interpret a correlation of, say, r = <m>.4</m>? The honest answer is that it really depends on what you want to use the data for, and on how strong the correlations in your field tend to be. A friend of mine in engineering once argued that any correlation less than <m>.95</m> is completely useless (I think he was exaggerating, even for engineering). On the other hand, there are real cases, even in psychology, where you should really expect correlations that strong. For instance, one of the benchmark data sets used to test theories of how people judge similarities is so clean that any theory that can't achieve a correlation of at least <m>.9</m> really isn't deemed to be successful. However, when looking for (say) elementary correlates of intelligence (e.g., inspection time, response time), if you get a correlation above <m>.3</m> you're doing very very well. In short, the interpretation of a correlation depends a lot on the context. That said, the rough guide in <xref ref="tbl-tab12-2"/> is pretty typical.</p>
+
+      <table xml:id="tbl-tab12-2">
+        <title>A rough guide to interpreting correlations</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell>Correlation</cell>
+            <cell>Strength</cell>
+            <cell>Direction</cell>
+          </row>
+          <row>
+            <cell>-1.0 to -0.9</cell>
+            <cell>Very strong</cell>
+            <cell>Negative</cell>
+          </row>
+          <row>
+            <cell>-0.9 to -0.7</cell>
+            <cell>Strong</cell>
+            <cell>Negative</cell>
+          </row>
+          <row>
+            <cell>-0.7 to -0.4</cell>
+            <cell>Moderate</cell>
+            <cell>Negative</cell>
+          </row>
+          <row>
+            <cell>-0.4 to -0.2</cell>
+            <cell>Weak</cell>
+            <cell>Negative</cell>
+          </row>
+          <row>
+            <cell>-0.2 to 0</cell>
+            <cell>Negligible</cell>
+            <cell>Negative</cell>
+          </row>
+          <row>
+            <cell>0 to 0.2</cell>
+            <cell>Negligible</cell>
+            <cell>Positive</cell>
+          </row>
+          <row>
+            <cell>0.2 to 0.4</cell>
+            <cell>Weak</cell>
+            <cell>Positive</cell>
+          </row>
+          <row>
+            <cell>0.4 to 0.7</cell>
+            <cell>Moderate</cell>
+            <cell>Positive</cell>
+          </row>
+          <row>
+            <cell>0.7 to 0.9</cell>
+            <cell>Strong</cell>
+            <cell>Positive</cell>
+          </row>
+          <row>
+            <cell>0.9 to 1.0</cell>
+            <cell>Very strong</cell>
+            <cell>Positive</cell>
+          </row>
+        </tabular>
+        <p>Note that I say a rough guide. There aren't hard and fast rules for what counts as strong or weak relationships. It depends on the context.</p>
+      </table>
+
+      <p>However, something that can never be stressed enough is that you should always look at the scatterplot before attaching any interpretation to the data. A correlation might not mean what you think it means. The classic illustration of this is "Anscombe's Quartet", a collection of four data sets. Each data set has two variables, an <m>X</m> and a <m>Y</m>. For all four data sets the mean value for <m>X</m> is <m>9</m> and the mean for <m>Y</m> is <m>7.5</m>. The standard deviations for all <m>X</m> variables are almost identical, as are those for the Y variables. And in each case the correlation between <m>X</m> and <m>Y</m> is <m>r = 0.816</m>. You can verify this yourself, since I happen to have saved it in a file called <em>anscombe.csv</em>.</p>
+
+      <p>You'd think that these four data sets would look pretty similar to one another. They do not. If we draw scatterplots of <m>X</m> against <m>Y</m> for all four variables, as shown in <xref ref="fig-fig12-6"/>, we see that all four of these are spectacularly different to each other. The lesson here, which so very many people seem to forget in real life, is "always graph your raw data".</p>
+
+      <figure xml:id="fig-fig12-6">
+        <caption>Anscombe's quartet scatterplots. All four of these data sets have a Pearson correlation of <m>r = .816</m>, but they are qualitatively different from one another</caption>
+        <image source="images/fig-fig12-6-1.png" width="90%">
+          <description>Four scatter plots with points showing the same positive correlation between x and y. The four plots show linear, non-linear, outlier, and leverage types of relationships.</description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-spearman">
+      <title>Spearman's rank correlations</title>
+
+      <p>The Pearson correlation coefficient is pretty useful, but it does have shortcomings. One issue stands out: what it actually measures is the strength of the linear relationship between two variables. In other words, what it gives you is a measure of the extent to which the data all tend to fall on a single, perfectly straight line. Often, this is a pretty good approximation to what we mean when we say "relationship", and so the Pearson correlation is a good thing to calculate. Sometimes though, it isn't.</p>
+
+      <p>One very common situation where the Pearson correlation isn't quite the right thing to use arises when an increase in one variable <m>X</m> really is reflected in an increase in another variable Y, but the nature of the relationship isn't necessarily linear. An example of this might be the relationship between effort and reward when studying for an exam. If you put zero effort (<m>X</m>) into learning a subject then you should expect a grade of <m>0\%</m> (<m>Y</m>).</p>
+
+      <p>However, a little bit of effort will cause a massive improvement. Just turning up to lectures means that you learn a fair bit, and if you just turn up to classes and scribble a few things down your grade might rise to 35%, all without a lot of effort. However, you just don't get the same effect at the other end of the scale. As everyone knows, it takes a lot more effort to get a grade of <m>90\%</m> than it takes to get a grade of <m>55\%</m>. What this means is that, if I've got data looking at study effort and grades, there's a pretty good chance that Pearson correlations will be misleading.</p>
+
+      <p>To illustrate, consider the data plotted in <xref ref="fig-fig12-7"/>, showing the relationship between hours worked and grade received for 10 students taking some class. The curious thing about this (highly fictitious) data set is that increasing your effort always increases your grade. It might be by a lot or it might be by a little, but increasing effort will never decrease your grade. If we run a standard Pearson correlation, it shows a strong relationship between hours worked and grade received, with a correlation coefficient of <m>0.91</m>.</p>
+
+      <p>However, this doesn't actually capture the observation that increasing hours worked always increases the grade. There's a sense here in which we want to be able to say that the correlation is perfect but for a somewhat different notion of what a "relationship" is. What we're looking for is something that captures the fact that there is a perfect <term>ordinal relationship</term> here. That is, if student 1 works more hours than student 2, then we can guarantee that student 1 will get the better grade. That's not what a correlation of <m>r = .91</m> says at all.</p>
+
+      <figure xml:id="fig-fig12-7">
+        <caption>jamovi plot showing the relationship between hours worked and grade received for a toy data set consisting of only 10 students (each dot corresponds to one student). The line through the middle shows the linear relationship between the two variables. This produces a strong Pearson correlation of <m>r = .91</m>. However, the interesting thing to note here is that there's actually a perfect monotonic relationship between the two variables. In this toy example, increasing the hours worked always increases the grade received, as illustrated by the solid line. This is reflected in a Spearman correlation of <m>\rho = 1</m>. With such a small data set, however, it's an open question as to which version better describes the actual relationship involved</caption>
+        <image source="images/fig12-7.png" width="80%">
+          <description>A scatter plot with a trend line. The x-axis is labeled "hours" and the y-axis is labeled "grade." Dots represent data points, showing a positive correlation between hours studied and grade achieved, with the trend line ascending from the bottom-left to top-right.</description>
+        </image>
+      </figure>
+
+      <p>How should we address this? Actually, it's really easy. If we're looking for ordinal relationships all we have to do is treat the data as if it were ordinal scale! So, instead of measuring effort in terms of "hours worked", lets rank all <m>10</m> of our students in order of hours worked. That is, student <m>1</m> did the least work out of anyone (<m>2</m> hours) so they get the lowest rank (rank = <m>1</m>). Student <m>4</m> was the next laziest, putting in only <m>6</m> hours of work over the whole semester, so they get the next lowest rank (rank = <m>2</m>).</p>
+
+      <p>Notice that I'm using "rank = 1" to mean "low rank". Sometimes in everyday language we talk about "rank = <m>1</m>" to mean "top rank" rather than "bottom rank". So be careful, you can rank "from smallest value to largest value" (i.e., small equals rank <m>1</m>) or you can rank "from largest value to smallest value" (i.e., large equals rank 1). In this case, I'm ranking from smallest to largest, but as it's really easy to forget which way you set things up you have to put a bit of effort into remembering!</p>
+
+      <p>Okay, so let's have a look at our students when we rank them from worst to best in terms of effort and reward <xref ref="tbl-tab12-3"/>.</p>
+
+      <table xml:id="tbl-tab12-3">
+        <title>Students ranked in terms of effort and reward</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell></cell>
+            <cell>rank (hours worked)</cell>
+            <cell>rank (grade received)</cell>
+          </row>
+          <row>
+            <cell>student 1</cell>
+            <cell>1</cell>
+            <cell>1</cell>
+          </row>
+          <row>
+            <cell>student 2</cell>
+            <cell>10</cell>
+            <cell>10</cell>
+          </row>
+          <row>
+            <cell>student 3</cell>
+            <cell>6</cell>
+            <cell>6</cell>
+          </row>
+          <row>
+            <cell>student 4</cell>
+            <cell>2</cell>
+            <cell>2</cell>
+          </row>
+          <row>
+            <cell>student 5</cell>
+            <cell>3</cell>
+            <cell>3</cell>
+          </row>
+          <row>
+            <cell>student 6</cell>
+            <cell>5</cell>
+            <cell>5</cell>
+          </row>
+          <row>
+            <cell>student 7</cell>
+            <cell>4</cell>
+            <cell>4</cell>
+          </row>
+          <row>
+            <cell>student 8</cell>
+            <cell>8</cell>
+            <cell>8</cell>
+          </row>
+          <row>
+            <cell>student 9</cell>
+            <cell>7</cell>
+            <cell>7</cell>
+          </row>
+          <row>
+            <cell>student 10</cell>
+            <cell>9</cell>
+            <cell>9</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>Hmm. These are identical. The student who put in the most effort got the best grade, the student with the least effort got the worst grade, etc. As the table above shows, these two rankings are identical, so if we now correlate them we get a perfect relationship, with a correlation of 1.0.</p>
+
+      <p>What we've just re-invented is <term>Spearman's rank order correlation</term>, usually denoted <m>\rho</m> to distinguish it from the Pearson correlation r. We can calculate Spearman's <m>\rho</m> using jamovi simply by clicking the 'Spearman' check box in the 'Correlation Matrix' screen.</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-scatterplots">
+    <title>Scatterplots</title>
+
+    <p><term>Scatterplots</term> are a simple but effective tool for visualising the relationship between two variables, like we saw with the figures in <xref ref="sec-correlations"/>. It's this latter application that we usually have in mind when we use the term "scatterplot". In this kind of plot each observation corresponds to one dot. The horizontal location of the dot plots the value of the observation on one variable, and the vertical location displays its value on the other variable.</p>
+
+    <p>In many situations you don't really have a clear opinion about what the causal relationship is (e.g., does A cause B, or does B cause A, or does some other variable C control both A and B). If that's the case, it doesn't really matter which variable you plot on the x-axis and which one you plot on the y-axis.</p>
+
+    <p>However, in many situations you do have a pretty strong idea which variable you think is most likely to be causal, or at least you have some suspicions in that direction. If so, then it's conventional to plot the cause variable on the x-axis, and the effect variable on the y-axis. With that in mind, let's look at how to draw scatterplots in jamovi, using the same <em>parenthood</em> data set (i.e. <em>parenthood.csv</em>) that I used when introducing correlations.</p>
+
+    <p>Suppose my goal is to draw a scatterplot displaying the relationship between the amount of sleep that I get (dani.sleep) and how grumpy I am the next day (dani.grump).</p>
+
+    <p>There are two different ways in which we can use jamovi to get the plot that we're after. The first way is to use the 'Plot' option under the 'Regression' — 'Correlation Matrix' button, giving us the output shown in <xref ref="fig-fig12-8"/>.</p>
+
+    <figure xml:id="fig-fig12-8">
+      <caption>Scatterplot via the 'Correlation Matrix' command in jamovi</caption>
+      <image source="images/fig12-8.png" width="90%">
+        <description>A jamovi screenshot displaying a correlation matrix analysis. The analysis examines the variables "dan.sleep" and "dan.grump" with options for Pearson and Spearman correlations, covariance, and testing hypotheses. A scatter plot and density plots of the variables are shown.</description>
+      </image>
+    </figure>
+
+    <p>Note that jamovi draws a line through the points, we'll come onto this a bit later in the section on linear regression models. Plotting a scatterplot in this way also allows you to specify 'Densities for variables' and this option adds a density curve showing how the data in each variable is distributed.</p>
+
+    <p>The second way do to it is to use one of the jamovi add-on modules. This module is called 'scatr' and you can install it by clicking on the large '<m>+</m>' icon in the top right of the jamovi screen, opening the jamovi library, scrolling down until you find 'scatr' and clicking 'install'.</p>
+
+    <p>When you have done this, you will find a new 'Scatterplot' command available under the 'Exploration' button. This plot is a bit different than the first way, see <xref ref="fig-fig12-9"/>, but the important information is the same.</p>
+
+    <figure xml:id="fig-fig12-9">
+      <caption>Scatterplot via the 'scatr' add-on module in jamovi</caption>
+      <image source="images/fig12-9.png" width="80%">
+        <description>A scatter plot showing the relationship between 'dan.grump' and 'dan.sleep'. The x-axis represents 'dan.sleep' ranging from 5 to 9, and the y-axis represents 'dan.grump' ranging from 40 to 90. Data points trend downwards, indicating a negative correlation.</description>
+      </image>
+    </figure>
+
+    <subsection xml:id="subsec-scatterplot-matrix">
+      <title>More elaborate options</title>
+
+      <p>Often you will want to look at the relationships between several variables at once, using a <term>scatterplot matrix</term> (in jamovi via the 'Correlation Matrix' — 'Plot' command).</p>
+
+      <p>Just add another variable, for example baby.sleep to the list of variables to be correlated, and jamovi will create a scatterplot matrix for you, just like the one in <xref ref="fig-fig12-10"/>.</p>
+
+      <figure xml:id="fig-fig12-10">
+        <caption>A matrix of scatterplots produced using jamovi</caption>
+        <image source="images/fig12-10.png" width="90%">
+          <description>A series of scatter plots arranged in a matrix format showing correlations between variables: dan.sleep, dan.grump, and baby.sleep. Each plot has points and trend lines with grey confidence intervals. The correlation coefficients are labeled on the plots.</description>
+        </image>
+      </figure>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-linear-regression-model">
+    <title>What is a linear regression model?</title>
+
+    <p>Stripped to its bare essentials, linear regression models are basically a slightly fancier version of the Pearson correlation (see <xref ref="sec-correlations"/>), but they are actually much more powerful tools. We'll return to the <em>parenthood.csv</em> file that we were using to illustrate how correlations work.</p>
+
+    <p>Recall that, in this data set we were trying to find out why Dani is so very grumpy all the time and our working hypothesis was that I'm not getting enough sleep. We drew scatterplots to help us examine the relationship between the amount of sleep I get and my grumpiness the following day, as in <xref ref="fig-fig12-9"/>, and as we saw that this corresponded to a correlation of <m>r = -.90</m>, but what we find ourselves secretly imagining is something that looks closer to <xref ref="fig-fig12-11"/>(a). That is, we mentally draw a straight line through the middle of the data. In statistics, this line that we're drawing is called a <term>regression line</term>.</p>
+
+    <p>Notice that, since we're not idiots, the regression line goes through the middle of the data. We don't find ourselves imagining anything like the rather silly plot shown in <xref ref="fig-fig12-11"/>(b). This is not highly surprising. The line that I've drawn in <xref ref="fig-fig12-11"/>(b) doesn't "fit" the data very well, so it doesn't make a lot of sense to propose it as a way of summarising the data, right?</p>
+
+    <figure xml:id="fig-fig12-11">
+      <caption>Panel (a) shows the sleep-grumpiness scatterplot from <xref ref="fig-fig12-9"/> with the best fitting regression line drawn over the top. Not surprisingly, the line goes through the middle of the data. In contrast, panel (b) shows the same data, but with a very poor choice of regression line drawn over the top</caption>
+      <image source="images/fig-fig12-11-1.png" width="90%">
+        <description>Two scatter plots compare the fitting of regression lines to the relationship between sleep hours and grumpiness. The left plot shows a strong negative correlation with a steep regression line; the right plot shows a weaker fit and a flatter regression line.</description>
+      </image>
+    </figure>
+
+    <p>This is a very simple observation to make, but it turns out to be very powerful when we start trying to wrap just a little bit of maths around it. To do so, let's start with a refresher of some high school maths. The formula for a straight line is usually written like this:
+    <me>y=a+bx</me></p>
+
+    <p>The two variables are <m>x</m> and <m>y</m>, and we have two coefficients, <m>a</m> and <m>b</m>.<fn>Also sometimes written as <m>y = mx + c</m> where <m>m</m> is the slope coefficient and <m>c</m> is the intercept (constant) coefficient.</fn> The coefficient <m>a</m> represents the y-intercept of the line, and coefficient <m>b</m> represents the slope of the line. The intercept is interpreted as "the value of y that you get when <m>x = 0</m>". Similarly, a slope of b means that if you increase the x-value by 1 unit, then the y-value goes up by b units, and a negative slope means that the y-value would go down rather than up. We use the exact same formula for a regression line.</p>
+
+    <p>If <m>Y</m> is the outcome variable (the DV) and <m>X</m> is the predictor variable (the IV), then the formula that describes our regression is written like this:
+    <me>\hat{Y}_i=b_0+b_1X_i</me></p>
+
+    <p>Hmm. Looks like the same formula, but there's some extra frilly bits in this version. Let's make sure we understand them.</p>
+
+    <p>Firstly, notice that I've written <m>X_i</m> and <m>Y_i</m> rather than just plain old <m>X</m> and <m>Y</m>. This is because we want to remember that we're dealing with actual data. In this equation, <m>X_i</m> is the value of predictor variable for the ith observation (i.e., the number of hours of sleep that I got on day i of my little study), and <m>Y_i</m> is the corresponding value of the outcome variable (i.e., my grumpiness on that day). And although I haven't said so explicitly in the equation, what we're assuming is that this formula works for all observations in the data set (i.e., for all i).</p>
+
+    <p>Secondly, notice that I wrote <m>\hat{Y}_i</m> and not <m>Y_i</m>. This is because we want to make the distinction between the actual data <m>Y_i</m>, and the estimate <m>\hat{Y}_i</m> (i.e., the prediction that our regression line is making).</p>
+
+    <p>Thirdly, I changed the letters used to describe the coefficients from a and <m>b</m> to <m>b_0</m> and <m>b_1</m>. That's just the way that statisticians like to refer to the coefficients in a regression model. I've no idea why they chose b, but that's what they did. In any case <m>b_0</m> always refers to the intercept term, and <m>b_1</m> refers to the slope.</p>
+
+    <p>Excellent, excellent. Next, I can't help but notice that, regardless of whether we're talking about the good regression line or the bad one, the data don't fall perfectly on the line. Or, to say it another way, the data <m>Y_i</m> are not identical to the predictions of the regression model <m>\hat{Y}_i</m>. Since statisticians love to attach letters, names and numbers to everything, let's refer to the difference between the model prediction and that actual data point as a residual, and we'll refer to it as <m>\epsilon_i</m>.<fn>The <m>\epsilon</m> symbol is the Greek letter epsilon. It's traditional to use <m>\epsilon_i</m> or <m>e_i</m> to denote a residual.</fn> Written using mathematics, the residuals are defined as:
+    <me>\epsilon_i=Y_i-\hat{Y}_i</me></p>
+
+    <p>which in turn means that we can write down the complete linear regression model as:
+    <me>Y_i=b_0+b_1X_i+\epsilon_i</me></p>
+  </section>
+
 </chapter>
