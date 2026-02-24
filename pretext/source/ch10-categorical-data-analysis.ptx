@@ -247,6 +247,47 @@
         <title>Table of critical values for the chi-square distribution</title>
         <tabular halign="center">
           <row header="yes">
+            <cell></cell>
+            <cell>clubs</cell>
+            <cell>diamonds</cell>
+            <cell>hearts</cell>
+            <cell>spades</cell>
+          </row>
+          <row>
+            <cell>expected frequency <m>E_i</m></cell>
+            <cell>40</cell>
+            <cell>60</cell>
+            <cell>60</cell>
+            <cell>40</cell>
+          </row>
+        </tabular>
+</table>
+
+      <p>So, if our calculated <m>\chi^2</m> statistic is bigger than the critical value of <m>7.815</m>, then we can reject the null hypothesis (remember that the null hypothesis, <m>H_0</m>, is that all four suits are chosen with equal probability). Since we actually already calculated that before (i.e., <m>\chi^2 = 8.44</m>) we can reject the null hypothesis. And that's it, basically. You now know "Pearson's <m>\chi^2</m> test for the goodness-of-fit". Lucky you.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-gof-in-jamovi">
+      <title>Doing the test in jamovi</title>
+
+      <p>Not surprisingly, jamovi provides an analysis that will do these calculations for you. Let's use the <em>Randomness.omv</em> file. From the main 'Analyses' toolbar select 'Frequencies' -- 'One Sample Proportion Tests' -- '<m>N</m> Outcomes'. Then in the analysis window that appears move the variable you want to analyse (choice 1) across into the 'Variable' box. Also, click on the 'Expected counts' check box so that these are shown on the results table. When you have done all this, you should see the analysis results in jamovi as in <xref ref="fig-fig10-3"/>. No surprise then that jamovi provides the same expected counts and statistics that we calculated by hand above, with a <m>\chi^2</m> value of <m>8.44</m> with <m>3</m> df and <m>p=0.038</m>. Note that we don't need to look up a critical <m>p</m>-value threshold value any more, as jamovi gives us the actual <m>p</m>-value of the calculated <m>\chi^2</m> for 3 df.</p>
+
+      <figure xml:id="fig-fig10-3">
+        <caption>A <m>\chi^2</m> One Sample Proportion Test in jamovi, with table showing both observed and expected frequencies and proportions</caption>
+        <image source="images/fig10-3.png" width="90%">
+          <description>A jamovi screenshot showing a Proportion Test (N Outcomes) analysis. The "Variable" selected is "choice_1" with observed and expected counts for clubs, diamonds, hearts, spades. The chi-squared test results are at the bottom with a p-value</description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-different-null">
+      <title>Specifying a different null hypothesis</title>
+
+      <p>At this point you might be wondering what to do if you want to run a goodness-of-fit test but your null hypothesis is not that all categories are equally likely. For instance, let's suppose that someone had made the theoretical prediction that people should choose red cards <m>60\%</m> of the time, and black cards <m>40\%</m> of the time (I've no idea why you'd predict that), but had no other preferences. If that were the case, the null hypothesis would be to expect <m>30\%</m> of the choices to be hearts, <m>30\%</m> to be diamonds, <m>20\%</m> to be spades and <m>20\%</m> to be clubs. In other words we would expect hearts and diamonds to appear 1.5 times more often than spades and clubs (the ratio <m>30\%</m> : <m>20\%</m> is the same as 1.5 : 1). The expected counts are now shown in <xref ref="tbl-tab10-7"/>.</p>
+
+      <table xml:id="tbl-tab10-7">
+        <title>Expected counts for a different null hypothesis</title>
+       <tabular halign="center">
+          <row header="yes">
             <cell>Degrees of freedom</cell>
             <cell>0.95</cell>
             <cell>0.9</cell>
@@ -366,47 +407,6 @@
             <cell>18.307</cell>
             <cell>23.209</cell>
             <cell>29.588</cell>
-          </row>
-        </tabular>
-      </table>
-
-      <p>So, if our calculated <m>\chi^2</m> statistic is bigger than the critical value of <m>7.815</m>, then we can reject the null hypothesis (remember that the null hypothesis, <m>H_0</m>, is that all four suits are chosen with equal probability). Since we actually already calculated that before (i.e., <m>\chi^2 = 8.44</m>) we can reject the null hypothesis. And that's it, basically. You now know "Pearson's <m>\chi^2</m> test for the goodness-of-fit". Lucky you.</p>
-    </subsection>
-
-    <subsection xml:id="subsec-gof-in-jamovi">
-      <title>Doing the test in jamovi</title>
-
-      <p>Not surprisingly, jamovi provides an analysis that will do these calculations for you. Let's use the <em>Randomness.omv</em> file. From the main 'Analyses' toolbar select 'Frequencies' -- 'One Sample Proportion Tests' -- '<m>N</m> Outcomes'. Then in the analysis window that appears move the variable you want to analyse (choice 1) across into the 'Variable' box. Also, click on the 'Expected counts' check box so that these are shown on the results table. When you have done all this, you should see the analysis results in jamovi as in <xref ref="fig-fig10-3"/>. No surprise then that jamovi provides the same expected counts and statistics that we calculated by hand above, with a <m>\chi^2</m> value of <m>8.44</m> with <m>3</m> df and <m>p=0.038</m>. Note that we don't need to look up a critical <m>p</m>-value threshold value any more, as jamovi gives us the actual <m>p</m>-value of the calculated <m>\chi^2</m> for 3 df.</p>
-
-      <figure xml:id="fig-fig10-3">
-        <caption>A <m>\chi^2</m> One Sample Proportion Test in jamovi, with table showing both observed and expected frequencies and proportions</caption>
-        <image source="images/fig10-3.png" width="90%">
-          <description>A jamovi screenshot showing a Proportion Test (N Outcomes) analysis. The "Variable" selected is "choice_1" with observed and expected counts for clubs, diamonds, hearts, spades. The chi-squared test results are at the bottom with a p-value</description>
-        </image>
-      </figure>
-    </subsection>
-
-    <subsection xml:id="subsec-different-null">
-      <title>Specifying a different null hypothesis</title>
-
-      <p>At this point you might be wondering what to do if you want to run a goodness-of-fit test but your null hypothesis is not that all categories are equally likely. For instance, let's suppose that someone had made the theoretical prediction that people should choose red cards <m>60\%</m> of the time, and black cards <m>40\%</m> of the time (I've no idea why you'd predict that), but had no other preferences. If that were the case, the null hypothesis would be to expect <m>30\%</m> of the choices to be hearts, <m>30\%</m> to be diamonds, <m>20\%</m> to be spades and <m>20\%</m> to be clubs. In other words we would expect hearts and diamonds to appear 1.5 times more often than spades and clubs (the ratio <m>30\%</m> : <m>20\%</m> is the same as 1.5 : 1). The expected counts are now shown in <xref ref="tbl-tab10-7"/>.</p>
-
-      <table xml:id="tbl-tab10-7">
-        <title>Expected counts for a different null hypothesis</title>
-        <tabular halign="center">
-          <row header="yes">
-            <cell></cell>
-            <cell>clubs</cell>
-            <cell>diamonds</cell>
-            <cell>hearts</cell>
-            <cell>spades</cell>
-          </row>
-          <row>
-            <cell>expected frequency <m>E_i</m></cell>
-            <cell>40</cell>
-            <cell>60</cell>
-            <cell>60</cell>
-            <cell>40</cell>
           </row>
         </tabular>
       </table>
@@ -840,39 +840,28 @@ GUARDBOT 1: Choose!</em></p>
       <tabular halign="center">
         <col right="minor"/><col/><col/><col/><col/>
         <row header="yes" bottom="minor">
-          <cell>choice_1 \ choice_2</cell>
-          <cell>clubs</cell>
-          <cell>diamonds</cell>
-          <cell>hearts</cell>
-          <cell>spades</cell>
+          <cell></cell>
+          <cell>Before: Yes</cell>
+          <cell>Before: No</cell>
+          <cell>Total</cell>
         </row>
         <row>
-          <cell>clubs</cell>
-          <cell>10</cell>
-          <cell>9</cell>
-          <cell>10</cell>
-          <cell>6</cell>
+          <cell>After: Yes</cell>
+          <cell><m>a</m></cell>
+          <cell><m>b</m></cell>
+          <cell><m>a+b</m></cell>
         </row>
         <row>
-          <cell>diamonds</cell>
-          <cell>20</cell>
-          <cell>4</cell>
-          <cell>13</cell>
-          <cell>14</cell>
+          <cell>After: No</cell>
+          <cell><m>c</m></cell>
+          <cell><m>d</m></cell>
+          <cell><m>c+d</m></cell>
         </row>
         <row>
-          <cell>hearts</cell>
-          <cell>20</cell>
-          <cell>18</cell>
-          <cell>3</cell>
-          <cell>23</cell>
-        </row>
-        <row>
-          <cell>spades</cell>
-          <cell>18</cell>
-          <cell>13</cell>
-          <cell>15</cell>
-          <cell>4</cell>
+          <cell>Total</cell>
+          <cell><m>a+c</m></cell>
+          <cell><m>b+d</m></cell>
+          <cell><m>n</m></cell>
         </row>
       </tabular>
     </table>
@@ -893,8 +882,8 @@ GUARDBOT 1: Choose!</em></p>
     <p>The key ideas discussed in this chapter are:</p>
 
     <ul>
-      <li><p>The <xref ref="sec-chi-square-goodness-of-fit" text="title"/> is used when you have a table of observed frequencies of different categories, and the null hypothesis gives you a set of "known" probabilities to compare them to.</p></li>
-      <li><p>The <xref ref="sec-chi-square-test-of-independence" text="title"/> is used when you have a contingency table (cross-tabulation) of two categorical variables. The null hypothesis is that there is no relationship or association between the variables.</p></li>
+      <li><p><xref ref="sec-chi-square-goodness-of-fit" text="title"/> is used when you have a table of observed frequencies of different categories, and the null hypothesis gives you a set of "known" probabilities to compare them to.</p></li>
+      <li><p><xref ref="sec-chi-square-test-of-independence" text="title"/> is used when you have a contingency table (cross-tabulation) of two categorical variables. The null hypothesis is that there is no relationship or association between the variables.</p></li>
       <li><p><xref ref="sec-effect-size-chi-square" text="title"/> for a contingency table can be measured in several ways. In particular we noted the Cramér's <m>V</m> statistic.</p></li>
       <li><p>Both versions of the Pearson test rely on two assumptions: that the expected frequencies are sufficiently large, and that the observations are independent (see <xref ref="sec-assumptions-chi-square" text="title"/>). The <xref ref="sec-fisher-exact-test" text="title"/> can be used when the expected frequencies are small. The <xref ref="sec-mcnemar-test" text="title"/> can be used for some kinds of violations of independence.</p></li>
     </ul>
