@@ -1027,4 +1027,30 @@
     <p>The jamovi results show descriptive statistics, chi-square value, degrees of freedom, and the <m>p</m>-value (<xref ref="fig-fig13-14"/>). Since the <m>p</m>-value is less than the level conventionally used to determine significance (<m>p &lt; .05</m>), we can conclude that Broca's Aphasics perform reasonably well on speech production (median = 7.5) and language comprehension (median = 6.5) tasks. However, their performance was considerably worse on the syntax task (median = 4.5), with a significant difference in post hoc tests between Speech and Syntax task performance.</p>
   </section>
 
+  <section xml:id="sec-anova-and-t-test">
+    <title>On the relationship between ANOVA and the Student <m>t</m>-test</title>
+
+    <p>There's one last thing I want to point out before finishing. It's something that a lot of people find kind of surprising, but it's worth knowing about. An ANOVA with two groups is identical to the Student <m>t</m>-test. No, really. It's not just that they are similar, but they are actually equivalent in every meaningful way. I won't try to prove that this is always true, but I will show you a single concrete demonstration.</p>
+
+    <p>Suppose that, instead of running an ANOVA on our mood.gain ~ drug model, let's instead do it using therapy as the predictor. If we run this ANOVA we get an <m>F</m>-statistic of <m>F(1,16) = 1.71</m>, and a <m>p</m>-value = <m>0.21</m>. Since we only have two groups, I didn't actually need to resort to an ANOVA, I could have just decided to run a Student <m>t</m>-test. So let's see what happens when I do that: I get a <m>t</m>-statistic of <m>t(16) = -1.3068</m> and a <m>p</m>-value = 0.21. Curiously, the <m>p</m>-values are identical. Once again we obtain a value of <m>p = .21</m>.</p>
+
+    <p>But what about the test statistic? Having run a <m>t</m>-test instead of an ANOVA, we get a somewhat different answer, namely <m>t(16) = -1.3068</m>. However, there is a fairly straightforward relationship here. If we square the <m>t</m>-statistic then we get the <m>F</m>-statistic from before: <m>-1.3068^2 = 1.7077</m>.</p>
+  </section>
+
+  <section xml:id="sec-anova-summary">
+    <title>Summary</title>
+
+    <p>There's a fair bit covered in this chapter, but there's still a lot missing.<fn>As with all of the chapters in this book, there are quite a few different sources that I've relied upon, but the one stand-out text that I've been most heavily influenced by is Sahai and Ageel (2000). It's not a good book for beginners, but it's an excellent book for more advanced readers who are interested in understanding the mathematics behind ANOVA.</fn> Most obviously, I haven't discussed how to run an ANOVA when you are interested in more than one grouping variable, but that will be discussed in a lot of detail in <xref ref="ch-factorial-anova"/>. In terms of what we have discussed, the key topics were:</p>
+
+    <ul>
+      <li><p>The basic logic behind <xref ref="sec-how-anova-works"/> and <xref ref="sec-running-anova-jamovi"/>.</p></li>
+      <li><p>How to compute an <xref ref="sec-anova-effect-size"/> for an ANOVA.</p></li>
+      <li><p><xref ref="sec-multiple-comparisons-post-hoc"/> for multiple testing.</p></li>
+      <li><p><xref ref="sec-anova-assumptions"/>.</p></li>
+      <li><p><xref ref="subsec-checking-homogeneity-variance"/> and what to do if it is violated: <xref ref="subsec-removing-homogeneity-variance"/>.</p></li>
+      <li><p><xref ref="subsec-checking-normality"/> and what to do if it is violated: <xref ref="subsec-removing-normality"/>.</p></li>
+      <li><p><xref ref="sec-repeated-measures-anova"/> and the non-parametric equivalent, <xref ref="sec-friedman-test"/>.</p></li>
+    </ul>
+  </section>
+
 </chapter>
