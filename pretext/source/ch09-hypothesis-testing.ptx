@@ -362,4 +362,165 @@
     <p>Right now, this output looks pretty unfamiliar to you, but you can see that it's telling you more or less the right things. Specifically, the <m>p</m>-value of <m>0.02</m> is less than the usual choice of <m>\alpha = .05</m>, so you can reject the null. We'll talk a lot more about how to read this sort of output as we go along, and after a while you'll hopefully find it quite easy to read and understand.</p>
   </section>
 
+  <section xml:id="sec-Effect-size-sample-size-and-power">
+    <title>Effect size, sample size and power</title>
+
+    <p>In previous sections I've emphasised the fact that the major design principle behind statistical hypothesis testing is that we try to control our type I error rate. When we fix <m>\alpha = .05</m> we are attempting to ensure that only <m>5\%</m> of true null hypotheses are incorrectly rejected. However, this doesn't mean that we don't care about type II errors. In fact, from the researcher's perspective, the error of failing to reject the null when it is actually false is an extremely annoying one. With that in mind, a secondary goal of hypothesis testing is to try to minimise <m>\beta</m>, the type II error rate, although we don't usually talk in terms of minimising type II errors. Instead, we talk about maximising the power of the test. Since power is defined as <m>1 - \beta</m>, this is the same thing.</p>
+
+    <subsection xml:id="subsec-the-power-function">
+      <title>The power function</title>
+
+      <p>Let's take a moment to think about what a type II error actually is. A type II error occurs when the alternative hypothesis is true, but we are nevertheless unable to reject the null hypothesis. Ideally, we'd be able to calculate a single number <m>\beta</m> that tells us the type II error rate, in the same way that we can set <m>\alpha = .05</m> for the type I error rate. Unfortunately, this is a lot trickier to do. To see this, notice that in my ESP study the alternative hypothesis actually corresponds to lots of possible values of <m>\theta</m>. In fact, the alternative hypothesis corresponds to every value of <m>\theta</m> except 0.5. Let's suppose that the true probability of someone choosing the correct response is 55% (i.e., <m>\theta = .55</m>). If so, then the true sampling distribution for <m>X</m> is not the same one that the null hypothesis predicts, as the most likely value for <m>X</m> is now <m>55</m> out of 100. Not only that, the whole sampling distribution has now shifted, as shown in <xref ref="fig-fig9-5"/>.</p>
+
+      <figure xml:id="fig-fig9-5">
+        <caption>Sampling distribution under the alternative hypothesis for a population parameter value of <m>\theta = 0.55</m>. A reasonable proportion of the distribution lies in the rejection region.</caption>
+        <image source="images/fig9-5.png" width="90%">
+          <description>A histogram titled "Sampling Distribution for X if theta = 0.55" shows the number of correct responses (X) on the x-axis (ranging from 0 to 100). The lower and upper critical regions (2.5% each) are shaded in blue, with labels indicating their positions.</description>
+        </image>
+      </figure>
+
+      <p>The critical regions, of course, do not change. By definition the critical regions are based on what the null hypothesis predicts, but when the null hypothesis is wrong, a much larger proportion of the sampling distribution falls in the critical region. The probability of rejecting the null hypothesis is larger when the null hypothesis is actually false! However <m>\theta = .55</m> is not the only possibility consistent with the alternative hypothesis. Let's instead suppose that the true value of <m>\theta</m> is actually <m>0.7</m>. What happens to the sampling distribution when this occurs? The answer, shown in <xref ref="fig-fig9-6"/>, is that almost the entirety of the sampling distribution has now moved into the critical region. Therefore, if <m>\theta = 0.7</m>, the probability of us correctly rejecting the null hypothesis (i.e., the power of the test) is much larger than if <m>\theta = 0.55</m>. In short, while <m>\theta = .55</m> and <m>\theta = .70</m> are both part of the alternative hypothesis, the type II error rate is different.</p>
+
+      <figure xml:id="fig-fig9-6">
+        <caption>Sampling distribution under the <em>alternative</em> hypothesis for a population parameter value of <m>\theta = 0.70</m>. Almost all of the distribution lies in the rejection region.</caption>
+        <image source="images/fig9-6.png" width="90%">
+          <description>A bar graph titled "Sampling Distribution for X if theta = 0.70" showing a distribution of the number of correct responses (X) from 0 to 100. The lower and upper critical regions, each 2.5% of the distribution, are highlighted on the left and right tails respectively.</description>
+        </image>
+      </figure>
+
+      <p>What all this means is that the power of a test (i.e., <m>1 - \beta</m>) depends on the true value of <m>\theta</m>. To illustrate this, I've calculated the expected probability of rejecting the null hypothesis for all values of <m>\theta</m>, and plotted it in <xref ref="fig-fig9-7"/>. This plot describes what is usually called the <term>power function</term> of the test. It's a nice summary of how good the test is, because it actually tells you the power <m>(1 - \beta)</m> for all possible values of <m>\theta</m>. As you can see, when the true value of <m>\theta</m> is very close to <m>0.5</m>, the power of the test drops very sharply, but when it is further away, the power is large.</p>
+
+      <figure xml:id="fig-fig9-7">
+        <caption>The probability that we will reject the null hypothesis, plotted as a function of the true value of <m>\theta</m>. Obviously, the test is more powerful (greater chance of correct rejection) if the true value of <m>\theta</m> is very different from the value that the null hypothesis specifies (i.e., <m>\theta = .5</m>). Notice that when <m>\theta</m> actually is equal to <m>.5</m> (plotted as a black dot), the null hypothesis is in fact true and rejecting the null hypothesis in this instance would be a type I error.</caption>
+        <image source="images/fig9-7.png" width="90%">
+          <description>A graph titled "Power function for the Test (N=100)" showing the probability of rejecting the null hypothesis (y-axis) plotted against the true value of theta (x-axis). The curve dips sharply to a minimum at theta=0.5, marked by a black dot, and rises symmetrically on either side to a maximum at both ends.</description>
+        </image>
+      </figure>
+
+      <blockquote>
+        <p><em>Since all models are wrong the scientist must be alert to what is importantly wrong. It is inappropriate to be concerned with mice when there are tigers abroad.</em><br/>— George Box</p>
+      </blockquote>
+
+      <p>The plot shown in <xref ref="fig-fig9-7"/> captures a fairly basic point about hypothesis testing. If the true state of the world is very different from what the null hypothesis predicts then your power will be very high, but if the true state of the world is similar to the null (but not identical) then the power of the test is going to be very low. Therefore, it's useful to be able to have some way of quantifying how "similar" the true state of the world is to the null hypothesis. A statistic that does this is called a measure of <term>effect size</term>. Effect size is defined slightly differently in different contexts (and so this section just talks in general terms) but the qualitative idea that it tries to capture is always the same (see e.g. <xref ref="tbl-tab9-6"/>). How big is the difference between the <em>true</em> population parameters and the parameter values that are assumed by the null hypothesis? In our ESP example, if we let <m>\theta_0 = 0.5</m> denote the value assumed by the null hypothesis and let <m>\theta</m> denote the true value, then a simple measure of effect size could be something like the difference between the true value and null (i.e., <m>\theta - \theta_0</m>), or possibly just the magnitude of this difference, <m>|\theta - \theta_0|</m>.</p>
+
+      <table xml:id="tbl-tab9-6">
+        <title>A crude guide to understanding the relationship between statistical significance and effect sizes. Basically, if you don't have a significant result then the effect size is pretty meaningless because you don't have any evidence that it's even real. On the other hand, if you do have a significant effect but your effect size is small then there's a pretty good chance that your result (although real) isn't all that interesting. It does depend a lot on what exactly you're studying; small effects can be of massive practical importance in some situations. So don't take this table too seriously — it's a rough guide at best.</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell></cell>
+            <cell>big effect size</cell>
+            <cell>small effect size</cell>
+          </row>
+          <row>
+            <cell>significant result</cell>
+            <cell>difference is real, and of practical importance</cell>
+            <cell>difference is real, but might not be interesting</cell>
+          </row>
+          <row>
+            <cell>non-significant result</cell>
+            <cell>no effect observed</cell>
+            <cell>no effect observed</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>Why calculate effect size? Let's assume that you've run your experiment, collected the data, and gotten a significant effect when you ran your hypothesis test. Isn't it enough just to say that you've gotten a significant effect? Surely that's the point of hypothesis testing? Well, sort of. Yes, the point of doing a hypothesis test is to try to demonstrate that the null hypothesis is wrong, but that's hardly the only thing we're interested in. If the null hypothesis claimed that <m>\theta = .5</m> and we show that it's wrong, we've only really told half of the story. Rejecting the null hypothesis implies that we believe that <m>\theta \neq .5</m>, but there's a big difference between <m>\theta = .51</m> and <m>\theta = .8</m>. If we find that <m>\theta = .8</m>, then not only have we found that the null hypothesis is wrong, it appears to be very wrong. On the other hand, suppose we've successfully rejected the null hypothesis, but it looks like the true value of <m>\theta</m> is only .51 (this would only be possible with a very large study). Sure, the null hypothesis is wrong but it's not at all clear that we actually care because the effect size is so small.</p>
+
+      <p>In the context of my ESP study we might still care since any demonstration of real psychic powers would actually be pretty cool,<fn>Although in practice a very small effect size is worrying, because even very minor methodological flaws might be responsible for the effect; and in practice no experiment is perfect, so there are always methodological issues to worry about.</fn> but in other contexts a <m>1\%</m> difference usually isn't very interesting, even if it is a real difference. For instance, suppose we're looking at differences in high school exam scores between males and females and it turns out that the female scores are <m>1\%</m> higher on average than the males. If I've got data from thousands of students then this difference will almost certainly be statistically significant, but regardless of how small the <m>p</m>-value is it's just not very interesting. You'd hardly want to go around proclaiming a crisis in boys education on the basis of such a tiny difference would you? It's for this reason that it is becoming more standard (slowly, but surely) to report some kind of standard measure of effect size along with the results of the hypothesis test. The hypothesis test itself tells you whether you should believe that the effect you have observed is real (i.e., not just due to chance), whereas the effect size tells you whether or not you should care.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-increasing-the-power-of-your-study">
+      <title>Increasing the power of your study</title>
+
+      <p>Not surprisingly, scientists are fairly obsessed with maximising the power of their experiments. We want our experiments to work and so we want to maximise the chance of rejecting the null hypothesis if it is false. As we've seen, one factor that influences power is the effect size. So the first thing you can do to increase your power is to increase the effect size. In practice, what this means is that you want to design your study in such a way that the effect size gets magnified.</p>
+
+      <p>For instance, in my ESP study I might believe that psychic powers work best in a quiet, darkened room with fewer distractions to cloud the mind. Therefore I would try to conduct my experiments in just such an environment. If I can strengthen people's ESP abilities somehow then the true value of <m>\theta</m> will go up<fn>Notice that the true population parameter <m>\theta</m> doesn't necessarily correspond to an immutable fact of nature. In this context <m>\theta</m> is just the true probability that people would correctly guess the colour of the card in the other room. As such the population parameter can be influenced by all sorts of things. Of course, this is all on the assumption that ESP actually exists!</fn> and therefore my effect size will be larger. In short, clever experimental design is one way to boost power, because it can alter the effect size.</p>
+
+      <p>Unfortunately, it's often the case that even with the best of experimental designs you may have only a small effect. Perhaps, for example, ESP really does exist but even under the best of conditions it's very, very weak. Under those circumstances your best bet for increasing power is to increase the sample size. In general, the more observations that you have, the more likely it is that you can discriminate between two hypotheses.</p>
+
+      <p>If I ran my ESP experiment with 10 participants and 7 of them correctly guessed the colour of the hidden card you wouldn't be terribly impressed. But if I ran it with 10,000 participants, and 7,000 of them got the answer right, you would be much more likely to think I had discovered something. In other words, power increases with the sample size. This is illustrated in <xref ref="fig-fig9-8"/>, which shows the power of the test for a true parameter of <m>\theta = 0.7</m> for all sample sizes <m>N</m> from <m>1</m> to <m>100</m>, where I'm assuming that the null hypothesis predicts that <m>\theta_0 = 0.5</m>.</p>
+
+      <figure xml:id="fig-fig9-8">
+        <caption>The power of our test plotted as a function of the sample size <m>N</m>. In this case, the true value of <m>\theta</m> is 0.7 but the null hypothesis is that <m>\theta = 0.5</m>. Overall, larger <m>N</m> means greater power. (The small zig-zags in this function occur because of some odd interactions between <m>\theta</m>, <m>\alpha</m> and the fact that the binomial distribution is discrete; it does not matter for any serious purpose.)</caption>
+        <image source="images/fig9-8.png" width="90%">
+          <description>A line graph showing the probability of rejecting the null hypothesis as a function of sample size (N). The x-axis represents the sample size ranging from 0 to 100, and the y-axis shows the probability from 0 to 1. The line increases and fluctuates upwards.</description>
+        </image>
+      </figure>
+
+      <p>Because power is important, whenever you're contemplating running an experiment it would be pretty useful to know how much power you're likely to have. It's never possible to know for sure since you can't possibly know what your real effect size is. However, it's often (well, sometimes) possible to guess how big it should be. If so, you can guess what sample size you need! This idea is called <term>power analysis</term>, and if it's feasible to do it then it's very helpful. It can tell you something about whether you have enough time or money to be able to run the experiment successfully. It's increasingly common to see people arguing that power analysis should be a required part of experimental design, so it's worth knowing about. I don't discuss power analysis in this book, however. This is partly for a boring reason and partly for a substantive one. The boring reason is that I haven't had time to write about power analysis yet. The substantive one is that I'm still a little suspicious of power analysis. Speaking as a researcher, I have very rarely found myself in a position to be able to do one. It's either the case that (a) my experiment is a bit non-standard and I don't know how to define effect size properly, or (b) I literally have so little idea about what the effect size will be that I wouldn't know how to interpret the answers.</p>
+
+      <p>Not only that, after extensive conversations with someone who does stats consulting for a living (my wife, as it happens), I can't help but notice that in practice the only time anyone ever asks her for a power analysis is when she's helping someone write a grant application. In other words, the only time any scientist ever seems to want a power analysis in real life is when they're being forced to do it by bureaucratic process. It's not part of anyone's day to day work. In short, I've always been of the view that whilst power is an important concept, power analysis is not as useful as people make it sound, except in the rare cases where (a) someone has figured out how to calculate power for your actual experimental design and (b) you have a pretty good idea what the effect size is likely to be.<fn>One possible exception to this is when researchers study the effectiveness of a new medical treatment and they specify in advance what an important effect size would be to detect, for example over and above any existing treatment. In this way some information about the potential value of a new treatment can be obtained.</fn> Maybe other people have had better experiences than me, but I've personally never been in a situation where both (a) and (b) were true. Maybe I'll be convinced otherwise in the future, and probably a future version of this book would include a more detailed discussion of power analysis, but for now this is about as much as I'm comfortable saying about the topic.</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-some-issues-to-consider">
+    <title>Some issues to consider</title>
+
+    <p>What I've described to you in this chapter is the orthodox framework for null hypothesis significance testing (NHST). Understanding how NHST works is an absolute necessity because it has been the dominant approach to inferential statistics ever since it came to prominence in the early 20th century. It's what the vast majority of working scientists rely on for their data analysis, so even if you hate it you need to know it.</p>
+
+    <p>However, the approach is not without problems. There are a number of quirks in the framework, historical oddities in how it came to be, theoretical disputes over whether or not the framework is right, and a lot of practical traps for the unwary. I'm not going to go into a lot of detail on this topic, but I think it's worth briefly discussing a few of these issues.</p>
+
+    <subsection xml:id="subsec-neyman-versus-fisher">
+      <title>Neyman versus Fisher</title>
+
+      <p>The first thing you should be aware of is that orthodox NHST is actually a mash-up of two rather different approaches to hypothesis testing, one proposed by Sir Ronald Fisher and the other proposed by Jerzy Neyman. The history is messy because Fisher and Neyman were real people whose opinions changed over time, and at no point did either of them offer "the definitive statement" of how we should interpret their work many decades later. That said, here's a quick summary of what I take these two approaches to be.</p>
+
+      <p>First, let's talk about Fisher's approach. As far as I can tell, Fisher assumed that you only had the one hypothesis (the null) and that what you want to do is find out if the null hypothesis is inconsistent with the data. From his perspective, what you should do is check to see if the data are "sufficiently unlikely" according to the null.</p>
+
+      <p>In fact, if you remember back to our earlier discussion, that's how Fisher defines the <m>p</m>-value. According to Fisher, if the null hypothesis provided a very poor account of the data then you could safely reject it. But, since you don't have any other hypotheses to compare it to, there's no way of "accepting the alternative" because you don't necessarily have an explicitly stated alternative. That's more or less all there is to it.</p>
+
+      <p>In contrast, Neyman thought that the point of hypothesis testing was as a guide to action and his approach was somewhat more formal than Fisher's. His view was that there are multiple things that you could do (accept the null or accept the alternative) and the point of the test was to tell you which one the data support.</p>
+
+      <p>From this perspective, it is critical to specify your alternative hypothesis properly. If you don't know what the alternative hypothesis is, then you don't know how powerful the test is, or even which action makes sense. His framework genuinely requires a competition between different hypotheses. For Neyman, the <m>p</m>-value didn't directly measure the probability of the data (or data more extreme) under the null, it was more of an abstract description about which "possible tests" were telling you to accept the null, and which "possible tests" were telling you to accept the alternative.</p>
+
+      <p>As you can see, what we have today is an odd mishmash of the two. We talk about having both a null hypothesis and an alternative (Neyman), but usually<fn>Although this book describes both Neyman's and Fisher's definition of the <m>p</m>-value, most don't. Most introductory textbooks will only give you the Fisher version.</fn> define the <m>p</m>-value in terms of extreme data (Fisher), but we still have <m>\alpha</m> values (Neyman). Some of the statistical tests have explicitly specified alternatives (Neyman) but others are quite vague about it (Fisher). And, according to some people at least, we're not allowed to talk about accepting the alternative (Fisher). It's a mess, but I hope this at least explains why it's a mess.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-bayesians-versus-frequentists">
+      <title>Bayesians versus frequentists</title>
+
+      <p>Earlier on in this chapter I was quite emphatic about the fact that you <em>cannot</em> interpret the <m>p</m>-value as the probability that the null hypothesis is true. NHST is fundamentally a frequentist tool and as such it does not allow you to assign probabilities to hypotheses. The null hypothesis is either true or it is not. The Bayesian approach to statistics interprets probability as a degree of belief, so it's totally okay to say that there is a <m>10\%</m> chance that the null hypothesis is true. That's just a reflection of the degree of confidence that you have in this hypothesis. You aren't allowed to do this within the frequentist approach.</p>
+
+      <p>Remember, if you're a frequentist, a probability can only be defined in terms of what happens after a large number of independent replications (i.e., a long run frequency). If this is your interpretation of probability, talking about the "probability" that the null hypothesis is true is complete gibberish: a null hypothesis is either true or it is false. There's no way you can talk about a long run frequency for this statement. To talk about "the probability of the null hypothesis" is as meaningless as "the colour of freedom". It doesn't have one!</p>
+
+      <p>Most importantly, this isn't a purely ideological matter. If you decide that you are a Bayesian and that you're okay with making probability statements about hypotheses, you have to follow the Bayesian rules for calculating those probabilities. I'll talk more about this later in the book, but for now what I want to point out to you is the <m>p</m>-value is a terrible approximation to the probability that <m>H_0</m> is true. If what you want to know is the probability of the null, then the <m>p</m>-value is not what you're looking for!</p>
+    </subsection>
+
+    <subsection xml:id="subsec-traps">
+      <title>Traps</title>
+
+      <p>As you can see, the theory behind hypothesis testing is a mess, and even now there are arguments in statistics about how it "should" work. However, disagreements among statisticians are not our real concern here. Our real concern is practical data analysis. And while the "orthodox" approach to null hypothesis significance testing has many drawbacks, even an unrepentant Bayesian like myself would agree that they can be useful if used responsibly. Most of the time they give sensible answers and you can use them to learn interesting things.</p>
+
+      <p>Setting aside the various ideologies and historical confusions that we've discussed, the fact remains that the biggest danger in all of statistics is <em>thoughtlessness</em>. I don't mean stupidity, I literally mean thoughtlessness. The rush to interpret a result without spending time thinking through what each test actually says about the data, and checking whether that's consistent with how you've interpreted it. That's where the biggest trap lies.</p>
+
+      <p>To give an example of this, consider the following example. Suppose I'm running my ESP study and I've decided to analyse the data separately for the male participants and the female participants. Of the male participants, <m>33</m> out of <m>50</m> guessed the colour of the card correctly. This is a significant effect (<m>p = .03</m>). Of the female participants, <m>29</m> out of <m>50</m> guessed correctly. This is not a significant effect (<m>p = .32</m>). Upon observing this, it is extremely tempting for people to start wondering why there is a difference between males and females in terms of their psychic abilities. However, this is wrong.</p>
+
+      <p>If you think about it, we haven't actually run a test that explicitly compares males to females. All we have done is compare males to chance (binomial test was significant) and compared females to chance (binomial test was non significant). If we want to argue that there is a real difference between the males and the females, we should probably run a test of the null hypothesis that there is no difference! We can do that using a different hypothesis test,<fn>In this case, the Pearson chi-square test of independence.</fn> but when we do that it turns out that we have no evidence that males and females are significantly different (<m>p = .54</m>). Now do you think that there's anything fundamentally different between the two groups? Of course not.</p>
+
+      <p>What's happened here is that the data from both groups (male and female) are pretty borderline. By pure chance one of them happened to end up on the magic side of the <m>p = .05</m> line, and the other one didn't. That doesn't actually imply that males and females are different. This mistake is so common that you should always be wary of it. The difference between significant and not-significant is not evidence of a real difference. If you want to say that there's a difference between two groups, then you have to test for that difference!</p>
+
+      <p>The example above is just that, an example. I've singled it out because it's such a common one, but the bigger picture is that data analysis can be tricky to get right. Think about what it is you want to test, <em>why</em> you want to test it, and whether or not the answers that your test gives could possibly make any sense in the real world.</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-ch09-summary">
+    <title>Summary</title>
+
+    <p>Null hypothesis testing is one of the most ubiquitous elements to statistical theory. The vast majority of scientific papers report the results of some hypothesis test or another. As a consequence it is almost impossible to get by in science without having at least a cursory understanding of what a <m>p</m>-value means, making this one of the most important chapters in the book. As usual, I'll end the chapter with a quick recap of the key ideas that we've talked about:</p>
+
+    <ul>
+      <li><p>A menagerie of hypotheses. Research hypotheses and statistical hypotheses. Null and alternative hypotheses.</p></li>
+      <li><p>Two types of errors. Type I and type II.</p></li>
+      <li><p>Test statistics and sampling distributions.</p></li>
+      <li><p>Hypothesis testing for making decisions.</p></li>
+      <li><p>The <m>p</m>-value of a test. <m>p</m>-values as "soft" decisions.</p></li>
+      <li><p>Reporting the results of a hypothesis test.</p></li>
+      <li><p>Running the hypothesis test in practice.</p></li>
+      <li><p>Effect size, sample size and power.</p></li>
+      <li><p>Some issues to consider regarding hypothesis testing.</p></li>
+    </ul>
+
+    <p>Later in the book I'll revisit the theory of null hypothesis tests from a Bayesian perspective and introduce a number of new tools that you can use if you aren't particularly fond of the orthodox approach. But for now, though, we're done with the abstract statistical theory, and we can start discussing specific data analysis tools.</p>
+  </section>
+
 </chapter>
