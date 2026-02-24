@@ -494,4 +494,221 @@
     </subsection>
   </section>
 
+  <section xml:id="sec-mtmm-cfa">
+    <title>Multi-Trait Multi-Method CFA</title>
+
+    <p>In this section we're going to consider how different measurement techniques or questions can be an important source of data variability, known as <term>method variance</term>. To do this, we'll use another psychological data set, one that contains data on "attributional style".</p>
+
+    <p>The Attributional Style Questionnaire (ASQ) was used (<xref ref="Hewitt2004"/>) to collect psychological wellbeing data from young people in the United Kingdom and New Zealand. They measured attributional style for negative events, which is how people habitually explain the cause of bad things that happen to them (<xref ref="Peterson1984"/>). The ASQ measures three aspects of attributional style:</p>
+
+    <ul>
+      <li><p>Internality is the extent to which a person believes that the cause of a bad event is due to his/her own actions.</p></li>
+      <li><p>Stability refers to the extent to which a person habitually believes the cause of a bad event is stable across time.</p></li>
+      <li><p>Globality refers to the extent to which a person habitually believes that the cause of a bad event in one area will affect other areas of their lives.</p></li>
+    </ul>
+
+    <p>There are six hypothetical scenarios and for each scenario respondents answer a question aimed at (a) internality, (b) stability and (c) globality. So there are <m>6 \times 3 = 18</m> items overall. See <xref ref="fig-fig15-19"/> for more details.</p>
+
+    <figure xml:id="fig-fig15-19">
+      <caption>The Attributional Style Questionnaire (ASQ) for negative events</caption>
+      <image source="images/fig15-19.png" width="85%">
+        <description>A screenshot of a questionnaire featuring three sections labeled (a), (b), and (c) with a 7-point scale for responses, ranging from "1" to "7". Below the sections, there is a list of six hypothetical scenarios for the respondent to consider.</description>
+      </image>
+    </figure>
+
+    <p>Researchers are interested in checking their data to see whether there are some underlying latent factors that are measured reasonably well by the 18 observed variables in the ASQ.</p>
+
+    <p>First, they try EFA with these 18 variables (not shown), but no matter how they extract or rotate, they can't find a good factor solution. Their attempt to identify underlying latent factors in the Attributional Style Questionnaire (ASQ) proved fruitless. If you get results like this then either your theory is wrong (there is no underlying latent factor structure for attributional style, which is possible), the sample is not relevant (which is unlikely given the size and characteristics of this sample of young adults from the United Kingdom and New Zealand), or the analysis was not the right tool for the job. We're going to look at this third possibility.</p>
+
+    <p>Remember that there were three dimensions measured in the ASQ: Internality, Stability and Globality, each measured by six questions as shown in <xref ref="tbl-tab15-2"/>.</p>
+
+    <p>What if, instead of doing an analysis where we see how the data goes together in an exploratory sense, we instead impose a structure, like in <xref ref="tbl-tab15-2"/>, on the data and see how well the data fits our pre-specified structure. In this sense, we are undertaking a confirmatory analysis, to see how well a pre-specified model is confirmed by the observed data. A straightforward Confirmatory Factor Analysis (CFA) of the ASQ would therefore specify three latent factors as shown in the columns of <xref ref="tbl-tab15-2"/>, each measured by six observed variables.</p>
+
+    <table xml:id="tbl-tab15-2">
+      <title>Six questions on the ASQ for each of the Internality, Stability and Globality dimensions</title>
+      <tabular halign="center">
+        <row header="yes">
+          <cell>Internality</cell>
+          <cell>Stability</cell>
+          <cell>Globality</cell>
+        </row>
+        <row>
+          <cell>Q1a</cell>
+          <cell>Q1b</cell>
+          <cell>Q1c</cell>
+        </row>
+        <row>
+          <cell>Q2a</cell>
+          <cell>Q2b</cell>
+          <cell>Q2c</cell>
+        </row>
+        <row>
+          <cell>Q3a</cell>
+          <cell>Q3b</cell>
+          <cell>Q3c</cell>
+        </row>
+        <row>
+          <cell>Q4a</cell>
+          <cell>Q4b</cell>
+          <cell>Q4c</cell>
+        </row>
+        <row>
+          <cell>Q5a</cell>
+          <cell>Q5b</cell>
+          <cell>Q5c</cell>
+        </row>
+        <row>
+          <cell>Q6a</cell>
+          <cell>Q6b</cell>
+          <cell>Q6c</cell>
+        </row>
+      </tabular>
+    </table>
+
+    <p>We could depict this as in the diagram in <xref ref="fig-fig15-20"/>, which shows that each variable is a measure of an underlying latent factor. For example INT1 is predicted by the underlying latent factor Internality. And because INT1 is not a perfect measure of the Internality factor, there is an error term, <m>e_1</m>, associated with it. In other words, <m>e_1</m> represents the variance in INT1 that is not accounted for by the Internality factor. This is sometimes called "measurement error".</p>
+
+    <figure xml:id="fig-fig15-20">
+      <caption>Initial pre-specification of latent factor structure for the ASQ</caption>
+      <image source="images/fig15-20.png" width="85%">
+        <description>A diagram depicting three categories: Internality, Stability, and Globality. Each category has elements leading to it with arrows. Internality includes INT1 to INT6, Stability includes STAB1 to STAB6, and Globality includes GLOB1 to GLOB6.</description>
+      </image>
+    </figure>
+
+    <p>The next step is to consider whether the latent factors should be allowed to correlate in our model. As mentioned earlier, in the psychological and behavioural sciences constructs are often related to each other, and we also think that Internality, Stability, and Globality might be correlated with each other, so in our model we should allow these latent factors to co-vary, as shown in <xref ref="fig-fig15-21"/>.</p>
+
+    <figure xml:id="fig-fig15-21">
+      <caption>Final pre-specification of latent factor structure for the ASQ, including latent factor correlations, and shared method error term correlations for the observed variable INT1, STAB1 and GLOB1, in a CFA MTMM model. For clarity, other pre-specified error term correlations are not shown</caption>
+      <image source="images/fig15-21.png" width="85%">
+        <description>A diagram shows a structural equation model with three latent variables: Internality, Stability, and Globality. Each latent variable has observable indicators linked to it. Internality has INT1 to INT6, Stability has STAB1 to STAB6, and Globality has GLOB1 to GLOB6. Arrows represent the relationships. Several error term correlations are depicted by curved arrows.</description>
+      </image>
+    </figure>
+
+    <p>At the same time, we should consider whether there is any good, systematic, reason for some of the error terms to be correlated with each other. Thinking back to the ASQ questions, there were three different sub-questions (a, b and c) for each main question (1-6). Q1 was about unsuccessful job hunting and it is plausible that this question has some distinctive artefactual or methodological aspects over and above the other questions (2-5), something to do with job hunting perhaps.</p>
+
+    <p>Similarly, Q2 was about not helping a friend with a problem, and there may be some distinctive artefactual or methodological aspects to do with not helping a friend that is not present in the other questions (1, and 3-5).</p>
+
+    <p>So, as well as multiple factors, we also have multiple methodological features in the ASQ, where each of Questions 1-6 has a slightly different "method", but each "method" is shared across the sub-questions a, b and c. In order to incorporate these different methodological features into the model we can specify that certain error terms are correlated with each other.</p>
+
+    <p>For example, the errors associated with INT1, STAB1 and GLOB1 should be correlated with each other to reflect the distinct and shared methodological variance of Q1a, Q1b and Q1c. Looking at <xref ref="tbl-tab15-2"/>, this means that as well as the latent factors represented by the columns, we will have correlated measurement errors for the variables in each row of the Table.</p>
+
+    <p>Whilst a basic CFA model like the one shown in <xref ref="fig-fig15-20"/> could be tested against our observed data, we have in fact come up with a more sophisticated model, as shown in the diagram in <xref ref="fig-fig15-21"/>. This more sophisticated CFA model is known as a <term>Multi-Trait Multi-Method (MTMM)</term> model, and it is the one we will test in jamovi.</p>
+
+    <subsection xml:id="subsec-mtmm-cfa-in-jamovi">
+      <title>MTMM CFA in jamovi</title>
+
+      <p>Open up the <em>ASQ.csv</em> file and check that the 18 variables (six "Internality", six "Stability" and six "Globality" variables) are specified as continuous variables.</p>
+
+      <p>To perform MTMM CFA in jamovi:</p>
+
+      <ul>
+        <li><p>Select 'Factor' -- 'Confirmatory Factor Analysis' from the main jamovi button bar to open the CFA analysis window (<xref ref="fig-fig15-22"/>).</p></li>
+        <li><p>Select the 6 INT variables and transfer them into the 'Factors' box and give them the label "Internality".</p></li>
+        <li><p>Create a new Factor in the 'Factors' box and label it "Stability". Select the 6 STAB variables and transfer them into the 'Factors' box under the "Stability" label.</p></li>
+        <li><p>Create another new Factor in the 'Factors' box and label it "Globality". Select the 6 GLOB variables and transfer them into the 'Factors' box under the "Globality" label.</p></li>
+        <li><p>Open up the Residual Covariances options, and for each of our pre-specified correlations move the associated variables across into the 'Residual Covariances' box on the right. For example, highlight both INT1 and STAB1 and then click the arrow to move these across. Now do the same for INT1 and GLOB1, for STAB1 and GLOB1, for INT2 and STAB2, for INT2 and GLOB2, for STAB2 and GLOB2, for INT3 and STAB3, and so on.</p></li>
+        <li><p>Check other appropriate options. The defaults are ok for this initial work through, though you might want to check the "Path diagram" option under 'Plots' to see jamovi produce a (fairly) similar diagram to our <xref ref="fig-fig15-21"/>, and including all the error term correlations that we have added above.</p></li>
+      </ul>
+
+      <figure xml:id="fig-fig15-22">
+        <caption>The jamovi CFA analysis window</caption>
+        <image source="images/fig15-22.png" width="90%">
+          <description>A jamovi screenshot showing a Confirmatory Factor Analysis setup. The screen includes options to select variables, factors, and residual covariances for the analysis. Menus for adding new factors and configuring analysis options are also visible.</description>
+        </image>
+      </figure>
+
+      <p>Once we have set up the analysis we can turn our attention to the jamovi results window and see what's what. The first thing to look at is "Model fit" as this tells us how good a fit our model is to the observed data (<xref ref="fig-fig15-23"/>). NB in our model only the pre-specified covariances are estimated, everything else is set to zero, so model fit is testing both whether the pre-specified "free" parameters are not zero, and conversely whether the other relationships in the data -- the ones we have not specified in the model -- can be held at zero.</p>
+
+      <p>Looking at <xref ref="fig-fig15-23"/> we can see that the chi-square value is highly significant, which is not a surprise given the large sample size (<m>N = 2748</m>). The CFI is <m>0.98</m> and the TLI is also <m>0.98</m>, indicating a very good fit. The RMSEA is <m>0.02</m> with a <m>90\%</m> confidence interval from <m>0.02</m> to <m>0.02</m> -- pretty tight!</p>
+
+      <figure xml:id="fig-fig15-23">
+        <caption>The jamovi CFA Model Fit results for our CFA MTMM model</caption>
+        <image source="images/fig15-23.png" width="70%">
+          <description>A jamovi table titled "Model Fit" displays "Test for Exact Fit" with χ² = 243.97, df = 114, p &lt; .00001. Another section shows "Fit Measures" with CFI = 0.98, TLI = 0.98, RMSEA = 0.02, and RMSEA 90% CI: Lower = 0.02, Upper = 0.02.</description>
+        </image>
+      </figure>
+
+      <p>Overall, I think we can be satisfied that our pre-specified model is a very good fit to the observed data, lending support to our MTMM model for the ASQ.</p>
+
+      <p>We can now go on to look at the factor loadings and the factor covariance estimates, as in <xref ref="fig-fig15-24"/>. Often the standardized estimates are easier to interpret, and these can be specified under the 'Estimates' option. These tables can usefully be incorporated into a written report or scientific article.</p>
+
+      <figure xml:id="fig-fig15-24">
+        <caption>The jamovi CFA Factor Loadings and Covariances tables for our CFA MTMM model</caption>
+        <image source="images/fig15-24.png" width="95%">
+          <description>A jamovi table from a confirmatory factor analysis shows factor loadings and estimates. It includes columns for factors, indicators, estimates, standard errors (SE), z-values, p-values, and standardized estimates. Factors listed are INTERNALITY, STABILITY, and GLOBALITY.</description>
+        </image>
+      </figure>
+
+      <p>You can see from <xref ref="fig-fig15-24"/> that all of our pre-specified factor loadings and factor covariances are significantly different from zero. In other words, they all seem to be making a useful contribution to the model.</p>
+
+      <p>We've been pretty lucky with this analysis, getting a very good fit on our first attempt!</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-internal-consistency-reliability">
+    <title>Internal consistency reliability analysis</title>
+
+    <p>After you have been through the process of initial scale development using EFA and CFA, you should have reached a stage where the scale holds up pretty well using CFA with different samples. One thing that you might also be interested in at this stage is to see how well the factors are measured using a scale that combines the observed variables.</p>
+
+    <p>In psychometrics we use reliability analysis to provide information about how consistently a scale measures a psychological construct. <term>Internal consistency</term> is what we are concerned with here, and that refers to the consistency across all the individual items that make up a measurement scale. So, if we have <m>V1, V2, V3, V4</m> and <m>V5</m> as observed item variables, then we can calculate a statistic that tells us how internally consistent these items are in measuring the underlying construct.</p>
+
+    <p>A popular statistic used to check the internal consistency of a scale is <term>Cronbach's alpha</term> (<xref ref="Cronbach1951"/>). Cronbach's alpha is a measure of equivalence (whether different sets of scale items would give the same measurement outcomes). Equivalence is tested by dividing the scale items into two groups (a "split-half") and seeing whether analysis of the two parts gives comparable results. Of course, there are many ways a set of items could be split, but if all possible splits are made then it is possible to produce a statistic that reflects the overall pattern of split-half coefficients. Cronbach's alpha (<m>\alpha</m>) is such a statistic: a function of all the split-half coefficients for a scale. If a set of items that measure a construct (e.g., an Extraversion scale) has an <m>\alpha</m> of <m>0.80</m>, then the proportion of error variance in the scale is <m>0.20</m>. In other words, a scale with an <m>\alpha</m> of <m>0.80</m> includes approximately 20% error.</p>
+
+    <p>BUT, and that's a BIG "BUT", Cronbach's alpha is not a measure of unidimensionality (i.e. an indicator that a scale is measuring a single factor or construct rather than multiple related constructs). Scales that are multidimensional will cause alpha to be under-estimated if not assessed separately for each dimension, but high values for alpha are not necessarily indicators of unidimensionality. So, an <m>\alpha</m> of 0.80 does not mean that 80% of a single underlying construct is accounted for. It could be that the 80% comes from more than one underlying construct. That's why EFA and CFA are useful to do first.</p>
+
+    <p>Further, another feature of <m>\alpha</m> is that it tends to be sample specific: it is not a characteristic of the scale, but rather a characteristic of the sample in which the scale has been used. A biased, unrepresentative, or small sample could produce a very different <m>\alpha</m> coefficient than a large, representative sample. <m>\alpha</m> can even vary from large sample to large sample. Nevertheless, despite these limitations, Cronbach's <m>\alpha</m> has been popular in Psychology for estimating internal consistency reliability. It's pretty easy to calculate, understand and interpret, and therefore it can be a useful initial check on scale performance when you administer a scale with a different sample, from a different setting or population, for example.</p>
+
+    <p>An alternative is <term>McDonald's omega</term> (<m>\omega</m>), and jamovi also provides this statistic. Whereas <m>\alpha</m> makes the following assumptions: (a) no residual correlations, (b) items have identical loadings, and (c) the scale is unidimensional, <m>\omega</m> does not and is therefore a more robust reliability statistic. If these assumptions are not violated then <m>\alpha</m> and <m>\omega</m> will be similar, but if they are then <m>\omega</m> is to be preferred.</p>
+
+    <p>Sometimes a threshold for <m>\alpha</m> or <m>\omega</m> is provided, suggesting a "good enough" value. This might be something like <m>\alpha</m>s of <m>0.70</m> or <m>0.80</m> representing "acceptable" and "good" reliability, respectively. However, this does depend on what exactly the scale is supposed to be measuring, so thresholds like this should be used cautiously. It could be better to simply state that an <m>\alpha</m> or <m>\omega</m> of <m>0.70</m> is associated with 30% error variance in a scale, and an <m>\alpha</m> or <m>\omega</m> of <m>0.80</m> is associated with 20%.</p>
+
+    <p>Can <m>\alpha</m> be too high? Probably: if you are getting an <m>\alpha</m> coefficient above <m>0.95</m> then this indicates high inter-correlations between the items and that there might be too much overly redundant specificity in the measurement, with a risk that the construct being measured is perhaps overly narrow.</p>
+
+    <subsection xml:id="subsec-reliability-analysis-in-jamovi">
+      <title>Reliability analysis in jamovi</title>
+
+      <p>We have a third sample of personality data to use to undertake reliability analysis: in the <em>bfi_sample3.csv</em> file. Once again, check that the 25 personality item variables are coded as continuous. To perform reliability analysis in jamovi:</p>
+
+      <ul>
+        <li><p>Select 'Factor' -- 'Reliability Analysis' from the main jamovi button bar to open the reliability analysis window (<xref ref="fig-fig15-25"/>).</p></li>
+        <li><p>Select the 5 A variables and transfer them into the 'Items' box.</p></li>
+        <li><p>Under the "Reverse Scaled Items" option, select variable A1 in the "Normal Scaled Items" box and move it across to the "Reverse Scaled Items" box.</p></li>
+        <li><p>Check other appropriate options, as in <xref ref="fig-fig15-25"/>.</p></li>
+      </ul>
+
+      <figure xml:id="fig-fig15-25">
+        <caption>The jamovi 'Reliability Analysis' window</caption>
+        <image source="images/fig15-25.png" width="90%">
+          <description>A jamovi screenshot of the interface for reliability analysis is displayed. The interface shows options for choosing and analyzing items with various statistics, including Cronbach's α, McDonald's ω, mean, and standard deviation. There are settings for normal and reverse-scaled items.</description>
+        </image>
+      </figure>
+
+      <p>Once done, look across at the jamovi results window. You should see something like <xref ref="fig-fig15-26"/>. This tells us that the Cronbach's <m>\alpha</m> coefficient for the Agreeableness scale is 0.72. This means that just under 30% of the Agreeableness scale score is error variance. McDonald's <m>\omega</m> is also given, and this is 0.74, not much different from <m>\alpha</m>.</p>
+
+      <figure xml:id="fig-fig15-26">
+        <caption>The jamovi Reliability Analysis results for the Agreeableness factor</caption>
+        <image source="images/fig15-26.png" width="95%">
+          <description>A jamovi table showing the results of a reliability analysis. The first section shows overall scale reliability statistics with mean, SD, Cronbach's α, and McDonald's ω values. The second section presents item reliability statistics for five items, including their individual reliability if dropped.</description>
+        </image>
+      </figure>
+
+      <p>We can also check how <m>\alpha</m> or <m>\omega</m> can be improved if a specific item is dropped from the scale. For example, <m>\alpha</m> would increase to 0.74 and <m>\omega</m> to 0.75 if we dropped item A1. This isn't a big increase, so probably not worth doing.</p>
+
+      <p>The process of calculating and checking scale statistics (<m>\alpha</m> and <m>\omega</m>) is the same for all the other scales, and they all had similar reliability estimates apart from Openness. For Openness, the amount of error variance in the Scale score is around 40%, which is high and indicates that Openness is substantially less consistent as a reliable measure of a personality attribute than the other personality scales.</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-factor-analysis-summary">
+    <title>Summary</title>
+
+    <p>In this chapter on Factor Analysis and related techniques we have introduced and demonstrated statistical analyses that assess the pattern of relationships in a data set. Specifically, we have covered:</p>
+
+    <ul>
+      <li><p><xref ref="sec-efa">Exploratory Factor Analysis</xref> (EFA). EFA is a statistical technique for identifying underlying latent factors in a data set. Each observed variable is conceptualised as representing the latent factor to some extent, indicated by a factor loading. Researchers also use EFA as a way of data reduction, i.e. identifying observed variables than can be combined into new factor variables for subsequent analysis.</p></li>
+      <li><p><xref ref="sec-pca">Principal Component Analysis</xref> (PCA) is a data reduction technique which, strictly speaking, does not identify underlying latent factors. Instead, PCA simply produces a linear combination of observed variables.</p></li>
+      <li><p><xref ref="sec-cfa">Confirmatory Factor Analysis</xref> (CFA). Unlike EFA, with CFA you start with an idea -- a model -- of how the variables in your data are related to each other. You then test your model against the observed data and assess how good a fit the model is to the data.</p></li>
+      <li><p>In <xref ref="sec-mtmm-cfa">Multi-Trait Multi-Method CFA</xref> (MTMM CFA), both latent factor and method variance are included in the model in an approach that is useful when there are different methodological approaches used and therefore method variance is an important consideration.</p></li>
+      <li><p><xref ref="sec-internal-consistency-reliability">Internal consistency reliability analysis</xref>. This form of reliability analysis tests how consistently a scale measures a measurement (psychological) construct.</p></li>
+    </ul>
+  </section>
+
 </chapter>
