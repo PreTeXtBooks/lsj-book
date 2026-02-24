@@ -2,7 +2,233 @@
 
 <chapter xml:id="ch-comparing-two-means" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Comparing two means</title>
+
   <introduction>
-    <p>To be added.</p>
+    <p>In <xref ref="ch-categorical-data-analysis"/> we covered the situation when your outcome variable is nominal scale and your predictor variable is also nominal scale. Lots of real-world situations have that character, and so you'll find that chi-square tests in particular are quite widely used. However, you're much more likely to find yourself in a situation where your outcome variable is interval scale or higher, and what you're interested in is whether the average value of the outcome variable is higher in one group or another. For instance, a psychologist might want to know if anxiety levels are higher among parents than non-parents, or if working memory capacity is reduced by listening to music (relative to not listening to music). In a medical context we might want to know if a new drug increases or decreases blood pressure. An agricultural scientist might want to know whether adding phosphorus to Australian native plants will kill them.<fn>Informal experimentation in my garden suggests that yes, it does. Australian natives are adapted to low phosphorus levels relative to everywhere else on Earth, so if you've bought a house with a bunch of exotics and you want to plant natives, keep them separate; nutrients to European plants are poison to Australian ones.</fn> In all these situations our outcome variable is a fairly continuous, interval or ratio scale variable, and our predictor is a binary "grouping" variable. In other words, we want to compare the means of the two groups.</p>
+
+    <p>The standard answer to the problem of comparing means is to use a <m>t</m>-test, of which there are several varieties depending on exactly what question you want to solve. As a consequence, the majority of this chapter focuses on different types of <m>t</m>-test: one sample <m>t</m>-tests, independent samples <m>t</m>-tests and paired samples <m>t</m>-tests. We'll then talk about one-sided tests and, after that, we'll talk a bit about Cohen's <m>d</m>, which is the standard measure of effect size for a <m>t</m>-test. The later sections of the chapter focus on the assumptions of the <m>t</m>-tests, and possible remedies if they are violated. However, before discussing any of these useful things, we'll start with a discussion of the <em>z</em>-test.</p>
   </introduction>
+
+  <section xml:id="sec-one-sample-z-test">
+    <title>The one-sample <em>z</em>-test</title>
+
+    <p>In this section I'll describe one of the most useless tests in all of statistics: the <em>z</em>-test. Seriously -- this test is almost never used in real life. Its only real purpose is that, when teaching statistics, it's a very convenient stepping stone along the way towards the <m>t</m>-test, which is probably the most (over)used tool in all statistics.</p>
+
+    <subsection xml:id="subsec-inference-problem-z">
+      <title>The inference problem that the test addresses</title>
+
+      <p>To introduce the idea behind the <em>z</em>-test, let's use a simple example. A friend of mine, Dr Zeppo, grades his introductory statistics class on a curve. Let's suppose that the average grade in his class is <m>67.5</m>, and the standard deviation is <m>9.5</m>. Of his many hundreds of students, it turns out that 20 of them also take psychology classes. Out of curiosity, I find myself wondering if the psychology students tend to get the same grades as everyone else (i.e., mean <m>67.5</m>) or do they tend to score higher or lower? He emails me the <em>zeppo.csv</em> file, which I use to look at the grades of those students, in the jamovi spreadsheet view, and then calculate the mean in 'Exploration' -- 'Descriptives'.<fn>In order to do this I had to change the measurement level for <m>X</m> to 'Continuous', as during the opening / import of the csv file jamovi made this a nominal level variable, which isn't right for my analysis.</fn> The mean value is <m>72.3</m>.</p>
+
+      <blockquote>
+        <p>50 60 60 64 66 66 67 69 70 74 76 76 77 79 79 79 81 82 82 89</p>
+      </blockquote>
+
+      <p>Hmm. It might be that the psychology students are scoring a bit higher than normal. That sample mean of <m>\bar{X} = 72.3</m> is a fair bit higher than the hypothesised population mean of <m>\mu = 67.5</m> but, on the other hand, a sample size of <m>N = 20</m> isn't all that big. Maybe it's pure chance.</p>
+
+      <p>To answer the question, it helps to be able to write down what it is that I think I know. Firstly, I know that the sample mean is <m>\bar{X} = 72.3</m>. If I'm willing to assume that the psychology students have the same standard deviation as the rest of the class then I can say that the population standard deviation is <m>\sigma = 9.5</m>. I'll also assume that since Dr Zeppo is grading to a curve, the psychology student grades are normally distributed.</p>
+
+      <p>Next, it helps to be clear about what I want to learn from the data. In this case my research hypothesis relates to the population mean <m>\mu</m> for the psychology student grades, which is unknown. Specifically, I want to know if <m>\mu = 67.5</m> or not. Given that this is what I know, can we devise a hypothesis test to solve our problem? The data, along with the hypothesised distribution from which they are thought to arise, are shown in <xref ref="fig-fig11-1"/>. Not entirely obvious what the right answer is, is it? For this, we are going to need some statistics.</p>
+
+      <figure xml:id="fig-fig11-1">
+        <caption>The theoretical distribution (solid line) from which the psychology student grades (bars) are supposed to have been generated</caption>
+        <image source="images/fig-fig11-1-1.png" width="80%">
+          <description>A bar histogram displays the distribution of grades with a curve overlay. The x-axis is labeled "Grades" ranging from 50 to 90, and the y-axis is unlabeled. Bars show peaks near grades 70 and 80, with the curve indicating a normal distribution.</description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-constructing-hypothesis-z">
+      <title>Constructing the hypothesis test</title>
+
+      <p>The first step in constructing a hypothesis test is to be clear about what the null and alternative hypotheses are. This isn't too hard to do. Our null hypothesis, <m>H_0</m>, is that the true population mean <m>\mu</m> for psychology student grades is <m>67.5\%</m>, and our alternative hypothesis is that the population mean isn't <m>67.5\%</m>. If we write this in mathematical notation, these hypotheses become:
+      <me>H_0:\mu= 67.5</me>
+      <me>H_1:\mu \neq 67.5</me>
+      though to be honest this notation doesn't add much to our understanding of the problem, it's just a compact way of writing down what we're trying to learn from the data. The null hypothesis <m>H_0</m> and the alternative hypothesis <m>H_1</m> for our test are both illustrated in <xref ref="fig-fig11-2"/>.</p>
+
+      <figure xml:id="fig-fig11-2">
+        <caption>Graphical illustration of the null and alternate hypotheses assumed by the one sample <em>z</em>-test (the two-sided version, that is). The null and alternate hypotheses both assume that the population distribution is normal, and additionally assumes that the population standard deviation is known (fixed at some value <m>\sigma_0</m>). The null hypothesis (left) is that the population mean <m>\mu</m> is equal to some specified value <m>\mu_0</m>. The alternative hypothesis (right) is that the population mean differs from this value, <m>\mu \neq \mu_0</m></caption>
+        <image source="images/fig-fig11-2-1.png" width="90%">
+          <description>Two side-by-side bell curve graphs comparing the null hypothesis and alternative hypothesis. The left graph shows the null hypothesis with mean equal to mu-zero and sigma equal to sigma-zero. The right graph shows the alternative hypothesis with mean not equal to mu-zero and sigma equal to sigma-zero. The x-axis is labeled "Value of X".</description>
+        </image>
+      </figure>
+
+      <p>In addition to providing us with these hypotheses, the scenario outlined above provides us with a fair amount of background knowledge that might be useful. Specifically, there are two special pieces of information that we can add:</p>
+
+      <ol>
+        <li><p>The psychology grades are normally distributed.</p></li>
+        <li><p>The true standard deviation of these scores <m>\sigma</m> is known to be 9.5.</p></li>
+      </ol>
+
+      <p>For the moment, we'll act as if these are absolutely trustworthy facts. In real life, this kind of absolutely trustworthy background knowledge doesn't exist, and so if we want to rely on these facts we'll just have to make the <em>assumption</em> that these things are true. However, since these assumptions may or may not be warranted, we might need to check them. For now though, we'll keep things simple.</p>
+
+      <p>The next step is to figure out what would be a good choice for a diagnostic test statistic, something that would help us discriminate between <m>H_0</m> and <m>H_1</m>. Given that the hypotheses all refer to the population mean <m>\mu</m>, you'd feel pretty confident that the sample mean <m>\bar{X}</m> would be a pretty useful place to start. What we could do is look at the difference between the sample mean <m>\bar{X}</m> and the value that the null hypothesis predicts for the population mean. In our example that would mean we calculate <m>\bar{X} - 67.5</m>. More generally, if we let <m>\mu_0</m> refer to the value that the null hypothesis claims is our population mean, then we'd want to calculate:
+      <me>\bar{X}-\mu_0</me></p>
+
+      <p>If this quantity equals or is very close to 0, things are looking good for the null hypothesis. If this quantity is a long way away from 0, then it's looking less likely that the null hypothesis is worth retaining. But how far away from zero should it be for us to reject <m>H_0</m>?</p>
+
+      <p>To figure that out we need to be a bit more sneaky, and we'll need to rely on those two pieces of background knowledge that I wrote down previously; namely that the raw data are normally distributed and that we know the value of the population standard deviation <m>\sigma</m>. If the null hypothesis is actually true, and the true mean is <m>\mu_0</m>, then these facts together mean that we know the complete population distribution of the data: a normal distribution with mean <m>\mu_0</m> and standard deviation <m>\sigma</m>.<fn>Adopting the notation from the section on the normal distribution, a statistician might write this as: <me>X \sim Normal(\mu_0,\sigma^2)</me></fn></p>
+
+      <p>Okay, if that's true, then what can we say about the distribution of <m>\bar{X}</m>? Well, as we discussed earlier (see the section on the central limit theorem), the sampling distribution of the mean <m>\bar{X}</m> is also normal, and has mean <m>\mu</m>. But the standard deviation of this sampling distribution <m>SE(\bar{X})</m>, which is called the standard error of the mean, is:<fn>In other words, if the null hypothesis is true then the sampling distribution of the mean can be written as follows: <me>\bar{X} \sim Normal(\mu_0, SE(\bar{X}))</me></fn>
+      <me>SE(\bar{X})=\frac{\sigma}{\sqrt{N}}</me></p>
+
+      <p>Now comes the trick. What we can do is convert the sample mean <m>\bar{X}</m> into a standard score (see the section on standard scores). This is conventionally written as <m>z</m>, but for now I'm going to refer to it as <m>z_{\bar{X}}</m>. The reason for using this expanded notation is to help you remember that we're calculating a standardised version of a sample mean, not a standardised version of a single observation, which is what a <em>z</em>-score usually refers to. When we do so the <em>z</em>-score for our sample mean is:
+      <me>z_{\bar{X}}=\frac{\bar{X}-\mu_0}{SE(\bar{X})}</me>
+      or, equivalently:
+      <me>z_{\bar{X}}=\frac{\bar{X}-\mu_0}{\frac{\sigma}{\sqrt{N}}}</me></p>
+
+      <p>This <em>z</em>-score is our test statistic. The nice thing about using this as our test statistic is that like all <em>z</em>-scores, it has a standard normal distribution.<fn>See the section on standard scores if you've forgotten why this is true.</fn></p>
+
+      <p>In other words, regardless of what scale the original data are on, the <m>z</m>-statistic itself always has the same interpretation: it's equal to the number of standard errors that separate the observed sample mean <m>\bar{X}</m> from the population mean <m>\mu_0</m> predicted by the null hypothesis. Better yet, regardless of what the population parameters for the raw scores actually are, the 5% critical regions for the <em>z</em>-test are always the same, as illustrated in <xref ref="fig-fig11-3"/>. And what this meant, way back in the days where people did all their statistics by hand, is that someone could publish a table like <xref ref="tbl-tab11-1"/>. This, in turn, meant that researchers could calculate their z-statistic by hand and then look up the critical value in a textbook.</p>
+
+      <figure xml:id="fig-fig11-3">
+        <caption>Rejection regions for the two-sided <em>z</em>-test (a) and the one-sided <em>z</em>-test (b)</caption>
+        <image source="images/fig-fig11-3-1.png" width="90%">
+          <description>Two bell curves comparing statistical tests: (a) Two-Sided Test with shaded tails beyond -1.96 and 1.96 z-values, and (b) One-Sided Test with a shaded tail beyond 1.64 z-value. Both graphs show standard normal distributions with z-statistic values on the x-axis.</description>
+        </image>
+      </figure>
+
+      <table xml:id="tbl-tab11-1">
+        <title>Critical values for different alpha levels</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell></cell>
+            <cell colspan="2">critical <m>z</m>-value</cell>
+          </row>
+          <row header="yes">
+            <cell>desired <m>\alpha</m> level</cell>
+            <cell>two-sided test</cell>
+            <cell>one-sided test</cell>
+          </row>
+          <row>
+            <cell>.1</cell>
+            <cell>1.644854</cell>
+            <cell>1.281552</cell>
+          </row>
+          <row>
+            <cell>.05</cell>
+            <cell>1.959964</cell>
+            <cell>1.644854</cell>
+          </row>
+          <row>
+            <cell>.01</cell>
+            <cell>2.575829</cell>
+            <cell>2.326348</cell>
+          </row>
+          <row>
+            <cell>.001</cell>
+            <cell>3.290527</cell>
+            <cell>3.090232</cell>
+          </row>
+        </tabular>
+      </table>
+    </subsection>
+
+    <subsection xml:id="subsec-worked-example-z">
+      <title>A worked example, by hand</title>
+
+      <p>Now, as I mentioned earlier, the <em>z</em>-test is almost never used in practice. It's so rarely used in real life that the basic installation of jamovi doesn't have a built in function for it. However, the test is so incredibly simple that it's really easy to do one manually. Let's go back to the data from Dr Zeppo's class. Having loaded the grades data, the first thing I need to do is calculate the sample mean, which I've already done (<m>72.3</m>). We already have the known population standard deviation (<m>\sigma = 9.5</m>), and the value of the population mean that the null hypothesis specifies (<m>\mu_0 = 67.5</m>), and we know the sample size (<m>N=20</m>).</p>
+
+      <p>Next, let's calculate the (true) standard error of the mean (easily done with a calculator):
+      <md>
+        <mrow>sem.true \amp = \frac{sd.true}{\sqrt{N}}</mrow>
+        <mrow>\amp = \frac{9.5}{\sqrt{20}}</mrow>
+        <mrow>\amp = 2.124265</mrow>
+      </md></p>
+
+      <p>And finally, we calculate our <em>z</em>-score:
+      <md>
+        <mrow>z.score \amp = \frac{sample.mean - mu.null}{sem.true}</mrow>
+        <mrow>\amp = \frac{72.3 - 67.5}{2.124265}</mrow>
+        <mrow>\amp = 2.259606</mrow>
+      </md></p>
+
+      <p>At this point, we would traditionally look up the value <m>2.26</m> in our table of critical values. Our original hypothesis was two-sided (we didn't really have any theory about whether psych students would be better or worse at statistics than other students) so our hypothesis test is two-sided (or two-tailed) also. Looking at the little table that I showed earlier, we can see that <m>2.26</m> is bigger than the critical value of <m>1.96</m> that would be required to be significant at <m>\alpha = .05</m>, but smaller than the value of <m>2.58</m> that would be required to be significant at a level of <m>\alpha = .01</m>. Therefore, we can conclude that we have a significant effect, which we might write up by saying something like this:</p>
+
+      <blockquote>
+        <p><em>With a mean grade of</em> <m>73.2</m> <em>in the sample of psychology students, and assuming a true population standard deviation of</em> <m>9.5</m><em>, we can conclude that the psychology students have significantly different statistics scores to the class average (</em><m>z = 2.26, N = 20, p&lt;.05</m><em>).</em></p>
+      </blockquote>
+    </subsection>
+
+    <subsection xml:id="subsec-assumptions-z">
+      <title>Assumptions of the <em>z</em>-test</title>
+
+      <p>As I've said before, all statistical tests make assumptions. Some tests make reasonable assumptions, while other tests do not. The test I've just described, the one sample <em>z</em>-test, makes three basic assumptions. These are:</p>
+
+      <ul>
+        <li><p><em>Normality</em>. As usually described, the <em>z</em>-test assumes that the true population distribution is normal.<fn>Actually this is too strong. Strictly speaking the <em>z</em>-test only requires that the sampling distribution of the mean be normally distributed. If the population is normal then it necessarily follows that the sampling distribution of the mean is also normal. However, as we saw when talking about the central limit theorem, it's quite possible (even commonplace) for the sampling distribution to be normal even if the population distribution itself is nonnormal. However, in light of the sheer ridiculousness of the assumption that the true standard deviation is known, there really isn't much point in going into details on this front!</fn> This is often a pretty reasonable assumption, and it's also an assumption that we can check if we feel worried about it (see <xref ref="sec-Checking-the-normality-of-a-sample" text="title"/>).</p></li>
+        <li><p><em>Independence</em>. The second assumption of the test is that the observations in your data set are not correlated with each other, or related to each other in some funny way. This isn't as easy to check statistically, it relies a bit on good experimental design. An obvious (and stupid) example of something that violates this assumption is a data set where you "copy" the same observation over and over again in your data file so that you end up with a massive "sample size", which consists of only one genuine observation. More realistically, you have to ask yourself if it's really plausible to imagine that each observation is a completely random sample from the population that you're interested in. In practice this assumption is never met, but we try our best to design studies that minimise the problems of correlated data.</p></li>
+        <li><p><em>Known standard deviation</em>. The third assumption of the <em>z</em>-test is that the true standard deviation of the population is known to the researcher. This is just stupid. In no real world data analysis problem do you know the standard deviation <m>\sigma</m> of some population but are completely ignorant about the mean <m>\mu</m>. In other words, this assumption is always wrong.</p></li>
+      </ul>
+
+      <p>In view of the stupidity of assuming that <m>\sigma</m> is known, let's see if we can live without it. This takes us out of the dreary domain of the <em>z</em>-test, and into the magical kingdom of the <m>t</m>-test, with unicorns and fairies and leprechauns!</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-The-one-sample-t-test">
+    <title>The one-sample <m>t</m>-test</title>
+
+    <p>After some thought, I decided that it might not be safe to assume that the psychology student grades necessarily have the same standard deviation as the other students in Dr Zeppo's class (<xref ref="fig-fig11-4"/>). After all, if I'm entertaining the hypothesis that they don't have the same mean, then why should I believe that they absolutely have the same standard deviation? In view of this, I should really stop assuming that I know the true value of <m>\sigma</m>. This violates the assumptions of my <em>z</em>-test, so in one sense I'm back to square one. However, it's not like I'm completely bereft of options. After all, I've still got my raw data, and those raw data give me an estimate of the population standard deviation, which is 9.52. In other words, while I can't say that I know that <m>\sigma = 9.5</m>, I can say that <m>\hat{\sigma}</m> = 9.52.</p>
+
+    <p>Okay, cool. The obvious thing that you might think to do is run a <em>z</em>-test, but using the estimated standard deviation of <m>9.52</m> instead of relying on my assumption that the true standard deviation is <m>9.5</m>. And you probably wouldn't be surprised to hear that this would still give us a significant result. This approach is close, but it's not quite correct. Because we are now relying on an estimate of the population standard deviation we need to make some adjustment for the fact that we have some uncertainty about what the true population standard deviation actually is. Maybe our data are just a fluke... maybe the true population standard deviation is <m>11</m>, for instance. But if that were actually true, and we ran the <em>z</em>-test assuming <m>\sigma=11</m>, then the result would end up being non-significant. That's a problem, and it's one we're going to have to address.</p>
+
+    <figure xml:id="fig-fig11-4">
+      <caption>Graphical illustration of the null and alternative hypotheses assumed by the (two-sided) one sample <m>t</m>-test. Note the similarity to the <em>z</em>-test (<xref ref="fig-fig11-2"/>). The null hypothesis is that the population mean <m>\mu</m> is equal to some specified value <m>\mu_0</m>, and the alternative hypothesis is that it is not. Like the <em>z</em>-test, we assume that the data are normally distributed, but we do not assume that the population standard deviation <m>\sigma</m> is known in advance</caption>
+      <image source="images/fig-fig11-4-1.png" width="90%">
+        <description>Two graphs compare the null and alternative hypotheses. The left graph shows a normal distribution curve with mean equal to mu-zero and sigma unknown. The right graph shows a normal distribution curve with mean not equal to mu-zero and sigma unknown. Both graphs have "Value of X" on the x-axis.</description>
+      </image>
+    </figure>
+
+    <subsection xml:id="subsec-introducing-t-test">
+      <title>Introducing the <m>t</m>-test</title>
+
+      <p>This ambiguity is annoying, and it was resolved in 1908 by a guy called William Sealy Gosset (Student, 1908), who was working as a chemist for the Guinness brewery at the time. Because Guinness took a dim view of its employees publishing statistical analysis (apparently they felt it was a trade secret), he published the work under the pseudonym "A Student" and, to this day, the full name of the <m>t</m>-test is actually <term>Student's <m>t</m>-test</term>. The key thing that Gosset figured out is how we should accommodate the fact that we aren't completely sure what the true standard deviation is.<fn>Well, sort of. As I understand the history, Gosset only provided a partial solution; the general solution to the problem was provided by Sir Ronald Fisher.</fn> The answer is that it subtly changes the sampling distribution. In the <m>t</m>-test our test statistic, now called a <m>t</m>-statistic, is calculated in exactly the same way I mentioned above. If our null hypothesis is that the true mean is <m>\mu</m>, but our sample has mean <m>\bar{X}</m> and our estimate of the population standard deviation is <m>\hat{\sigma}</m>, then our <m>t</m>-statistic is:
+      <me>t=\frac{\bar{X}-\mu}{\frac{\hat{\sigma}}{\sqrt{N}}}</me></p>
+
+      <p>The only thing that has changed in the equation is that instead of using the known true value <m>\sigma</m>, we use the estimate <m>\hat{\sigma}</m>. And if this estimate has been constructed from <m>N</m> observations, then the sampling distribution turns into a <m>t</m>-distribution with <m>N-1</m> <term>degrees of freedom</term> (<m>df</m>). The <m>t</m>-distribution is very similar to the normal distribution, but has "heavier" tails, as discussed earlier in the section on other useful distributions and illustrated in <xref ref="fig-fig11-5"/>. Notice, though, that as <m>df</m> gets larger, the <m>t</m>-distribution starts to look identical to the standard normal distribution. This is as it should be: if you have a sample size of <m>N = 70,000,000</m> then your "estimate" of the standard deviation would be pretty much perfect, right? So, you should expect that for large <m>N</m>, the <m>t</m>-test would behave exactly the same way as a <em>z</em>-test. And that's exactly what happens!</p>
+
+      <figure xml:id="fig-fig11-5">
+        <caption>The <m>t</m>-distribution with 2 degrees of freedom (left) and 10 degrees of freedom (right), with a standard normal distribution (i.e., mean 0 and std dev 1) plotted as dotted lines for comparison purposes. Notice that the <m>t</m>-distribution has heavier tails (leptokurtic, higher kurtosis) than the normal distribution; this effect is quite exaggerated when the degrees of freedom are very small, but negligible for larger values. In other words, for large <m>df</m> the <m>t</m>-distribution is essentially identical to a normal distribution</caption>
+        <image source="images/fig-fig11-5-1.png" width="90%">
+          <description>Two line graphs show t-distribution curves for different degrees of freedom. The left graph, labeled "df = 2," depicts a curve slightly wider and shorter with dashed lines representing the standard normal distribution. The right graph, labeled "df = 10," shows a taller, narrower curve. Both graphs have "Value of t-statistic" on the x-axis.</description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-t-test-in-jamovi">
+      <title>Doing the test in jamovi</title>
+
+      <p>As you might expect, the mechanics of the <m>t</m>-test are almost identical to the mechanics of the <em>z</em>-test. So there's not much point in going through the tedious exercise of showing you how to do the calculations using low level commands. It's pretty much identical to the calculations that we did earlier, except that we use the estimated standard deviation and then we test our hypothesis using the <m>t</m>-distribution rather than the normal distribution. And so instead of going through the calculations in tedious detail for a second time, I'll jump straight to showing you how <m>t</m>-tests are actually done. jamovi comes with a dedicated analysis for <m>t</m>-tests that is very flexible (it can run lots of different kinds of <m>t</m>-tests). It's pretty straightforward to use; all you need to do is specify 'Analyses' -- 'T-Tests' -- 'One Sample T-Test', move the variable you are interested in (<m>X</m>) across into the 'Variables' box, and type in the mean value for the null hypothesis ('67.5') in the 'Hypothesis' -- 'Test value' box. Easy enough. See <xref ref="fig-fig11-6"/>, which, amongst other things that we will get to in a moment, gives you a <m>t</m>-test statistic = 2.25, with 19 degrees of freedom and an associated <m>p</m>-value of <m>0.036</m>.</p>
+
+      <figure xml:id="fig-fig11-6">
+        <caption>jamovi does the one-sample <m>t</m>-test</caption>
+        <image source="images/fig11-6.png" width="90%">
+          <description>A statistical analysis software interface displays a one-sample t-test. The screen shows options like Students T-Test, Bayes factor, Wilcoxon rank, and additional statistics selections. The results section includes descriptive statistics, a test table, and a hypothesis test plot.</description>
+        </image>
+      </figure>
+
+      <p>Also reported are two other things you might care about: the 95% confidence interval and a measure of effect size (we'll talk more about effect sizes later). So that seems straightforward enough. Now what do we do with this output? Well, since we're pretending that we actually care about my toy example, we're overjoyed to discover that the result is statistically significant (i.e. <m>p</m>-value below .05). We could report the result by saying something like this:</p>
+
+      <blockquote>
+        <p><em>With a mean grade of <m>72.3</m>, the psychology students scored slightly higher than the average grade of <m>67.5</m> (<m>t(19) = 2.25</m>, <m>p = .036</m>); the mean difference was <m>4.80</m> and the <m>95\%</m> confidence interval was from <m>0.34</m> to <m>9.26</m>.</em></p>
+      </blockquote>
+
+      <p>...where <m>t(19)</m> is shorthand notation for a t statistic that has <m>19</m> degrees of freedom. That said, it's often the case that people don't report the confidence interval, or do so using a much more compressed form than I've done here. For instance, it's not uncommon to see the confidence interval included as part of the stat block after reporting the mean difference, like this:
+      <me>t(19)=2.25, p = .036, CI_{95} = [0.34, 9.26]</me>
+      With that much jargon crammed into half a line, you know it must be really smart.<fn>More seriously, I tend to think the reverse is true. I get very suspicious of technical reports that fill their results sections with nothing except the numbers. It might just be that I'm an arrogant jerk, but I often feel like an author that makes no attempt to explain and interpret their analysis to the reader either doesn't understand it themselves, or is being a bit lazy. Your readers are smart, but not infinitely patient. Don't annoy them if you can help it.</fn></p>
+    </subsection>
+
+    <subsection xml:id="subsec-assumptions-one-sample-t">
+      <title>Assumptions of the one sample <m>t</m>-test</title>
+
+      <p>Okay, so what assumptions does the one-sample <m>t</m>-test make? Well, since the <m>t</m>-test is basically a <em>z</em>-test with the assumption of known standard deviation removed, you shouldn't be surprised to see that it makes the same assumptions as the <em>z</em>-test, minus the one about the known standard deviation. That is:</p>
+
+      <ul>
+        <li><p>Normality. We're still assuming that the population distribution is normal,<fn>A technical comment. In the same way that we can weaken the assumptions of the <em>z</em>-test so that we're only talking about the sampling distribution, we can weaken the <m>t</m>-test assumptions so that we don't have to assume normality of the population. However, for the <m>t</m>-test it's trickier to do this. As before, we can replace the assumption of population normality with an assumption that the sampling distribution of <m>\bar{X}</m> is normal. However, remember that we're also relying on a sample estimate of the standard deviation, and so we also require the sampling distribution of <m>\hat{\sigma}</m> to be chi-square. That makes things nastier, and this version is rarely used in practice. Fortunately, if the population distribution is normal, then both of these two assumptions are met.</fn> and as noted earlier, there are standard tools that you can use to check to see if this assumption is met (<xref ref="sec-Checking-the-normality-of-a-sample" text="title"/>), and other tests you can do in its place if this assumption is violated (<xref ref="sec-testing-non-normal" text="title"/>).</p></li>
+        <li><p>Independence. Once again, we have to assume that the observations in our sample are generated independently of one another. See the earlier discussion about the <em>z</em>-test for specifics (<xref ref="subsec-assumptions-z" text="title"/>).</p></li>
+      </ul>
+
+      <p>Overall, these two assumptions aren't terribly unreasonable, and as a consequence the one sample <m>t</m>-test is pretty widely used in practice as a way of comparing a sample mean against a hypothesised population mean.</p>
+    </subsection>
+  </section>
+
 </chapter>
