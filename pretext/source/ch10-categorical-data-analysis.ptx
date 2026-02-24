@@ -450,4 +450,194 @@
     </subsection>
   </section>
 
+  <section xml:id="sec-chi-square-test-of-independence">
+    <title>The <m>\chi^2</m> test of independence (or association)</title>
+
+    <introduction>
+      <blockquote>
+        <p><em>GUARDBOT 1: Halt!
+GUARDBOT 2: Be you robot or human?
+LEELA: Robot...we be.
+FRY: Uh, yup! Just two robots out roboting it up! Eh?
+GUARDBOT 1: Administer the test.
+GUARDBOT 2: Which of the following would you most prefer? A: A puppy, B: A pretty flower from your sweetie, or C: A large properly-formatted data file?
+GUARDBOT 1: Choose!</em></p>
+        <attribution>Futurama, <em>Fear of a Bot Planet</em></attribution>
+      </blockquote>
+
+      <p>The other day I was watching an animated documentary examining the quaint customs of the natives of the planet <em>Chapek 9</em>. Apparently, in order to gain access to their capital city a visitor must prove that they're a robot, not a human. In order to determine whether or not a visitor is human, the natives ask whether the visitor prefers puppies, flowers, or large, properly formatted data files. "Pretty clever," I thought to myself "but what if humans and robots have the same preferences? That probably wouldn't be a very good test then, would it?" As it happens, I got my hands on the testing data that the civil authorities of <em>Chapek 9</em> used to check this. It turns out that what they did was very simple. They found a bunch of robots and a bunch of humans and asked them what they preferred. I saved their data in a file called <em>chapek9.omv</em>, which we can now load into jamovi. As well as the ID variable that identifies individual people, there are two nominal text variables, species and choice. In total there are 180 entries in the data set, one for each person (counting both robots and humans as "people") who was asked to make a choice. Specifically, there are 93 humans and 87 robots, and overwhelmingly the preferred choice is the data file. You can check this yourself by asking jamovi for Frequency Tables, under the 'Exploration' -- 'Descriptives' button. However, this summary does not address the question we're interested in. To do that, we need a more detailed description of the data. What we want to do is look at the choices broken down <em>by species</em>. That is, we need to cross-tabulate the data. In jamovi we do this using the 'Frequencies' -- 'Contingency Tables' -- 'Independent Samples' analysis, and we should get a table something like <xref ref="tbl-tab10-8"/>.</p>
+
+      <table xml:id="tbl-tab10-8">
+        <title>Cross-tabulating the data</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell></cell>
+            <cell>Robot</cell>
+            <cell>Human</cell>
+            <cell>Total</cell>
+          </row>
+          <row>
+            <cell>Puppy</cell>
+            <cell>13</cell>
+            <cell>15</cell>
+            <cell>28</cell>
+          </row>
+          <row>
+            <cell>Flower</cell>
+            <cell>30</cell>
+            <cell>13</cell>
+            <cell>43</cell>
+          </row>
+          <row>
+            <cell>Data</cell>
+            <cell>44</cell>
+            <cell>65</cell>
+            <cell>109</cell>
+          </row>
+          <row>
+            <cell>Total</cell>
+            <cell>87</cell>
+            <cell>93</cell>
+            <cell>180</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>From this, it's quite clear that the vast majority of the humans chose the data file, whereas the robots tended to be a lot more even in their preferences. Leaving aside the question of why the humans might be more likely to choose the data file for the moment (which does seem quite odd, admittedly), our first order of business is to determine if the discrepancy between human choices and robot choices in the data set is statistically significant.</p>
+    </introduction>
+
+    <subsection xml:id="subsec-constructing-hypothesis-test-independence">
+      <title>Constructing our hypothesis test</title>
+
+      <p>How do we analyse this data? Specifically, since my research hypothesis is that "humans and robots answer the question in different ways", how can I construct a test of the null hypothesis that "humans and robots answer the question the same way"? As before, we begin by establishing some notation to describe the data (<xref ref="tbl-tab10-9"/>).</p>
+
+      <table xml:id="tbl-tab10-9">
+        <title>Notation to describe the data</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell></cell>
+            <cell>Robot</cell>
+            <cell>Human</cell>
+            <cell>Total</cell>
+          </row>
+          <row>
+            <cell>Puppy</cell>
+            <cell><m>O_{11}</m></cell>
+            <cell><m>O_{12}</m></cell>
+            <cell><m>R_{1}</m></cell>
+          </row>
+          <row>
+            <cell>Flower</cell>
+            <cell><m>O_{21}</m></cell>
+            <cell><m>O_{22}</m></cell>
+            <cell><m>R_{2}</m></cell>
+          </row>
+          <row>
+            <cell>Data</cell>
+            <cell><m>O_{31}</m></cell>
+            <cell><m>O_{32}</m></cell>
+            <cell><m>R_{3}</m></cell>
+          </row>
+          <row>
+            <cell>Total</cell>
+            <cell><m>C_{1}</m></cell>
+            <cell><m>C_{2}</m></cell>
+            <cell><m>N</m></cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>In this notation we say that <m>O_{ij}</m> is a count (observed frequency) of the number of respondents that are of species <m>j</m> (robots or human) who gave answer <m>i</m> (puppy, flower or data) when asked to make a choice. The total number of observations is written <m>N</m>, as usual. Finally, I've used <m>R_i</m> to denote the row totals (e.g., <m>R_1</m> is the total number of people who chose the flower), and <m>C_j</m> to denote the column totals (e.g., <m>C_1</m> is the total number of robots).<fn>A technical note. The way I've described the test pretends that the column totals are fixed (i.e., the researcher intended to survey 87 robots and 93 humans) and the row totals are random (i.e., it just turned out that 28 people chose the puppy). I should technically refer to this situation as a chi-square test of homogeneity and reserve the term chi-square test of independence for the situation where both the row and column totals are random outcomes of the experiment. However, it turns out that these two tests are identical, and so I've collapsed them together.</fn></p>
+
+      <p>So now let's think about what the null hypothesis says. If robots and humans are responding in the same way to the question, it means that the probability that "a robot says puppy" is the same as the probability that "a human says puppy", and so on for the other two possibilities.</p>
+
+      <p>So, if we use <m>P_{ij}</m> to denote "the probability that a member of species <m>j</m> gives response <m>i</m>" then our null hypothesis is that:
+      <me>H_0 : P_{11} = P_{12} \text{ (same probability of saying "puppy"),}</me>
+      <me>P_{21} = P_{22} \text{ (same probability of saying "flower"), and}</me>
+      <me>P_{31} = P_{32} \text{ (same probability of saying "data").}</me></p>
+
+      <p>And actually, since the null hypothesis is claiming that the true choice probabilities don't depend on the species of the person making the choice, we can let <m>P_i</m> refer to this probability, e.g., <m>P_1</m> is the true probability of choosing the puppy.</p>
+
+      <p>Next, in much the same way that we did with the goodness-of-fit test, what we need to do is calculate the expected frequencies. That is, for each of the observed counts <m>O_{ij}</m> we need to figure out what the null hypothesis would tell us to expect. Let's denote this expected frequency by <m>E_{ij}</m>. This time, it's a little bit trickier. If there are a total of <m>C_j</m> people that belong to species <m>j</m>, and the true probability of anyone (regardless of species) choosing option <m>i</m> is <m>P_i</m>, then the expected frequency is just:
+      <me>E_{ij}=C_j \times P_i</me></p>
+
+      <p>Now, this is all very well and good, but we have a problem. Unlike the situation we had with the goodness-of-fit test, the null hypothesis doesn't actually specify a particular value for <m>P_i</m>. It's something we have to estimate from the data! Fortunately, this is pretty easy to do. If 28 out of 180 people selected the flowers, then a natural estimate for the probability of choosing flowers is <m>\frac{28}{180}</m>, which is approximately <m>.16</m>. If we phrase this in mathematical terms, what we're saying is that our estimate for the probability of choosing option <m>i</m> is just the row total divided by the total sample size:
+      <me>\hat{P}_{i}= \frac{R_i}{N}</me></p>
+
+      <p>Therefore, our expected frequency can be written as the product (i.e. multiplication) of the row total and the column total, divided by the total number of observations:
+      <me>E_{ij}= \frac{R_i \times C_j}{N}</me><fn>Technically, <m>E_{ij}</m> here is an estimate, so I should probably write it <m>\hat{E}_{ij}</m>, but since no-one else does, I won't either. Now that we've figured out how to calculate the expected frequencies, it's straightforward to define a test statistic, following the exact same strategy that we used in the goodness-of-fit test. In fact, it's pretty much the same statistic. For a contingency table with <m>r</m> rows and <m>c</m> columns, the equation that defines our <m>X^2</m> statistic is: <me>X^2=\sum_{i=1}^{r}\sum_{j=1}^{c} \frac{(E_{ij}-O_{ij})^2}{E_{ij}}</me> The only difference is that I have to include two summation signs (i.e., <m>\sum</m>) to indicate that we're summing over both rows and columns.</fn></p>
+
+      <p>As before, large values of <m>X^2</m> indicate that the null hypothesis provides a poor description of the data, whereas small values of <m>X^2</m> suggest that it does a good job of accounting for the data. Therefore, just like last time, we want to reject the null hypothesis if <m>X^2</m> is too large.</p>
+
+      <p>Not surprisingly, this statistic is <m>\chi^2</m> distributed. All we need to do is figure out how many degrees of freedom are involved, which actually isn't too hard. As I mentioned before, you can (usually) think of the degrees of freedom as being equal to the number of data points that you're analysing, minus the number of constraints. A contingency table with <m>r</m> rows and <m>c</m> columns contains a total of <m>r \times c</m> observed frequencies, so that's the total number of observations. What about the constraints? Here, it's slightly trickier. The answer is always the same:
+      <me>df=(r-1)(c-1)</me></p>
+
+      <p>But the explanation for why the degrees of freedom takes this value is different depending on the experimental design. For the sake of argument, let's suppose that we had honestly intended to survey exactly 87 robots and 93 humans (column totals fixed by the experimenter), but left the row totals free to vary (row totals are random variables). Let's think about the constraints that apply here. Well, since we deliberately fixed the column totals by Act of Experimenter, we have <m>c</m> constraints right there. But, there's actually more to it than that.</p>
+
+      <p>Remember how our null hypothesis had some free parameters (i.e., we had to estimate the <m>P_i</m> values)? Those matter too. I won't explain why in this book, but every free parameter in the null hypothesis is rather like an additional constraint. So, how many of those are there? Well, since these probabilities have to sum to 1, there's only <m>r - 1</m> of these.</p>
+
+      <p>So our total degrees of freedom is:
+      <me>df = (r \times c) - (c + (r - 1)) = rc - c - r + 1 = (r - 1)(c - 1)</me></p>
+
+      <p>Alternatively, suppose that the only thing that the experimenter fixed was the total sample size <m>N</m>. That is, we quizzed the first 180 people that we saw and it just turned out that 87 were robots and 93 were humans. This time around our reasoning would be slightly different, but would still lead us to the same answer. Our null hypothesis still has <m>r - 1</m> free parameters corresponding to the choice probabilities, but it now also has <m>c - 1</m> free parameters corresponding to the species probabilities, because we'd also have to estimate the probability that a randomly sampled person turns out to be a robot.<fn>A problem many of us worry about in real life.</fn></p>
+
+      <p>Finally, since we did actually fix the total number of observations <m>N</m>, that's one more constraint. So, now we have <m>rc</m> observations, and <m>(c-1)+(r-1)+1</m> constraints. And that gives:
+      <me>df = (r \times c) - ((c-1) + (r - 1)+1) = (r - 1)(c - 1)</me></p>
+
+      <p>Amazing.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-independence-in-jamovi">
+      <title>Doing the test in jamovi</title>
+
+      <p>Okay, now that we know how the test works let's have a look at how it's done in jamovi. As tempting as it is to lead you through the tedious calculations so that you're forced to learn it the long way, I figure there's no point. I already showed you how to do it the long way for the goodness-of-fit test in the last section, and since the test of independence isn't conceptually any different, you won't learn anything new by doing it the long way. So instead I'll go straight to showing you the easy way.</p>
+
+      <p>After you have run the test in jamovi ('Frequencies' -- 'Contingency Tables' -- 'Independent Samples'), all you have to do is look underneath the contingency table in the jamovi results window and there is the <m>\chi^2</m> statistic for you. This shows a <m>\chi^2</m> statistic value of 10.72, with 2 df and <m>p</m>-value = 0.005.</p>
+
+      <p>That was easy, wasn't it! You can also ask jamovi to show you the expected counts - just click on the check box for 'Counts' -- 'Expected' in the 'Cells' options and the expected counts will appear in the contingency table. And whilst you are doing that, an effect size measure would be helpful. We'll choose Cramér's <m>V</m>, and you can specify this from a check box in the 'Statistics' options, and it gives a value for Cramér's <m>V</m> of <m>0.24</m>. See <xref ref="fig-fig10-5"/>. We will talk about this some more in just a moment.</p>
+
+      <figure xml:id="fig-fig10-5">
+        <caption>Independent samples <m>\chi^2</m> test in jamovi using the <em>Chapek 9</em> data</caption>
+        <image source="images/fig10-5.png" width="90%">
+          <description>A jamovi screenshot showing Contingency Tables. The interface includes options to select rows, columns, and layers for the tables, as well as displaying statistics, cells, and plots. A table of observed and expected values is shown on the right</description>
+        </image>
+      </figure>
+
+      <p>This output gives us enough information to write up the result:</p>
+
+      <blockquote>
+        <p><em>Pearson's</em> <m>\chi^2</m> revealed a significant association between species and choice (<m>\chi^2(2) = 10.7, p &lt; .01</m>). Robots appeared to be more likely to say that they prefer flowers, but the humans were more likely to say they prefer data.</p>
+      </blockquote>
+
+      <p>Notice that, once again, I provided a little bit of interpretation to help the human reader understand what's going on with the data. Later on in my discussion section I'd provide a bit more context. To illustrate the difference, here's what I'd probably say later on:</p>
+
+      <blockquote>
+        <p>The fact that humans appeared to have a stronger preference for raw data files than robots is somewhat counter-intuitive. However, in context it makes some sense, as the civil authority on Chapek 9 has an unfortunate tendency to kill and dissect humans when they are identified. As such it seems most likely that the human participants did not respond honestly to the question, so as to avoid potentially undesirable consequences. This should be considered to be a substantial methodological weakness.</p>
+      </blockquote>
+
+      <p>This could be classified as a rather extreme example of a reactivity effect, I suppose. Obviously, in this case the problem is severe enough that the study is more or less worthless as a tool for understanding the difference preferences among humans and robots. However, I hope this illustrates the difference between getting a statistically significant result (our null hypothesis is rejected in favour of the alternative), and finding something of scientific value (the data tell us nothing of interest about our research hypothesis due to a big methodological flaw).</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-continuity-correction">
+    <title>The continuity correction</title>
+
+    <p>Okay, time for a little bit of a digression. I've been lying to you a little bit so far. There's a tiny change that you need to make to your calculations whenever you only have 1 degree of freedom. It's called the "continuity correction", or sometimes the <term>Yates correction</term>. Remember what I pointed out earlier: the <m>\chi^2</m> test is based on an approximation, specifically on the assumption that the binomial distribution starts to look like a normal distribution for large <m>N</m>. One problem with this is that it often doesn't quite work, especially when you've only got 1 degree of freedom (e.g., when you're doing a test of independence on a <m>2 \times 2</m> contingency table). The main reason for this is that the true sampling distribution for the <m>X^{2}</m> statistic is actually discrete (because you're dealing with categorical data!) but the <m>\chi^2</m> distribution is continuous. This can introduce systematic problems. Specifically, when <m>N</m> is small and when <m>df = 1</m>, the goodness-of-fit statistic tends to be "too big", meaning that you actually have a bigger <m>\alpha</m> value than you think (or, equivalently, the <m>p</m>-values are a bit too small).</p>
+
+    <p>As far as I can tell from reading Yates' paper, the correction is basically a hack. It's not derived from any principled theory. Rather, it's based on an examination of the behaviour of the test, and observing that the corrected version seems to work better. You can specify this correction in jamovi from a check box in the 'Statistics' options, where it is called '<m>\chi^2</m> continuity correction'.<fn>Yates suggested a simple fix, in which you redefine the goodness-of-fit statistic as: <me>\chi^{2}=\sum_{i}\frac{(|E_i-O_i|-0.5)^2}{E_i}</me> Basically, he just subtracts off 0.5 everywhere.</fn></p>
+  </section>
+
+  <section xml:id="sec-effect-size-chi-square">
+    <title>Effect size</title>
+
+    <p>As we discussed earlier, it's becoming commonplace to ask researchers to report some measure of effect size. So, let's suppose that you've run your chi-square test, which turns out to be significant. So you now know that there is some association between your variables (independence test) or some deviation from the specified probabilities (goodness-of-fit test). Now you want to report a measure of effect size. That is, given that there is an association or deviation, how strong is it?</p>
+
+    <p>There are several different measures that you can choose to report, and several different tools that you can use to calculate them. I won't discuss all of them but will instead focus on the most commonly reported measures of effect size.</p>
+
+    <p>By default, the two measures that people tend to report most frequently are the <m>\phi</m> statistic and the somewhat superior version, known as Cramér's <m>V</m>.<fn>Mathematically, they're very simple. To calculate the <m>\phi</m> statistic, you just divide your <m>X^2</m> value by the sample size, and take the square root: <me>\phi=\sqrt{\frac{X^2}{N}}</me> The idea here is that the <m>\phi</m> statistic is supposed to range between 0 (no association at all) and 1 (perfect association), but it doesn't always do this when your contingency table is bigger than <m>2 \times 2</m>, which is a total pain. For bigger tables it's actually possible to obtain <m>\phi > 1</m>, which is pretty unsatisfactory. So, to correct for this, people usually prefer to report the <m>V</m> statistic proposed by Cramér. It's a pretty simple adjustment to <m>\phi</m>. If you've got a contingency table with <m>r</m> rows and <m>c</m> columns, then define <m>k = \min(r, c)</m> to be the smaller of the two values. If so, then Cramér's <m>V</m> statistic is: <me>V=\sqrt{\frac{X^2}{N(k-1)}}</me></fn></p>
+
+    <p>And you're done. This seems to be a fairly popular measure, presumably because it's easy to calculate, and it gives answers that aren't completely silly. With Cramér's <m>V</m>, you know that the value really does range from 0 (no association at all) to 1 (perfect association).</p>
+  </section>
+
+
 </chapter>
