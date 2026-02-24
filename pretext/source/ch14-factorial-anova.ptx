@@ -481,4 +481,348 @@
     </subsection>
   </section>
 
+  <section xml:id="sec-assumption-checking-factorial">
+    <title>Assumption checking</title>
+
+    <p>As with one-way ANOVA, the key assumptions of factorial ANOVA are homogeneity of variance (all groups have the same standard deviation), normality of the residuals, and independence of the observations. The first two are things we can check for. The third is something that you need to assess yourself by asking if there are any special relationships between different observations, for example repeated measures where the independent variable is time so there is a relationship between the observations at time one and time two: observations at different time points are from the same people. Additionally, if you aren't using a saturated model (e.g., if you've omitted the interaction terms) then you're also assuming that the omitted terms aren't important. Of course, you can check this last one by running an ANOVA with the omitted terms included and see if they're significant, so that's pretty easy. What about homogeneity of variance and normality of the residuals? As it turns out, these are pretty easy to check. It's no different to the checks we did for a one-way ANOVA.</p>
+
+    <subsection xml:id="subsec-homogeneity-of-variance-factorial">
+      <title>Homogeneity of variance</title>
+
+      <p>As mentioned in <xref ref="ch-anova"/>, it's a good idea to visually inspect a plot of the standard deviations compared across different groups/categories, and also see if the Levene test is consistent with the visual inspection. This test expects that you have a saturated model (i.e., including all of the relevant terms), because the test is primarily concerned with the within-group variance, and it doesn't really make a lot of sense to calculate this any way other than with respect to the full model. The Levene test can be specified under the ANOVA 'Assumption Checks' -- 'Homogeneity Tests' option in jamovi, with the result shown in <xref ref="fig-fig14-10"/>. The fact that the Levene test is non-significant means that, providing it is consistent with a visual inspection of the plot of standard deviations, we can safely assume that the homogeneity of variance assumption is not violated.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-normality-of-residuals-factorial">
+      <title>Normality of residuals</title>
+
+      <p>As with one-way ANOVA we can test for the normality of residuals (see <xref ref="ch-anova"/>). Primarily it's a good idea to examine the residuals graphically using a QQ plot. See <xref ref="fig-fig14-10"/>.</p>
+
+      <figure xml:id="fig-fig14-10">
+        <caption>Checking assumptions in an ANOVA model</caption>
+        <image source="images/fig14-10.png" width="90%">
+          <description>An image shows assumption checks for statistical analysis. It includes results for the Levene test (F = 0.22, df1 = 5, df2 = 12, p = 0.94731) and Shapiro-Wilk test (Statistic = 0.96, p = 0.53290). Below is a Q-Q plot of standardized residuals versus theoretical quantiles.</description>
+        </image>
+      </figure>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-analysis-of-covariance-ancova">
+    <title>Analysis of covariance (ANCOVA)</title>
+
+    <p>A variation in ANOVA is when you have an additional continuous variable that you think might be related to the dependent variable. This additional variable can be added to the analysis as a covariate, in the aptly named analysis of covariance (ANCOVA).</p>
+
+    <p>In ANCOVA the values of the dependent variable are "adjusted" for the influence of the covariate, and then the "adjusted" score means are tested between groups in the usual way. This technique can increase the precision of an experiment and provide a more "powerful" test of the equality of group means in the dependent variable. How does ANCOVA do this? Although the covariate itself is typically not of any experimental interest, adjustment for the covariate can decrease the estimate of experimental error. By reducing error variance precision is increased. This means that a false rejection of the null hypothesis (false negative or type II error) is less likely.</p>
+
+    <p>Despite this advantage, ANCOVA runs the risk of undoing real differences between groups and this should be avoided. Look at <xref ref="fig-fig14-11"/> for example, which shows a plot of Statistics anxiety against age and shows two distinct groups -- students who have either an Arts or Science background. ANCOVA with age as a covariate might lead to the conclusion that statistics anxiety does not differ in the two groups. Would this conclusion be reasonable -- probably not because the ages of the two groups do not overlap and analysis of variance has essentially "extrapolated into a region with no data" (<xref ref="Everitt1996"/>, p. 68). Clearly, careful thought needs to be given to an analysis of covariance with distinct groups. This applies to both one-way and factorial designs, as ANCOVA can be used with both.</p>
+
+    <figure xml:id="fig-fig14-11">
+      <caption>Plot of Statistics anxiety against age for two distinct groups</caption>
+      <image source="images/fig14-11.png" width="90%">
+        <description>A scatter plot shows 'Statistics anxiety' on the Y-axis versus 'Age' on the X-axis. Data points for 'Scientists' cluster lower on the Y-axis and at younger ages on the X-axis, while 'Artists' cluster higher on the Y-axis and at older ages on the X-axis.</description>
+      </image>
+    </figure>
+
+    <subsection xml:id="subsec-running-ancova-in-jamovi">
+      <title>Running ANCOVA in jamovi</title>
+
+      <p>A health psychologist was interested in the effect of routine cycling and stress on happiness levels, with age as a covariate. You can find the data set in the file <em>ancova.csv</em>. Open this file in jamovi and then, to undertake an ANCOVA, select Analyses -- ANOVA -- ANCOVA to open the ANCOVA analysis window (<xref ref="fig-fig14-12"/>). Highlight the dependent variable 'happiness' and transfer it into the 'Dependent Variable' text box. Highlight the independent variables 'stress' and 'commute' and transfer them into the 'Fixed Factors' text box. Highlight the covariate 'age' and transfer it into the 'Covariates' text box. Then click on Estimated Marginal Means to bring up the plots and tables options.</p>
+
+      <figure xml:id="fig-fig14-12">
+        <caption>The jamovi ANCOVA analysis window</caption>
+        <image source="images/fig14-12.png" width="75%">
+          <description>A jamovi screenshot showing an ANCOVA setup. The window has options for adding dependent variables, fixed factors, and covariates. "Happiness" is selected as the dependent variable, with "stress" and "commute" as fixed factors, and "age" as a covariate.</description>
+        </image>
+      </figure>
+
+      <p>An ANCOVA table showing 'Tests of Between Subjects Effects' is produced in the jamovi results window (<xref ref="fig-fig14-13"/>). The <m>F</m>-value for the covariate 'age' is significant at <m>p = .023</m>, suggesting that age is an important predictor of the dependent variable, happiness. When we look at the estimated marginal mean scores (<xref ref="fig-fig14-14"/>), adjustments have been made (compared to an analysis without the covariate) because of the inclusion of the covariate 'age' in this ANCOVA. A plot (<xref ref="fig-fig14-15"/>) is a good way of visualising and interpreting the significant effects.</p>
+
+      <figure xml:id="fig-fig14-13">
+        <caption>jamovi ANCOVA output for happiness as a function of stress and commuting method, with age as a covariate</caption>
+        <image source="images/fig14-13.png" width="90%">
+          <description>An ANCOVA table titled 'happiness' displays statistical results including Sum of Squares, degrees of freedom (df), Mean Square, F-ratio (F), p-values (p), eta squared (η²), partial eta squared (ηp²), and omega squared (ω²) for various factors like stress, commute, age, and interactions.</description>
+        </image>
+      </figure>
+
+      <figure xml:id="fig-fig14-14">
+        <caption>Table of mean happiness level as a function of stress and commuting method (adjusted for the covariate age) with 95% confidence intervals</caption>
+        <image source="images/fig14-14.png" width="85%">
+          <description>A jamovi results table titled "Estimated Marginal Means - stress × commute" showing mean stress levels with standard errors (SE) and 95% Confidence Intervals for different commuting methods (drive, cycle) and stress levels (high, low).</description>
+        </image>
+      </figure>
+
+      <figure xml:id="fig-fig14-15">
+        <caption>Plot of mean happiness level as a function of stress and commuting method</caption>
+        <image source="images/fig14-15.png" width="90%">
+          <description>A line graph compares happiness levels based on stress levels (high and low) and commute type (drive or cycle). The "cycle" line shows a steeper increase in happiness from high to low stress compared to the "drive" line. Error bars are present.</description>
+        </image>
+      </figure>
+
+      <p>The <m>F</m>-value for the main effect 'stress' (52.61) has an associated probability of <m>p &lt; .001</m>. The <m>F</m>-value for the main effect 'commute' (42.33) has an associated probability of <m>p &lt; .001</m>. Since both of these are less than the probability that is typically used to decide if a statistical result is significant (<m>p &lt; .05</m>) we can conclude that there was a significant main effect of stress (<m>F(1, 15) = 52.61, p &lt; .001</m>) and a significant main effect of commuting method (<m>F(1, 15) = 42.33, p &lt; .001</m>). A significant interaction between stress and commuting method was also found (<m>F(1, 15) = 14.15, p = .002</m>).</p>
+
+      <p>In <xref ref="fig-fig14-15"/> we can see the adjusted, marginal, mean happiness scores when age is a covariate in an ANCOVA. In this analysis there is a significant interaction effect, whereby people with low stress who cycle to work are happier than people with low stress who drive and people with high stress regardless of whether they cycle or drive to work. There is also a significant main effect of stress -- people with low stress are happier than those with high stress. And there is also a significant main effect of commuting behaviour -- people who cycle are happier, on average, than those who drive to work.</p>
+
+      <p>One thing to be aware of is that, if you are thinking of including a covariate in your ANOVA, there is an additional assumption: the relationship between the covariate and the dependent variable should be similar for all levels of the independent variable. This can be checked by adding an interaction term between the covariate and each independent variable in the jamovi 'Model -- Model' terms option. If the interaction effect is not significant it can be removed. If it is significant then a different and more advanced statistical technique might be appropriate (which is beyond the scope of this book so you might want to consult a friendly statistician).</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-anova-as-linear-model">
+    <title>ANOVA as a linear model</title>
+
+    <p>One of the most important things to understand about ANOVA and regression is that they're basically the same thing. On the surface of it, you maybe wouldn't think this is true. After all, the way that I've described them so far suggests that ANOVA is primarily concerned with testing for group differences, and regression is primarily concerned with understanding the correlations between variables. And, as far as it goes that's perfectly true. But when you look under the hood, so to speak, the underlying mechanics of ANOVA and regression are awfully similar. In fact, if you think about it, you've already seen evidence of this. ANOVA and regression both rely heavily on sums of squares (<m>SS</m>), both make use of <m>F</m>-tests, and so on. Looking back, it's hard to escape the feeling that <xref ref="ch-correlation-regression"/> and <xref ref="ch-anova"/> were a bit repetitive.</p>
+
+    <p>The reason for this is that ANOVA and regression are both kinds of <term>linear models</term>. In the case of regression, this is kind of obvious. The regression equation that we use to define the relationship between predictors and outcomes is the equation for a straight line, so it's quite obviously a linear model, with the equation:
+    <me>Y_p=b_0+b_1 X_{1p} +b_2 X_{2p} + \epsilon_p</me>
+    where <m>Y_p</m> is the outcome value for the <m>p</m>-th observation (e.g., <m>p</m>-th person), <m>X_{1p}</m> is the value of the first predictor for the <m>p</m>-th observation, <m>X_{2p}</m> is the value of the second predictor for the <m>p</m>-th observation, the <m>b_0</m>, <m>b_1</m>, and <m>b_2</m> terms are our regression coefficients, and <m>\epsilon_p</m> is the <m>p</m>-th residual. If we ignore the residuals <m>\epsilon_p</m> and just focus on the regression line itself, we get the following formula:
+    <me>\hat{Y}_p=b_0+b_1 X_{1p} +b_2 X_{2p}</me>
+    where <m>\hat{Y}_p</m> is the value of Y that the regression line predicts for person p, as opposed to the actually-observed value <m>Y_p</m>. The thing that isn't immediately obvious is that we can write ANOVA as a linear model as well. However, it's actually pretty straightforward to do this. Let's start with a really simple example, rewriting a <m>2 \times 2</m> factorial ANOVA as a linear model.</p>
+
+    <subsection xml:id="subsec-some-data-anova-linear">
+      <title>Some data</title>
+
+      <p>To make things concrete, let's suppose that our outcome variable is the grade that a student receives in my class, a ratio-scale variable corresponding to a mark from <m>0\%</m> to <m>100\%</m>. There are two predictor variables of interest: whether or not the student turned up to lectures (the attend variable) and whether or not the student actually read the textbook (the reading variable). We'll say that attend = 1 if the student attended class, and attend = 0 if they did not. Similarly, we'll say that reading = 1 if the student read the textbook, and reading = 0 if they did not.</p>
+
+      <p>Okay, so far that's simple enough. The next thing we need to do is to wrap some maths around this (sorry!). For the purposes of this example, let <m>Y_p</m> denote the grade of the <m>p</m>-th student in the class. This is not quite the same notation that we used earlier in this chapter. Previously, we've used the notation <m>Y_{rci}</m> to refer to the <m>i</m>-th person in the <m>r</m>-th group for predictor 1 (the row factor) and the <m>c</m>-th group for predictor 2 (the column factor). This extended notation was really handy for describing how the <m>SS</m> values are calculated, but it's a pain in the current context, so I'll switch notation here. Now, the <m>Y_p</m> notation is visually simpler than <m>Y_{rci}</m>, but it has the shortcoming that it doesn't actually keep track of the group memberships! That is, if I told you that <m>Y_{0,0,3} = 35</m>, you'd immediately know that we're talking about a student (the 3rd such student, in fact) who didn't attend the lectures (i.e., attend = 0) and didn't read the textbook (i.e. reading = 0), and who ended up failing the class (grade = 35). But if I tell you that <m>Y_p = 35</m>, all you know is that the <m>p</m>-th student didn't get a good grade. We've lost some key information here. Of course, it doesn't take a lot of thought to figure out how to fix this. What we'll do instead is introduce two new variables <m>X_{1p}</m> and <m>X_{2p}</m> that keep track of this information. In the case of our hypothetical student, we know that <m>X_{1p} = 0</m> (i.e., attend = 0) and <m>X_{2p} = 0</m> (i.e., reading = 0). So the data might look like <xref ref="tbl-tab14-8"/>.</p>
+
+      <table xml:id="tbl-tab14-8">
+        <title>Data for grade, attendance and reading the textbook</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell>person, <m>p</m></cell>
+            <cell>grade, <m>Y_p</m></cell>
+            <cell>attendance, <m>X_{1p}</m></cell>
+            <cell>reading, <m>X_{2p}</m></cell>
+          </row>
+          <row><cell>1</cell><cell>90</cell><cell>1</cell><cell>1</cell></row>
+          <row><cell>2</cell><cell>87</cell><cell>1</cell><cell>1</cell></row>
+          <row><cell>3</cell><cell>75</cell><cell>0</cell><cell>1</cell></row>
+          <row><cell>4</cell><cell>60</cell><cell>1</cell><cell>0</cell></row>
+          <row><cell>5</cell><cell>35</cell><cell>0</cell><cell>0</cell></row>
+          <row><cell>6</cell><cell>50</cell><cell>0</cell><cell>0</cell></row>
+          <row><cell>7</cell><cell>65</cell><cell>1</cell><cell>0</cell></row>
+          <row><cell>8</cell><cell>70</cell><cell>0</cell><cell>1</cell></row>
+        </tabular>
+      </table>
+
+      <p>This isn't anything particularly special, of course. It's exactly the format in which we expect to see our data! See the data file <em>rtfm.csv</em>. We can use the jamovi 'Descriptives' analysis to confirm that this data set corresponds to a balanced design, with 2 observations for each combination of attend and reading. In the same way we can also calculate the mean grade for each combination. This is shown in <xref ref="fig-fig14-16"/>. Looking at the mean scores, one gets the strong impression that reading the text and attending the class both matter a lot.</p>
+
+      <figure xml:id="fig-fig14-16">
+        <caption>jamovi descriptives for the <em>rtfm.csv</em> data set</caption>
+        <image source="images/fig14-16.png" width="90%">
+          <description>A jamovi screenshot showing various tabs at the top, including Variables, Data, Analyses, and Edit. The current screen displays options for descriptives analysis with variables such as "grade." The "Results" section includes a table of descriptive statistics like mean and standard deviation. The "References" section at the bottom cites software and packages used.</description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-anova-binary-factors-as-regression">
+      <title>ANOVA with binary factors as a regression model</title>
+
+      <p>Okay, let's get back to talking about the mathematics. We now have our data expressed in terms of three numeric variables: the continuous variable <m>Y</m> and the two binary variables <m>X_1</m> and <m>X_2</m>. What I want you to recognise is that our <m>2 \times 2</m> factorial ANOVA is exactly equivalent to the regression model:
+      <me>Y_p=b_0+b_1 X_{1p} + b_2 X_{2p} + \epsilon_p</me>
+      This is, of course, the exact same equation that I used earlier to describe a two-predictor regression model! The only difference is that <m>X_1</m> and <m>X_2</m> are now binary variables (i.e., values can only be 0 or 1), whereas in a regression analysis we expect that <m>X_1</m> and <m>X_2</m> will be continuous. There's a couple of ways I could try to convince you of this. One possibility would be to do a lengthy mathematical exercise proving that the two are identical. However, I'm going to go out on a limb and guess that most of the readership of this book will find that annoying rather than helpful. Instead, I'll explain the basic ideas and then rely on jamovi to show that ANOVA analyses and regression analyses aren't just similar, they're identical for all intents and purposes. Let's start by running this as an ANOVA. To do this, we'll use the rtfm data set, and <xref ref="fig-fig14-17"/> shows what we get when we run the analysis in jamovi.</p>
+
+      <figure xml:id="fig-fig14-17">
+        <caption>ANOVA of the <em>rtfm.csv</em> data set in jamovi, without the interaction term</caption>
+        <image source="images/fig14-17.png" width="90%">
+          <description>ANOVA table presenting the results for "grade" with variables "attend" and "reading." It includes columns for Sum of Squares, df, Mean Square, F, p, η², η²p, and ω². Notable values include "attend" with an F of 21.60, p of 0.00559, and "reading" with an F of 52.27, p of 0.00079.</description>
+        </image>
+      </figure>
+
+      <p>So, by reading the key numbers off the ANOVA table and the mean scores that we presented earlier, we can see that the students obtained a higher grade if they attended class (<m>F_{1,5} = 21.6, p = .0056</m>) and if they read the textbook (<m>F_{1,5} = 52.3, p = .0008</m>). Let's make a note of those <m>p</m>-values and those <m>F</m>-statistics.</p>
+
+      <p>Now let's think about the same analysis from a linear regression perspective. In the <em>rtfm.csv</em> data set, we have encoded attend and reading as if they were numeric predictors. In this case, this is perfectly acceptable. There really is a sense in which a student who turns up to class (i.e. attend = 1) has in fact done "more attendance" than a student who does not (i.e. attend = 0). So it's not at all unreasonable to include it as a predictor in a regression model. It's a little unusual, because the predictor only takes on two possible values, but it doesn't violate any of the assumptions of linear regression. And it's easy to interpret. If the regression coefficient for attend is greater than 0 it means that students that attend lectures get higher grades. If it's less than zero then students attending lectures get lower grades. The same is true for our reading variable.</p>
+
+      <p>Wait a second though. Why is this true? It's something that is intuitively obvious to everyone who has taken a few stats classes and is comfortable with the maths, but it isn't clear to everyone else at first pass. To see why this is true, it helps to look closely at a few specific students. Let's start by considering the 6th and 7th students in our data set (i.e. <m>p = 6</m> and <m>p = 7</m>). Neither one has read the textbook, so in both cases we can set reading = 0. Or, to say the same thing in our mathematical notation, we observe <m>X_{2,6} = 0</m> and <m>X_{2,7} = 0</m>. However, student number 7 did turn up to lectures (i.e., attend = 1, <m>X_{1,7} = 1</m>) whereas student number 6 did not (i.e., attend = 0, <m>X_{1,6} = 0</m>). Now let's look at what happens when we insert these numbers into the general formula for our regression line. For student number 6, the regression predicts that:
+      <md>
+        <mrow>\hat{Y}_6 \amp = b_0 + b_1 X_{1,6} + b_2 X_{2,6}</mrow>
+        <mrow>\amp = b_0 + (b_1 \times 0) + (b_2 \times 0)</mrow>
+        <mrow>\amp = b_0</mrow>
+      </md>
+      So we're expecting that this student will obtain a grade corresponding to the value of the intercept term <m>b_0</m>. What about student 7? This time when we insert the numbers into the formula for the regression line, we obtain the following:
+      <md>
+        <mrow>\hat{Y}_7 \amp = b_0 + b_1 X_{1,7} + b_2 X_{2,7}</mrow>
+        <mrow>\amp = b_0 + (b_1 \times 1) + (b_2 \times 0)</mrow>
+        <mrow>\amp = b_0 + b_1</mrow>
+      </md>
+      Because this student attended class, the predicted grade is equal to the intercept term b0 plus the coefficient associated with the attend variable, <m>b_1</m>. So, if <m>b_1</m> is greater than zero, we're expecting that the students who turn up to lectures will get higher grades than those students who don't. If this coefficient is negative we're expecting the opposite: students who turn up at class end up performing much worse.</p>
+
+      <p>In fact, we can push this a little bit further. What about student number 1, who turned up to class (<m>X_{1,1} = 1</m>) and read the textbook (<m>X_{2,1} = 1</m>)? If we plug these numbers into the regression we get:
+      <md>
+        <mrow>\hat{Y}_1 \amp = b_0 + b_1 X_{1,1} + b_2 X_{2,1}</mrow>
+        <mrow>\amp = b_0 + (b_1 \times 1) + (b_2 \times 1)</mrow>
+        <mrow>\amp = b_0 + b_1 + b_2</mrow>
+      </md>
+      So if we assume that attending class helps you get a good grade (i.e., <m>b_1 > 0</m>) and if we assume that reading the textbook also helps you get a good grade (i.e., <m>b_2 > 0</m>), then our expectation is that student 1 will get a grade that is higher than student 6 and student 7.</p>
+
+      <p>And at this point you won't be at all surprised to learn that the regression model predicts that student 3, who read the book but didn't attend lectures, will obtain a grade of <m>b_2 + b_0</m>. I won't bore you with yet another regression formula. Instead, what I'll do is show you <xref ref="tbl-tab14-9"/> with the <em>expected grades</em>.</p>
+
+      <table xml:id="tbl-tab14-9">
+        <title>Expected grades from the regression model</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell></cell>
+            <cell></cell>
+            <cell>read textbook</cell>
+            <cell></cell>
+          </row>
+          <row header="yes">
+            <cell></cell>
+            <cell></cell>
+            <cell>no</cell>
+            <cell>yes</cell>
+          </row>
+          <row>
+            <cell>attended?</cell>
+            <cell>no</cell>
+            <cell><m>b_0</m></cell>
+            <cell><m>b_0 + b_2</m></cell>
+          </row>
+          <row>
+            <cell></cell>
+            <cell>yes</cell>
+            <cell><m>b_0 + b_1</m></cell>
+            <cell><m>b_0 + b_1 + b_2</m></cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>As you can see, the intercept term <m>b_0</m> acts like a kind of "baseline" grade that you would expect from those students who don't take the time to attend class or read the textbook. Similarly, <m>b_1</m> represents the boost that you're expected to get if you come to class, and <m>b_2</m> represents the boost that comes from reading the textbook. In fact, if this were an ANOVA you might very well want to characterise <m>b_1</m> as the main effect of attendance, and <m>b_2</m> as the main effect of reading! In fact, for a simple <m>2 \times 2</m> ANOVA that's exactly how it plays out.</p>
+
+      <p>Okay, now that we're really starting to see why ANOVA and regression are basically the same thing, let's actually run our regression using the rtfm data and the jamovi regression analysis to convince ourselves that this is really true. Running the regression in the usual way gives the results shown in <xref ref="fig-fig14-18"/>.</p>
+
+      <figure xml:id="fig-fig14-18">
+        <caption>Regression analysis of the <em>rtfm.csv</em> data set in jamovi, without the interaction term</caption>
+        <image source="images/fig14-18.png" width="80%">
+          <description>A jamovi results table titled "Model Coefficients - grade" displays the estimate, standard error (SE), t-value, and p-value for three predictors: Intercept, attend, and reading. The Intercept values are 43.50, 3.35, 12.97, 0.00005. Attend: 18.00, 3.87, 4.65, 0.00559. Reading: 28.00, 3.87, 7.23, 0.00079.</description>
+        </image>
+      </figure>
+
+      <p>There's a few interesting things to note here. First, notice that the intercept term is 43.5 which is close to the "group" mean of 42.5 observed for those two students who didn't read the text or attend class. Second, notice that we have the regression coefficient of <m>b_1 = 18.0</m> for the attendance variable, suggesting that those students that attended class scored 18% higher than those who didn't. So our expectation would be that those students who turned up to class but didn't read the textbook would obtain a grade of <m>b_0 + b_1</m>, which is equal to <m>43.5 + 18.0 = 61.5</m>. You can verify for yourself that the same thing happens when we look at the students that read the textbook.</p>
+
+      <p>Actually, we can push a little further in establishing the equivalence of our ANOVA and our regression. Look at the <m>p</m>-values associated with the attend variable and the reading variable in the regression output. They're identical to the ones we encountered earlier when running the ANOVA. This might seem a little surprising, since the test used when running our regression model calculates a <m>t</m>-statistic and the ANOVA calculates an <m>F</m>-statistic. However, if you can remember all the way back to <xref ref="ch-probability"/>, I mentioned that there's a relationship between the <m>t</m>-distribution and the <m>F</m>-distribution. If you have some quantity that is distributed according to a <m>t</m>-distribution with <m>k</m> degrees of freedom and you square it, then this new squared quantity follows an <m>F</m>-distribution whose degrees of freedom are 1 and <m>k</m>. We can check this with respect to the <m>t</m>-statistics in our regression model. For the attend variable we get a <m>t</m>-value of 4.65. If we square this number we end up with 21.6, which matches the corresponding <m>F</m>-statistic in our ANOVA.</p>
+
+      <p>Finally, one last thing you should know. Because jamovi understands the fact that ANOVA and regression are both examples of linear models, it lets you extract the classic ANOVA table from your regression model using the 'Linear Regression' -- 'Model Coefficients' -- 'Omnibus Test' -- 'ANOVA Test', and this will give you the table shown in <xref ref="fig-fig14-19"/>.</p>
+
+      <figure xml:id="fig-fig14-19">
+        <caption>Omnibus ANOVA Test results from the jamovi regression analysis</caption>
+        <image source="images/fig14-19.png" width="80%">
+          <description>A jamovi results table titled "Omnibus ANOVA Test" showing values for Sum of Squares, df, Mean Square, F, and p across three rows: attend, reading, and Residuals. Note indicates "Type 3 sum of squares".</description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-how-to-encode-non-binary-factors">
+      <title>How to encode non binary factors as contrasts</title>
+
+      <p>At this point, I've shown you how we can view a <m>2 \times 2</m> ANOVA as a linear model. And it's pretty easy to see how this generalises to a <m>2 \times 2 \times 2</m> ANOVA or a <m>2 \times 2 \times 2 \times 2</m> ANOVA. It's the same thing, really. You just add a new binary variable for each of your factors. Where it begins to get trickier is when we consider factors that have more than two levels. Consider, for instance, the <m>3 \times 2</m> ANOVA that we ran earlier in this chapter using the <em>clinicaltrial.csv</em> data. How can we convert the three-level drug factor into a numerical form that is appropriate for a regression?</p>
+
+      <p>The answer to this question is pretty simple, actually. All we have to do is realise that a three-level factor can be redescribed as two binary variables. Suppose, for instance, I were to create a new binary variable called druganxifree. Whenever the drug variable is equal to "anxifree" we set druganxifree = 1. Otherwise, we set druganxifree = 0. This variable sets up a <term>contrast</term>, in this case between anxifree and the other two drugs. By itself, of course, the druganxifree contrast isn't enough to fully capture all of the information in our drug variable. We need a second contrast, one that allows us to distinguish between joyzepam and the placebo. To do this, we can create a second binary contrast, called drugjoyzepam, which equals 1 if the drug is joyzepam and 0 if it is not. Taken together, these two contrasts allows us to perfectly discriminate between all three possible drugs. <xref ref="tbl-tab14-10"/> illustrates this.</p>
+
+      <table xml:id="tbl-tab14-10">
+        <title>Binary contrasts to discriminate between all three possible drugs</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell>drug</cell>
+            <cell>druganxifree</cell>
+            <cell>drugjoyzepam</cell>
+          </row>
+          <row>
+            <cell>placebo</cell>
+            <cell>0</cell>
+            <cell>0</cell>
+          </row>
+          <row>
+            <cell>anxifree</cell>
+            <cell>1</cell>
+            <cell>0</cell>
+          </row>
+          <row>
+            <cell>joyzepam</cell>
+            <cell>0</cell>
+            <cell>1</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>If the drug administered to a patient is a placebo then both of the two contrast variables will equal 0. If the drug is Anxifree then the druganxifree variable will equal 1, and drugjoyzepam will be 0. The reverse is true for Joyzepam: drugjoyzepam is 1 and druganxifree is 0.</p>
+
+      <p>Creating contrast variables is not too difficult to do using the jamovi compute new variable command. For example, to create the druganxifree variable, write this logical expression in the compute new variable formula box:</p>
+
+      <blockquote>
+        <p>IF(drug == 'anxifree', 1, 0)</p>
+      </blockquote>
+
+      <p>Similarly, to create the new variable drugjoyzepam use this logical expression:</p>
+
+      <blockquote>
+        <p>IF(drug == 'joyzepam', 1, 0)</p>
+      </blockquote>
+
+      <p>Likewise for CBTtherapy:</p>
+
+      <blockquote>
+        <p>IF(therapy == 'CBT', 1, 0)</p>
+      </blockquote>
+
+      <p>You can see these new variables, and the corresponding logical expressions, in the jamovi data file <em>clinicaltrial2.omv</em>.</p>
+
+      <p>We have now recoded our three-level factor in terms of two binary variables, and we've already seen that ANOVA and regression behave the same way for binary variables. However, there are some additional complexities that arise in this case, which we'll discuss in the next section.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-equivalence-anova-regression-nonbinary">
+      <title>The equivalence between ANOVA and regression for non-binary factors</title>
+
+      <p>Now we have two different versions of the same data set. Our original data in which the drug variable from the <em>clinicaltrial.csv</em> file is expressed as a single three-level factor, and the expanded data <em>clinicaltrial2.omv</em> in which it is expanded into two binary contrasts. Once again, the thing that we want to demonstrate is that our original <m>3 \times 2</m> factorial ANOVA is equivalent to a regression model applied to the contrast variables. Let's start by re-running the ANOVA, with results shown in <xref ref="fig-fig14-20"/>.</p>
+
+      <figure xml:id="fig-fig14-20">
+        <caption>jamovi ANOVA results, without interaction component</caption>
+        <image source="images/fig14-20.png" width="90%">
+          <description>ANOVA table displaying the sum of squares, degrees of freedom (df), mean square, F-value, p-value, eta squared (η²), partial eta squared (η²p), and omega squared (ω²) for factors 'drug' and 'therapy' in relation to the residuals for mood gain.</description>
+        </image>
+      </figure>
+
+      <p>Obviously, there are no surprises here. That's the exact same ANOVA that we ran earlier. Next, let's run a regression using druganxifree, drugjoyzepam and CBTtherapy as the predictors. The results are shown in <xref ref="fig-fig14-21"/>.</p>
+
+      <figure xml:id="fig-fig14-21">
+        <caption>jamovi regression results, with contrast variables druganxifree and drugjoyzepam</caption>
+        <image source="images/fig14-21.png" width="70%">
+          <description>A jamovi results table displays the model coefficients for mood.gain. Predictors include Intercept, druganxifree, drugjoyzepam, and CBTherapy, with respective estimates, standard errors, t-values, and p-values. Notably, drugjoyzepam has a highly significant p-value (&lt;.00001).</description>
+        </image>
+      </figure>
+
+      <p>Hmm. This isn't the same output that we got last time. Not surprisingly, the regression output prints out the results for each of the three predictors separately, just like it did every other time we conducted a regression analysis. On the one hand we can see that the <m>p</m>-value for the CBTtherapy variable is exactly the same as the one for the therapy factor in our original ANOVA, so we can be reassured that the regression model is doing the same thing as the ANOVA did. On the other hand, this regression model is testing the druganxifree contrast and the drugjoyzepam contrast <em>separately</em>, as if they were two completely unrelated variables.</p>
+
+      <p>It's not surprising of course, because the poor regression analysis has no way of knowing that drugjoyzepam and druganxifree are actually the two different contrasts that we used to encode our three-level drug factor. As far as it knows, drugjoyzepam and druganxifree are no more related to one another than drugjoyzepam and CBTtherapy. However, you and I know better. At this stage we're not at all interested in determining whether these two contrasts are individually significant. We just want to know if there's an "overall" effect of drug. That is, what we want jamovi to do is to run some kind of "model comparison" test, one in which the two "drug related" contrasts are lumped together for the purpose of the test. Sound familiar? All we need to do is specify our null model, which in this case would include the CBTtherapy predictor, and omit both of the drug-related variables, as in <xref ref="fig-fig14-22"/>.</p>
+
+      <figure xml:id="fig-fig14-22">
+        <caption>Model comparison in jamovi regression, null model 1 versus contrasts model 2</caption>
+        <image source="images/fig14-22.png" width="90%">
+          <description>An image displaying jamovi results from a linear regression analysis for a clinical trial. The screen shows model measures, comparisons, and specific results, with variables including 'drug' and 'CBTherapy'.</description>
+        </image>
+      </figure>
+
+      <p>Ah, that's better. Our <m>F</m>-statistic is 26.15, the degrees of freedom are 2 and 14, and the <m>p</m>-value is 0.00002. The numbers are identical to the ones we obtained for the main effect of drug in our original ANOVA. Once again we see that ANOVA and regression are essentially the same. They are both linear models, and the underlying statistical machinery for ANOVA is identical to the machinery used in regression. The importance of this fact should not be understated. Throughout the rest of this chapter we're going to rely heavily on this idea.</p>
+
+      <p>Although we went through all the faff of computing new variables in jamovi for the contrasts druganxifree and drugjoyzepam, just to show that ANOVA and regression are essentially the same, in the jamovi linear regression analysis there is actually a nifty shortcut to get these contrasts, see <xref ref="fig-fig14-23"/>. What jamovi is doing here is allowing you to enter the predictor variables that are factors as, wait for it...factors! Smart, eh. You can also specify which group to use as the reference level, via the 'Reference Levels' option. We've changed this to 'placebo' and 'no.therapy', respectively, because this makes most sense.</p>
+
+      <figure xml:id="fig-fig14-23">
+        <caption>Regression analysis with factors and contrasts in jamovi, including omnibus ANOVA test results</caption>
+        <image source="images/fig14-23.png" width="90%">
+          <description>A jamovi screenshot displaying linear regression analysis within a software interface. The interface shows data inputs and settings on the left, while the right side displays output results including ANOVA and model coefficients. Sections for data, analyses, edit, and more are visible.</description>
+        </image>
+      </figure>
+
+      <p>If you also click on the 'ANOVA' test checkbox under the 'Model Coefficients' -- 'Omnibus Test' option, we see that the <m>F</m>-statistic is 26.15, the degrees of freedom are 2 and 14, and the <m>p</m>-value is 0.00002 (<xref ref="fig-fig14-23"/>). The numbers are identical to those we obtained for the main effect of drug in our original ANOVA. Once again we see that ANOVA and regression are essentially the same. They are both linear models and the underlying statistical machinery for ANOVA and for regression is identical.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-degrees-of-freedom-as-parameter-counting">
+      <title>Degrees of freedom as parameter counting!</title>
+
+      <p>At long last, I can finally give a definition of degrees of freedom that I am happy with. Degrees of freedom are defined in terms of the number of parameters that have to be estimated in a model. For a regression model or an ANOVA, the number of parameters corresponds to the number of regression coefficients (i.e. <m>b</m>-values), including the intercept. Keeping in mind that any <m>F</m>-test is always a comparison between two models and the first df is the difference in the number of parameters. For example, in the model comparison above, the null model (mood.gain ~ CBTtherapy) has two parameters: there's one regression coefficient for the CBTtherapy variable, and a second one for the intercept. The alternative model (mood.gain ~ druganxifree + drugjoyzepam + CBTtherapy) has four parameters: one regression coefficient for each of the three contrasts, and one more for the intercept. So the degrees of freedom associated with the difference between these two models is <m>df_1 = 4 - 2 = 2</m>.</p>
+
+      <p>What about the case when there doesn't seem to be a null model? For instance, you might be thinking of the <m>F</m>-test that shows up when you select 'F Test' under the 'Linear Regression' -- 'Model Fit' options. I originally described that as a test of the regression model as a whole. However, that is still a comparison between two models. The null model is the trivial model that only includes 1 regression coefficient, for the intercept term. The alternative model contains <m>K + 1</m> regression coefficients, one for each of the <m>K</m> predictor variables and one more for the intercept. So the <m>df</m> value that you see in this <m>F</m>-test is equal to <m>df_1 = K + 1 - 1 = K</m>.</p>
+
+      <p>What about the second <m>df</m> value that appears in the <m>F</m>-test? This always refers to the degrees of freedom associated with the residuals. It is possible to think of this in terms of parameters too, but in a slightly counter-intuitive way. Think of it like this. Suppose that the total number of observations across the study as a whole is <m>N</m>. If you wanted to perfectly describe each of these <m>N</m> values, you need to do so using, well... <m>N</m> numbers. When you build a regression model, what you're really doing is specifying that some of the numbers need to perfectly describe the data. If your model has <m>K</m> predictors and an intercept, then you've specified <m>K + 1</m> numbers. So, without bothering to figure out exactly how this would be done, how many more numbers do you think are going to be needed to transform a <m>K + 1</m> parameter regression model into a perfect re-description of the raw data? If you found yourself thinking that <m>(K + 1) + (N - K - 1) = N</m>, and so the answer would have to be <m>N - K - 1</m>, well done! That's exactly right. In principle you can imagine an absurdly complicated regression model that includes a parameter for every single data point, and it would of course provide a perfect description of the data. This model would contain <m>N</m> parameters in total, but we're interested in the difference between the number of parameters required to describe this full model (i.e. <m>N</m>) and the number of parameters used by the simpler regression model that you're actually interested in (i.e., <m>K + 1</m>), and so the second degrees of freedom in the <m>F</m> test is <m>df_2 = N - K - 1</m>, where <m>K</m> is the number of predictors (in a regression model) or the number of contrasts (in an ANOVA). In the example I gave above, there are <m>N = 18</m> observations in the data set and <m>K + 1 = 4</m> regression coefficients associated with the ANOVA model, so the degrees of freedom for the residuals is <m>df_2 = 18 - 4 = 14</m>.</p>
+    </subsection>
+  </section>
+
 </chapter>
