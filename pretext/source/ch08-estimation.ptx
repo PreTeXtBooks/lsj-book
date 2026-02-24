@@ -552,4 +552,71 @@
     </subsection>
   </section>
 
+  <section xml:id="sec-Estimating-a-confidence-interval">
+    <title>Estimating a confidence interval</title>
+
+    <blockquote>
+      <p><em>Statistics means never having to say you're certain</em><fn>This quote appears on a great many t-shirts and websites, and even gets a mention in a few academic papers (e.g., https://jse.amstat.org/v10n3/friedman.html), but I've never found the original source.</fn><br/>
+      -- Unknown origin</p>
+    </blockquote>
+
+    <p>Up to this point in this chapter, I've outlined the basics of sampling theory which statisticians rely on to make guesses about population parameters on the basis of a sample of data. As this discussion illustrates, one of the reasons we need all this sampling theory is that every data set leaves us with some uncertainty, so our estimates are never going to be perfectly accurate.</p>
+
+    <p>The thing that has been missing from this discussion is an attempt to quantify the amount of uncertainty that attaches to our estimate. It's not enough to be able guess that, say, the mean IQ of undergraduate psychology students is <m>115</m> (yes, I just made that number up). We also want to be able to say something that expresses the degree of certainty that we have in our guess. For example, it would be nice to be able to say that there is a <m>95\%</m> chance that the true mean lies between <m>109</m> and <m>121</m>. The name for this is a <term>confidence interval</term> for the mean.</p>
+
+    <p>Armed with an understanding of sampling distributions, constructing a confidence interval for the mean is actually pretty easy. Here's how it works. Suppose the true population mean is <m>\mu</m> and the standard deviation is <m>\sigma</m>. I've just finished running my study that has <m>N</m> participants, and the mean IQ among those participants is <m>\bar{X}</m>. We know from our discussion of the central limit theorem that the sampling distribution of the mean is approximately normal. We also know from our discussion of the normal distribution that there is a <m>95\%</m> chance that a normally-distributed quantity will fall within about two standard deviations of the true mean.</p>
+
+    <p>To be more precise, the more correct answer is that there is a <m>95\%</m> chance that a normally distributed quantity will fall within <m>1.96</m> standard deviations of the true mean. Next, recall that the standard deviation of the sampling distribution is referred to as the standard error, and the standard error of the mean is written as SEM. When we put all these pieces together, we learn that there is a 95% probability that the sample mean <m>\bar{X}</m> that we have actually observed lies within <m>1.96</m> standard errors of the population mean.</p>
+
+    <p>Of course, there's nothing special about the number <m>1.96</m>. It just happens to be the multiplier you need to use if you want a <m>95\%</m> confidence interval. If I'd wanted a <m>70\%</m> confidence interval, I would have used <m>1.04</m> as the magic number rather than <m>1.96</m>.<fn>Mathematically, we write this as: <me>\mu-(1.96 \times SEM ) \leq \bar{X} \leq \mu + (1.96 \times SEM)</me> where the SEM is equal to <m>\frac{\sigma}{\sqrt{N}}</m> and we can be 95% confident that this is true. However, that's not answering the question that we're actually interested in. The equation above tells us what we should expect about the sample mean given that we know what the population parameters are. What we want is to have this work the other way around. We want to know what we should believe about the population parameters, given that we have observed a particular sample. However, it's not too difficult to do this. Using a little high school algebra, a sneaky way to rewrite our equation is like this: <me>\bar{X}-(1.96 \times SEM ) \leq \mu \leq \bar{X}+(1.96 \times SEM )</me> What this is telling us is that the range of values has a 95% probability of containing the population mean <m>\mu</m>. We refer to this range as a <term>95% confidence interval</term>, denoted <m>CI_{95}</m>. In short, as long as <m>N</m> is sufficiently large (large enough for us to believe that the sampling distribution of the mean is normal), then we can write this as our formula for the 95% confidence interval: <me>CI_{95}=\bar{X} \pm (1.96 \times \frac{\sigma}{\sqrt{N}})</me></fn></p>
+
+    <subsection xml:id="subsec-interpreting-a-confidence-interval">
+      <title>Interpreting a confidence interval</title>
+
+      <p>The hardest thing about confidence intervals is understanding what they mean. Whenever people first encounter confidence intervals, the first instinct is almost always to say that "there is a 95% probability that the true mean lies inside the confidence interval". It's simple and it seems to capture the common sense idea of what it means to say that I am "95% confident". Unfortunately, it's not quite right. The intuitive definition relies very heavily on your own personal beliefs about the value of the population mean. I say that I am 95% confident because those are my beliefs. In everyday life that's perfectly okay, but if you remember back to the section on what probability means, you'll notice that talking about personal belief and confidence is a Bayesian idea.</p>
+
+      <p>However, confidence intervals are not Bayesian tools. Like everything else in this chapter, confidence intervals are frequentist tools, and if you are going to use frequentist methods then it's not appropriate to attach a Bayesian interpretation to them. If you use frequentist methods, you must adopt frequentist interpretations! Okay, so if that's not the right answer, what is?</p>
+
+      <p>Remember what we said about frequentist probability. The only way we are allowed to make "probability statements" is to talk about a sequence of events, and to count up the frequencies of different kinds of events. From that perspective, the interpretation of a 95% confidence interval must have something to do with replication.</p>
+
+      <p>Specifically, if we replicated the experiment over and over again and computed a 95% confidence interval for each replication, then 95% of those intervals would contain the true mean. More generally, 95% of all confidence intervals constructed using this procedure should contain the true population mean. This idea is illustrated in <xref ref="fig-fig8-12"/>, which shows 50 confidence intervals constructed for a "measure 10 IQ scores" experiment (top panel) and another 50 confidence intervals for a "measure 25 IQ scores" experiment (bottom panel).</p>
+
+      <p>We'd expect that around 95 of our confidence intervals would contain the true population mean, and that's what we found in <xref ref="fig-fig8-12"/>. The critical difference here is that the Bayesian claim makes a probability statement about the population mean (i.e., it refers to our uncertainty about the population mean), which is not allowed under the frequentist interpretation of probability because you can't "replicate" a population!</p>
+
+      <figure xml:id="fig-fig8-12">
+        <caption>95% confidence intervals. The top panel (a) shows 50 simulated replications of an experiment in which we measure the IQs of 10 people. The dot marks the location of the sample mean and the line shows the 95% confidence interval. Most of the 50 confidence intervals do contain the true mean (i.e., 100), but a few -- in blue and marked with asterisks -- do not. The lower graph (panel b) shows a similar simulation, but this time we simulate replications of an experiment that measures the IQs of 25 people</caption>
+        <image source="images/fig-fig8-12-1.png" width="95%">
+          <description>Two bar graphs are shown vertically. The top graph (a) has "Sample Size = 10" and the bottom graph (b) has "Sample Size = 25." Both graphs have replication numbers on the x-axis and IQ mean values with error bars on the y-axis. Blue data points are marked with asterisks</description>
+        </image>
+      </figure>
+
+      <p>In the frequentist claim, the population mean is fixed and no probabilistic claims can be made about it. Confidence intervals, however, are repeatable so we can replicate experiments. Therefore a <em>frequentist</em> is allowed to talk about the probability that the <em>confidence interval</em> (a random variable) contains the true mean, but is not allowed to talk about the probability that the <em>true population mean</em> (not a repeatable event) falls within the confidence interval I know that this seems a little pedantic, but it does matter. It matters because the difference in interpretation leads to a difference in the mathematics.</p>
+
+      <p>There is a Bayesian alternative to confidence intervals, known as <em>credible intervals</em>. In most situations credible intervals are quite similar to confidence intervals, but in other cases they are drastically different. As promised, though, I'll talk more about the Bayesian perspective in a later chapter.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-calculating-confidence-intervals-in-jamovi">
+      <title>Calculating confidence intervals in jamovi</title>
+
+      <p>jamovi includes a simple way to calculate confidence intervals for the mean as part of the 'Descriptives' functionality. Under 'Descriptives' -- 'Statistics' there is a check box for both the 'Std. error of Mean' and 'Confidence interval for the mean', so you can use this to find out the 95% confidence interval (which is the default). So, for example, if I load the <em>IQsim.omv</em> file, check 'Confidence interval for the mean', I can see the confidence interval associated with the simulated mean IQ: Lower 95% CI = 99.39 and Upper 95% CI = 99.97 So, in our simulated large sample data with <m>N = 10,000</m>, the mean IQ score is 99.68 with a 95% CI from 99.39 to 99.97.</p>
+
+      <p>When it comes to plotting confidence intervals in jamovi, you can specify that the mean is included as an option in a box plot. Moreover, when we get onto learning about specific statistical tests, for example in the chapter on comparing several means (one-way ANOVA), we will see that we can also plot confidence intervals as part of the data analysis. That's pretty cool, so we'll show you how to do that later on.</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-ch08-summary">
+    <title>Summary</title>
+
+    <p>In this chapter I've covered two main topics. The first half of the chapter talks about sampling theory, and the second half talks about how we can use sampling theory to construct estimates of the population parameters. The section breakdown looks like this:</p>
+
+    <ul>
+      <li><p>Basic ideas about samples, populations and sampling.</p></li>
+      <li><p>Statistical theory of sampling: the law of large numbers and sampling distributions and the central limit theorem.</p></li>
+      <li><p>Estimating population parameters. Means and standard deviations.</p></li>
+      <li><p>Estimating a confidence interval.</p></li>
+    </ul>
+
+    <p>As always, there's a lot of topics related to sampling and estimation that aren't covered in this chapter, but for an introductory psychology class this is fairly comprehensive I think. For most applied researchers you won't need much more theory than this. One big question that I haven't touched on in this chapter is what you do when you don't have a simple random sample. There is a lot of statistical theory you can draw on to handle this situation, but it's well beyond the scope of this book.</p>
+  </section>
+
 </chapter>
