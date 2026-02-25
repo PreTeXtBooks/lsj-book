@@ -550,4 +550,55 @@
     </subsection>
   </section>
 
+  <section xml:id="sec-bayesian-t-tests">
+    <title>Bayesian <m>t</m>-tests</title>
+
+    <p>An important type of statistical inference problem discussed in this book is comparing two means, discussed in some detail in <xref ref="ch-comparing-two-means"/> on <m>t</m>-tests. If you can remember back that far, you'll recall that there are several versions of the <m>t</m>-test. I'll talk a little about Bayesian versions of the independent samples <m>t</m>-tests and the paired samples <m>t</m>-test in this section.</p>
+
+    <subsection xml:id="subsec-independent-samples-t-test-bayesian">
+      <title>Independent samples <m>t</m>-test</title>
+
+      <p>The most common type of <m>t</m>-test is the independent samples <m>t</m>-test, and it arises when you have data as in the <em>harpo.csv</em> data set that we used in <xref ref="ch-comparing-two-means"/> on <m>t</m>-tests. In this data set, we have two groups of students, those who received lessons from Anastasia and those who took their classes with Bernadette. The question we want to answer is whether there's any difference in the grades received by these two groups of students. Back in <xref ref="ch-comparing-two-means"/> I suggested you could analyse this kind of data using the Independent Samples <m>t</m>-test in jamovi, which gave us the results in <xref ref="fig-fig16-2"/>. As we obtain a <m>p</m>-value less than <m>0.05</m>, we reject the null hypothesis.</p>
+
+      <figure xml:id="fig-fig16-2">
+        <caption>Independent samples <m>t</m>-test result in jamovi</caption>
+        <image source="images/fig11-12.png" width="90%">
+          <description>A jamovi screenshot displaying a data set with student grades and a descriptive statistics summary. The data set table lists student IDs and their grades for two tests. The results panel shows descriptive statistics including N, mean, median, standard deviation, minimum, and maximum values.</description>
+        </image>
+      </figure>
+
+      <p>What does the Bayesian version of the <m>t</m>-test look like? We can get the Bayes factor analysis by selecting the 'Bayes factor' checkbox under the 'Tests' option, and accepting the suggested default value for the 'Prior'. This gives the results shown in the table in <xref ref="fig-fig16-3"/>. What we get in this table is a Bayes factor statistic of 1.75, meaning that the evidence provided by these data are about 1.8:1 in favour of the alternative hypothesis.</p>
+
+      <figure xml:id="fig-fig16-3">
+        <caption>Bayes factor analysis alongside independent samples <m>t</m>-test</caption>
+        <image source="images/fig16-3.png" width="90%">
+          <description>A jamovi table titled "Independent Samples T-test" shows statistical comparison data for three methods: Student's t, Bayes factor, and Welch's t. Columns include "Statistic," "df," "p," "Mean difference," "SE difference," and "Effect Size".</description>
+        </image>
+      </figure>
+
+      <p>Before moving on, it's worth highlighting the difference between the orthodox test results and the Bayesian one. According to the orthodox test, we obtained a significant result, though only barely. Nevertheless, many people would happily accept <m>p = .043</m> as reasonably strong evidence for an effect. In contrast, notice that the Bayesian test doesn't even reach 2:1 odds in favour of an effect, and would be considered very weak evidence at best. In my experience that's a pretty typical outcome. Bayesian methods usually require more evidence before rejecting the null.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-paired-samples-t-test-bayesian">
+      <title>Paired samples <m>t</m>-test</title>
+
+      <p>Back in <xref ref="sec-paired-samples-t-test"/> I discussed the <em>chico.csv</em> data set in which student grades were measured on two tests, and we were interested in finding out whether grades went up from test 1 to test 2. Because every student did both tests, the tool we used to analyse the data was a paired samples <m>t</m>-test. <xref ref="fig-fig16-4"/> shows the jamovi results table for the conventional paired <m>t</m>-test alongside the Bayes factor analysis. At this point, I hope you can read this output without any difficulty. The data provide evidence of about 6000:1 in favour of the alternative. We could probably reject the null with some confidence!</p>
+
+      <figure xml:id="fig-fig16-4">
+        <caption>Paired samples <m>t</m>-test and Bayes factor result in jamovi</caption>
+        <image source="images/fig16-4.png" width="90%">
+          <description>A jamovi table showing results of a Paired Samples T-Test. It includes the test names, statistics (6.48 for Student's t, 5993.58 for Bayes factor), degrees of freedom (19), p-value (&lt;0.0001), mean difference (1.40), standard error difference (0.22), confidence interval (0.95 to 1.86), and effect size (1.45).</description>
+        </image>
+      </figure>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-bayesian-summary">
+    <title>Summary</title>
+
+    <p>The first half of this chapter was focused primarily on the theoretical underpinnings of Bayesian statistics. I introduced the mathematics for how Bayesian inference works in the section on <xref ref="sec-probabilistic-reasoning-by-rational-agents">Probabilistic reasoning by rational agents</xref>, and gave a very basic overview of <xref ref="sec-bayesian-hypothesis-tests">Bayesian hypothesis tests</xref>. Finally, I devoted some space to talking about why I think <xref ref="sec-why-be-a-bayesian">Bayesian methods are worth using</xref>.</p>
+
+    <p>Then I gave a practical example, with <xref ref="sec-bayesian-t-tests">Bayesian <m>t</m>-tests</xref>. If you're interested in learning more about the Bayesian approach, there are many good books you could look into. John Kruschke's book, <em>Doing Bayesian Data Analysis</em>, is a pretty good place to start (<xref ref="Kruschke2011"/>) and is a nice mix of theory and practice. His approach is a little different to the "Bayes factor" approach that I've discussed here, so you won't be covering the same ground. If you're a cognitive psychologist, you might want to check out <xref ref="Lee2014"/>. I picked these two because I think they're especially useful for people in my discipline, but there's a lot of good books out there, so look around!</p>
+  </section>
+
 </chapter>
