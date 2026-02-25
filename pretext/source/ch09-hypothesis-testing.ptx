@@ -224,8 +224,6 @@
           <description>A histogram displaying a normal distribution of the number of correct responses (X) with a highlighted critical region on the right side, representing 5% of the distribution. The x-axis ranges from 0 to 100 correct responses. Text reads "critical region (5% of the distribution)"</description>
         </image>
       </figure>
-
-      <p>Choosing a one-sided test is sometimes done for substantive reasons. If I genuinely believe that ESP can only produce better-than-chance performance (and not worse), then it makes some sense to choose a one-sided test. It also has a practical consequence. Because the entire <m>5\%</m> now falls in the one tail (rather than being split between two tails as in the two-sided test), the critical region is somewhat smaller. In my ESP example, the critical region for a one-sided test corresponds to <m>X \geq 58</m> rather than <m>X \geq 60</m>. That means I'm able to reject the null hypothesis for a somewhat smaller number of correct answers. However, you need to be very careful when choosing a one-sided test, because there is a temptation to decide to use one after looking at the data. When that happens, you're no longer testing a genuinely one-sided hypothesis, you're cheating.</p>
     </subsection>
   </section>
 
@@ -397,10 +395,13 @@
         </image>
       </figure>
 
+</subsection>
+
+    <subsection xml:id="subsec-the-power-function">
+      <title>The power function</title>
       <blockquote>
         <p><em>Since all models are wrong the scientist must be alert to what is importantly wrong. It is inappropriate to be concerned with mice when there are tigers abroad.</em><br/>— George Box</p>
       </blockquote>
-
       <p>The plot shown in <xref ref="fig-fig9-7"/> captures a fairly basic point about hypothesis testing. If the true state of the world is very different from what the null hypothesis predicts then your power will be very high, but if the true state of the world is similar to the null (but not identical) then the power of the test is going to be very low. Therefore, it's useful to be able to have some way of quantifying how "similar" the true state of the world is to the null hypothesis. A statistic that does this is called a measure of <term>effect size</term>. Effect size is defined slightly differently in different contexts (and so this section just talks in general terms) but the qualitative idea that it tries to capture is always the same (see e.g. <xref ref="tbl-tab9-6"/>). How big is the difference between the <em>true</em> population parameters and the parameter values that are assumed by the null hypothesis? In our ESP example, if we let <m>\theta_0 = 0.5</m> denote the value assumed by the null hypothesis and let <m>\theta</m> denote the true value, then a simple measure of effect size could be something like the difference between the true value and null (i.e., <m>\theta - \theta_0</m>), or possibly just the magnitude of this difference, <m>|\theta - \theta_0|</m>.</p>
 
       <table xml:id="tbl-tab9-6">

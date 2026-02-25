@@ -24,6 +24,29 @@
   <references>
     <title>References</title>
 
+    <biblio type="raw" xml:id="Hedges1981">
+      Hedges, L. V. (1981). Distribution theory for Glass's estimator of effect size and related estimators. <em>Journal of Educational Statistics</em>, 6, 107&#x2013;128. doi:10.2307/1164588
+    </biblio>
+
+    <biblio type="raw" xml:id="Hedges1985">
+      Hedges, L. V., &amp; Olkin, I. (1985). <em>Statistical Methods for Meta-Analysis</em>. Academic Press. doi:10.1016/C2009-0-03396-0
+    </biblio>
+
+    <biblio type="raw" xml:id="McGrath2006">
+      McGrath, R. E., &amp; Meyer, G. J. (2006). When effect sizes disagree: The case of <m>r</m> and <m>d</m>. <em>Psychological Methods</em>, 11, 386&#x2013;401. doi:10.1037/1082-989x.11.4.386
+    </biblio>
+
+    <biblio type="raw" xml:id="Shapiro1965">
+      Shapiro, S. S., &amp; Wilk, M. B. (1965). An analysis of variance test for normality (complete samples). <em>Biometrika</em>, 52, 591&#x2013;611. doi:10.1093/biomet/52.3-4.591
+    </biblio>
+
+    <biblio type="raw" xml:id="Student1908">
+      Student, A. (1908). The probable error of a mean. <em>Biometrika</em>, 6, 1&#x2013;2. doi:10.1093/biomet/6.1.1
+    </biblio>
+
+    <biblio type="raw" xml:id="Welch1947">
+      Welch, B. L. (1947). The generalization of <q>Student's</q> problem when several different population variances are involved. <em>Biometrika</em>, 34, 28&#x2013;35. doi:10.1093/biomet/34.1-2.28
+
     <biblio type="raw" xml:id="Child1990">
       D. Child. <em>The Essentials of Factor Analysis</em> (2nd ed.). Cassell Educational, 1990.
     </biblio>
