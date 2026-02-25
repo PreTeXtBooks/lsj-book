@@ -3,6 +3,967 @@
 <chapter xml:id="ch-correlation-regression" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Correlation and linear regression</title>
   <introduction>
-    <p>To be added.</p>
+    <p>The goal in this chapter is to introduce <term>correlation</term> and <term>linear regression</term>. These are the standard tools that statisticians rely on when analysing the relationship between continuous predictors and continuous outcomes.</p>
   </introduction>
+
+  <section xml:id="sec-correlations">
+    <title>Correlations</title>
+
+    <p>In this section we'll talk about how to describe the relationships between variables in the data. To do that, we want to talk mostly about the <term>correlation</term> between variables. But first, we need some data (<xref ref="tbl-tab12-1"/>).</p>
+
+    <subsection xml:id="subsec-correlation-data">
+      <title>The data</title>
+
+      <table xml:id="tbl-tab12-1">
+        <title>Data for correlation analysis — descriptive statistics for the <em>parenthood</em> data</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell>variable</cell>
+            <cell>min</cell>
+            <cell>max</cell>
+            <cell>mean</cell>
+            <cell>median</cell>
+            <cell>std. dev</cell>
+            <cell>IQR</cell>
+          </row>
+          <row>
+            <cell>Dani's grumpiness</cell>
+            <cell>41</cell>
+            <cell>91</cell>
+            <cell>63.71</cell>
+            <cell>62</cell>
+            <cell>10.05</cell>
+            <cell>14</cell>
+          </row>
+          <row>
+            <cell>Dani's hours slept</cell>
+            <cell>4.84</cell>
+            <cell>9.00</cell>
+            <cell>6.97</cell>
+            <cell>7.03</cell>
+            <cell>1.02</cell>
+            <cell>1.45</cell>
+          </row>
+          <row>
+            <cell>Dani's son's hours slept</cell>
+            <cell>3.25</cell>
+            <cell>12.07</cell>
+            <cell>8.05</cell>
+            <cell>7.95</cell>
+            <cell>2.07</cell>
+            <cell>3.21</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>Let's turn to a topic close to every parent's heart: sleep. The data set we'll use is fictitious, but based on real events. Suppose I'm curious to find out how much my infant son's sleeping habits affect my mood. Let's say that I can rate my grumpiness very precisely, on a scale from 0 (not at all grumpy) to <m>100</m> (grumpy as a very, very grumpy old man or woman). And lets also assume that I've been measuring my grumpiness, my sleeping patterns and my son's sleeping patterns for quite some time now. Let's say, for <m>100</m> days. And, being a nerd, I've saved the data as a file called <em>parenthood.csv</em>.</p>
+
+      <p>If we load the data we can see that the file contains four variables dani.sleep, baby.sleep, dani.grump and day. Note that when you first load this data set jamovi may not have guessed the data type for each variable correctly, in which case you should fix it: dani.sleep, baby.sleep, dani.grump and day can be specified as continuous variables, and ID is a nominal(integer) variable.<fn>I've noticed that in jamovi you can also specify an 'ID' variable type, but for our purposes it does not matter how we specify the ID variable as we won't be including it in any analyses.</fn></p>
+
+      <p>Next, I'll take a look at some basic descriptive statistics and, to give a graphical depiction of what each of the three interesting variables looks like, <xref ref="fig-fig12-1"/> plots histograms. One thing to note: just because jamovi can calculate dozens of different statistics doesn't mean you should report all of them. If I were writing this up for a report, I'd probably pick out those statistics that are of most interest to me (and to my readership), and then put them into a nice, simple table like the one in <xref ref="tbl-tab12-1"/>.<fn>Actually, even that table is more than I'd bother with. In practice most people pick one measure of central tendency, and one measure of variability only.</fn></p>
+
+      <p>Notice that when I put it into a table, I gave everything "human readable" names. This is always good practice. Notice also that I'm not getting enough sleep. This isn't good practice, but other parents tell me that it's pretty standard.</p>
+
+      <figure xml:id="fig-fig12-1">
+        <caption>Histograms from jamovi for the three interesting variables in the <em>parenthood</em> data set</caption>
+        <sidebyside widths="33% 33% 33%">
+          <figure xml:id="fig-fig12-1a">
+            <caption></caption>
+            <image source="images/fig12-1a.png">
+              <description>A histogram displaying the density distribution of baby sleep durations. The bars range from about 3.5 to 12.5 hours of sleep. There is a higher concentration of data points between 7 and 10 hours. The y-axis is labeled 'density' and the x-axis is labeled 'baby.sleep'.</description>
+            </image>
+          </figure>
+          <figure xml:id="fig-fig12-1b">
+            <caption></caption>
+            <image source="images/fig12-1b.png">
+              <description>A histogram with labelled axes 'density' on the y-axis and 'dan.sleep' on the x-axis. The histogram has bars of varying heights, peaking between the values 6 and 7 on the x-axis. The bars are shaded in light blue.</description>
+            </image>
+          </figure>
+          <figure xml:id="fig-fig12-1c">
+            <caption></caption>
+            <image source="images/fig12-1c.png">
+              <description>A histogram displays the density of data points for the variable 'dan.grump'. The x-axis ranges from 40 to 90, and the y-axis is labeled 'density'. The bars show a distribution peaking around 60 and tapering off towards the lower and higher ends.</description>
+            </image>
+          </figure>
+        </sidebyside>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-correlation-strength-direction">
+      <title>The strength and direction of a relationship</title>
+
+      <p>We can draw scatterplots to give us a general sense of how closely related two variables are. Ideally though, we might want to say a bit more about it than that. For instance, let's compare the relationship between baby.sleep and dani.grump (<xref ref="fig-fig12-2a"/>), left, with that between dani.sleep and dani.grump (<xref ref="fig-fig12-2b"/>), right. When looking at these two plots side by side, it's clear that the relationship is qualitatively the same in both cases: more sleep equals less grump!</p>
+
+      <p>However, it's also pretty obvious that the relationship between dani.sleep and dani.grump is stronger than the relationship between baby.sleep and dani.grump. The plot on the right is "neater" than the one on the left. What it feels like is that if you want to predict what my mood is, it'd help you a little bit to know how many hours my son slept, but it'd be more helpful to know how many hours I slept.</p>
+
+      <figure xml:id="fig-fig12-2">
+        <caption>Scatterplots from jamovi showing the relationship between baby.sleep and dani.grump (left) and the relationship between dani.sleep and dani.grump (right)</caption>
+        <sidebyside widths="48% 48%">
+          <figure xml:id="fig-fig12-2a">
+            <caption></caption>
+            <image source="images/fig12-2a.png">
+              <description>Scatter plot showing the relationship between 'Baby sleep (hours)' on the x-axis and 'My grumpiness' on the y-axis. The trend indicates that as the baby sleeps more, grumpiness decreases.</description>
+            </image>
+          </figure>
+          <figure xml:id="fig-fig12-2b">
+            <caption></caption>
+            <image source="images/fig12-2b.png">
+              <description>A scatter plot titled 'My grumpiness vs. My sleep (hours)'. The x-axis is labeled 'My sleep (hours)' ranging from 5 to 9, and the y-axis is labeled 'My grumpiness' ranging from 40 to 90. The data points show a negative correlation between sleep and grumpiness.</description>
+            </image>
+          </figure>
+        </sidebyside>
+      </figure>
+
+      <p>In contrast, let's consider the two scatterplots shown in <xref ref="fig-fig12-3"/>. If we compare the scatterplot of "baby.sleep v dani.grump" (left) to the scatterplot of "baby.sleep v dani.sleep" (right), the overall strength of the relationship is the same, but the direction is different. That is, if my son sleeps more, I get more sleep (positive relationship, right-hand side), but if he sleeps more then I get less grumpy (negative relationship, left-hand side).</p>
+
+      <figure xml:id="fig-fig12-3">
+        <caption>Scatterplots from jamovi showing the relationship between baby.sleep and dani.grump (left), as compared to the relationship between baby.sleep and dani.sleep (right)</caption>
+        <sidebyside widths="48% 48%">
+          <figure xml:id="fig-fig12-3a">
+            <caption></caption>
+            <image source="images/fig12-2a.png">
+              <description>Scatter plot showing the relationship between 'Baby sleep (hours)' on the x-axis and 'My grumpiness' on the y-axis. The trend indicates that as the baby sleeps more, grumpiness decreases.</description>
+            </image>
+          </figure>
+          <figure xml:id="fig-fig12-3b">
+            <caption></caption>
+            <image source="images/fig12-3b.png">
+              <description>Scatter plot showing the relationship between 'Baby sleep (hours)' on the x-axis and 'My sleep (hours)' on the y-axis. Data points indicate that as the baby's sleep increases from 5 to 12.5 hours, the parent's sleep also tends to increase from 5 to 9 hours.</description>
+            </image>
+          </figure>
+        </sidebyside>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-correlation-coefficient">
+      <title>The correlation coefficient</title>
+
+      <p>We can make these ideas a bit more explicit by introducing the idea of a <term>correlation coefficient</term> (or, more specifically, Pearson's correlation coefficient), which is traditionally denoted as r. The correlation coefficient between two variables <m>X</m> and <m>Y</m> (sometimes denoted <m>r_{XY}</m>), which we'll define more precisely in the next section, is a measure that varies from -1 to 1. When <m>r = -1</m> it means that we have a perfect negative relationship, and when <m>r = 1</m> it means we have a perfect positive relationship. When <m>r = 0</m>, there's no relationship at all. If you look at <xref ref="fig-fig12-4"/>, you can see several plots showing what different correlations look like.</p>
+
+      <p>[Additional technical detail<fn>The formula for the Pearson's correlation coefficient can be written in several different ways. I think the simplest way to write down the formula is to break it into two steps. Firstly, let's introduce the idea of a <term>covariance</term>. The covariance between two variables <m>X</m> and <m>Y</m> is a generalisation of the notion of the variance and is a mathematically simple way of describing the relationship between two variables that isn't terribly informative to humans: <me>Cov(X,Y)=\frac{1}{N-1}\sum_{i=1}^N(X_i-\bar{X})(Y_i-\bar{Y})</me> Because we're multiplying (i.e., taking the "product" of) a quantity that depends on X by a quantity that depends on Y and then averaging, you can think of the formula for the covariance as an "average cross product" between <m>X</m> and <m>Y</m>. The covariance has the nice property that, if <m>X</m> and <m>Y</m> are entirely unrelated, then the covariance is exactly zero. If the relationship between them is positive then the covariance is also positive, and if the relationship is negative then the covariance is also negative. In other words, the covariance captures the basic qualitative idea of correlation. Unfortunately, the raw magnitude of the covariance isn't easy to interpret as it depends on the units in which <m>X</m> and <m>Y</m> are expressed and, worse yet, the actual units that the covariance itself is expressed in are really weird. The Pearson correlation coefficient r fixes this interpretation problem by standardising the covariance, in pretty much the exact same way that the <m>z</m>-score standardises a raw score, by dividing by the standard deviation. However, because we have two variables that contribute to the covariance, the standardisation only works if we divide by both standard deviations. In other words, the correlation between <m>X</m> and <m>Y</m> can be written as follows: <me>r_{XY}=\frac{Cov(X,Y)}{\hat{\sigma}_X\hat{\sigma}_Y}</me></fn>]</p>
+
+      <figure xml:id="fig-fig12-4">
+        <caption>Illustration of the effect of varying the strength and direction of a correlation. In the left-hand column, the correlations are <m>0, .33, .66</m> and <m>1</m>. In the right-hand column, the correlations are <m>0, -.33, -.66</m> and <m>-1</m></caption>
+        <image source="images/fig-fig12-4-1.png" width="80%">
+          <description>Scatter plots are shown with varying degrees of positive and negative correlations. Positive correlations: 0, 0.33, 0.66, and 1. Negative correlations: 0, -0.33, -0.66, and -1. 0 shows no correlation, and 1, -1 show perfect correlations.</description>
+        </image>
+      </figure>
+
+      <p>By standardising the covariance, not only do we keep all of the nice properties of the covariance discussed earlier, but the actual values of r are on a meaningful scale: r = 1 implies a perfect positive relationship and <m>r = -1</m> implies a perfect negative relationship. I'll expand a little more on this point later, in the section on interpreting a correlation. But before I do, let's look at how to calculate correlations in jamovi.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-correlations-jamovi">
+      <title>Calculating correlations in jamovi</title>
+
+      <p>Calculating correlations in jamovi can be done by clicking on the 'Regression' — 'Correlation Matrix' button. Transfer all four continuous variables across into the box on the right to get the output in <xref ref="fig-fig12-5"/>.</p>
+
+      <figure xml:id="fig-fig12-5">
+        <caption>Correlations between variables in the <em>parenthood.csv</em> file</caption>
+        <image source="images/fig12-5.png" width="90%">
+          <description>A jamovi screenshot showing data analysis tools. The main focus is on a Correlation Matrix section with variable labels such as "dan sleep," "baby sleep," and "dan grump." Options for Pearson correlation, significance reporting, and confidence intervals are visible.</description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-interpreting-correlation">
+      <title>Interpreting a correlation</title>
+
+      <p>Naturally, in real life you don't see many correlations of <m>1</m>. So how should you interpret a correlation of, say, r = <m>.4</m>? The honest answer is that it really depends on what you want to use the data for, and on how strong the correlations in your field tend to be. A friend of mine in engineering once argued that any correlation less than <m>.95</m> is completely useless (I think he was exaggerating, even for engineering). On the other hand, there are real cases, even in psychology, where you should really expect correlations that strong. For instance, one of the benchmark data sets used to test theories of how people judge similarities is so clean that any theory that can't achieve a correlation of at least <m>.9</m> really isn't deemed to be successful. However, when looking for (say) elementary correlates of intelligence (e.g., inspection time, response time), if you get a correlation above <m>.3</m> you're doing very very well. In short, the interpretation of a correlation depends a lot on the context. That said, the rough guide in <xref ref="tbl-tab12-2"/> is pretty typical.</p>
+
+      <table xml:id="tbl-tab12-2">
+        <title>A rough guide to interpreting correlations</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell>Correlation</cell>
+            <cell>Strength</cell>
+            <cell>Direction</cell>
+          </row>
+          <row>
+            <cell>-1.0 to -0.9</cell>
+            <cell>Very strong</cell>
+            <cell>Negative</cell>
+          </row>
+          <row>
+            <cell>-0.9 to -0.7</cell>
+            <cell>Strong</cell>
+            <cell>Negative</cell>
+          </row>
+          <row>
+            <cell>-0.7 to -0.4</cell>
+            <cell>Moderate</cell>
+            <cell>Negative</cell>
+          </row>
+          <row>
+            <cell>-0.4 to -0.2</cell>
+            <cell>Weak</cell>
+            <cell>Negative</cell>
+          </row>
+          <row>
+            <cell>-0.2 to 0</cell>
+            <cell>Negligible</cell>
+            <cell>Negative</cell>
+          </row>
+          <row>
+            <cell>0 to 0.2</cell>
+            <cell>Negligible</cell>
+            <cell>Positive</cell>
+          </row>
+          <row>
+            <cell>0.2 to 0.4</cell>
+            <cell>Weak</cell>
+            <cell>Positive</cell>
+          </row>
+          <row>
+            <cell>0.4 to 0.7</cell>
+            <cell>Moderate</cell>
+            <cell>Positive</cell>
+          </row>
+          <row>
+            <cell>0.7 to 0.9</cell>
+            <cell>Strong</cell>
+            <cell>Positive</cell>
+          </row>
+          <row>
+            <cell>0.9 to 1.0</cell>
+            <cell>Very strong</cell>
+            <cell>Positive</cell>
+          </row>
+        </tabular>
+        <p>Note that I say a rough guide. There aren't hard and fast rules for what counts as strong or weak relationships. It depends on the context.</p>
+      </table>
+
+      <p>However, something that can never be stressed enough is that you should always look at the scatterplot before attaching any interpretation to the data. A correlation might not mean what you think it means. The classic illustration of this is "Anscombe's Quartet", a collection of four data sets. Each data set has two variables, an <m>X</m> and a <m>Y</m>. For all four data sets the mean value for <m>X</m> is <m>9</m> and the mean for <m>Y</m> is <m>7.5</m>. The standard deviations for all <m>X</m> variables are almost identical, as are those for the Y variables. And in each case the correlation between <m>X</m> and <m>Y</m> is <m>r = 0.816</m>. You can verify this yourself, since I happen to have saved it in a file called <em>anscombe.csv</em>.</p>
+
+      <p>You'd think that these four data sets would look pretty similar to one another. They do not. If we draw scatterplots of <m>X</m> against <m>Y</m> for all four variables, as shown in <xref ref="fig-fig12-6"/>, we see that all four of these are spectacularly different to each other. The lesson here, which so very many people seem to forget in real life, is "always graph your raw data".</p>
+
+      <figure xml:id="fig-fig12-6">
+        <caption>Anscombe's quartet scatterplots. All four of these data sets have a Pearson correlation of <m>r = .816</m>, but they are qualitatively different from one another</caption>
+        <image source="images/fig-fig12-6-1.png" width="90%">
+          <description>Four scatter plots with points showing the same positive correlation between x and y. The four plots show linear, non-linear, outlier, and leverage types of relationships.</description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-spearman">
+      <title>Spearman's rank correlations</title>
+
+      <p>The Pearson correlation coefficient is pretty useful, but it does have shortcomings. One issue stands out: what it actually measures is the strength of the linear relationship between two variables. In other words, what it gives you is a measure of the extent to which the data all tend to fall on a single, perfectly straight line. Often, this is a pretty good approximation to what we mean when we say "relationship", and so the Pearson correlation is a good thing to calculate. Sometimes though, it isn't.</p>
+
+      <p>One very common situation where the Pearson correlation isn't quite the right thing to use arises when an increase in one variable <m>X</m> really is reflected in an increase in another variable Y, but the nature of the relationship isn't necessarily linear. An example of this might be the relationship between effort and reward when studying for an exam. If you put zero effort (<m>X</m>) into learning a subject then you should expect a grade of <m>0\%</m> (<m>Y</m>).</p>
+
+      <p>However, a little bit of effort will cause a massive improvement. Just turning up to lectures means that you learn a fair bit, and if you just turn up to classes and scribble a few things down your grade might rise to 35%, all without a lot of effort. However, you just don't get the same effect at the other end of the scale. As everyone knows, it takes a lot more effort to get a grade of <m>90\%</m> than it takes to get a grade of <m>55\%</m>. What this means is that, if I've got data looking at study effort and grades, there's a pretty good chance that Pearson correlations will be misleading.</p>
+
+      <p>To illustrate, consider the data plotted in <xref ref="fig-fig12-7"/>, showing the relationship between hours worked and grade received for 10 students taking some class. The curious thing about this (highly fictitious) data set is that increasing your effort always increases your grade. It might be by a lot or it might be by a little, but increasing effort will never decrease your grade. If we run a standard Pearson correlation, it shows a strong relationship between hours worked and grade received, with a correlation coefficient of <m>0.91</m>.</p>
+
+      <p>However, this doesn't actually capture the observation that increasing hours worked always increases the grade. There's a sense here in which we want to be able to say that the correlation is perfect but for a somewhat different notion of what a "relationship" is. What we're looking for is something that captures the fact that there is a perfect <term>ordinal relationship</term> here. That is, if student 1 works more hours than student 2, then we can guarantee that student 1 will get the better grade. That's not what a correlation of <m>r = .91</m> says at all.</p>
+
+      <figure xml:id="fig-fig12-7">
+        <caption>jamovi plot showing the relationship between hours worked and grade received for a toy data set consisting of only 10 students (each dot corresponds to one student). The line through the middle shows the linear relationship between the two variables. This produces a strong Pearson correlation of <m>r = .91</m>. However, the interesting thing to note here is that there's actually a perfect monotonic relationship between the two variables. In this toy example, increasing the hours worked always increases the grade received, as illustrated by the solid line. This is reflected in a Spearman correlation of <m>\rho = 1</m>. With such a small data set, however, it's an open question as to which version better describes the actual relationship involved</caption>
+        <image source="images/fig12-7.png" width="80%">
+          <description>A scatter plot with a trend line. The x-axis is labeled "hours" and the y-axis is labeled "grade." Dots represent data points, showing a positive correlation between hours studied and grade achieved, with the trend line ascending from the bottom-left to top-right.</description>
+        </image>
+      </figure>
+
+      <p>How should we address this? Actually, it's really easy. If we're looking for ordinal relationships all we have to do is treat the data as if it were ordinal scale! So, instead of measuring effort in terms of "hours worked", lets rank all <m>10</m> of our students in order of hours worked. That is, student <m>1</m> did the least work out of anyone (<m>2</m> hours) so they get the lowest rank (rank = <m>1</m>). Student <m>4</m> was the next laziest, putting in only <m>6</m> hours of work over the whole semester, so they get the next lowest rank (rank = <m>2</m>).</p>
+
+      <p>Notice that I'm using "rank = 1" to mean "low rank". Sometimes in everyday language we talk about "rank = <m>1</m>" to mean "top rank" rather than "bottom rank". So be careful, you can rank "from smallest value to largest value" (i.e., small equals rank <m>1</m>) or you can rank "from largest value to smallest value" (i.e., large equals rank 1). In this case, I'm ranking from smallest to largest, but as it's really easy to forget which way you set things up you have to put a bit of effort into remembering!</p>
+
+      <p>Okay, so let's have a look at our students when we rank them from worst to best in terms of effort and reward <xref ref="tbl-tab12-3"/>.</p>
+
+      <table xml:id="tbl-tab12-3">
+        <title>Students ranked in terms of effort and reward</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell></cell>
+            <cell>rank (hours worked)</cell>
+            <cell>rank (grade received)</cell>
+          </row>
+          <row>
+            <cell>student 1</cell>
+            <cell>1</cell>
+            <cell>1</cell>
+          </row>
+          <row>
+            <cell>student 2</cell>
+            <cell>10</cell>
+            <cell>10</cell>
+          </row>
+          <row>
+            <cell>student 3</cell>
+            <cell>6</cell>
+            <cell>6</cell>
+          </row>
+          <row>
+            <cell>student 4</cell>
+            <cell>2</cell>
+            <cell>2</cell>
+          </row>
+          <row>
+            <cell>student 5</cell>
+            <cell>3</cell>
+            <cell>3</cell>
+          </row>
+          <row>
+            <cell>student 6</cell>
+            <cell>5</cell>
+            <cell>5</cell>
+          </row>
+          <row>
+            <cell>student 7</cell>
+            <cell>4</cell>
+            <cell>4</cell>
+          </row>
+          <row>
+            <cell>student 8</cell>
+            <cell>8</cell>
+            <cell>8</cell>
+          </row>
+          <row>
+            <cell>student 9</cell>
+            <cell>7</cell>
+            <cell>7</cell>
+          </row>
+          <row>
+            <cell>student 10</cell>
+            <cell>9</cell>
+            <cell>9</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>Hmm. These are identical. The student who put in the most effort got the best grade, the student with the least effort got the worst grade, etc. As the table above shows, these two rankings are identical, so if we now correlate them we get a perfect relationship, with a correlation of 1.0.</p>
+
+      <p>What we've just re-invented is <term>Spearman's rank order correlation</term>, usually denoted <m>\rho</m> to distinguish it from the Pearson correlation r. We can calculate Spearman's <m>\rho</m> using jamovi simply by clicking the 'Spearman' check box in the 'Correlation Matrix' screen.</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-scatterplots">
+    <title>Scatterplots</title>
+
+    <p><term>Scatterplots</term> are a simple but effective tool for visualising the relationship between two variables, like we saw with the figures in <xref ref="sec-correlations"/>. It's this latter application that we usually have in mind when we use the term "scatterplot". In this kind of plot each observation corresponds to one dot. The horizontal location of the dot plots the value of the observation on one variable, and the vertical location displays its value on the other variable.</p>
+
+    <p>In many situations you don't really have a clear opinion about what the causal relationship is (e.g., does A cause B, or does B cause A, or does some other variable C control both A and B). If that's the case, it doesn't really matter which variable you plot on the x-axis and which one you plot on the y-axis.</p>
+
+    <p>However, in many situations you do have a pretty strong idea which variable you think is most likely to be causal, or at least you have some suspicions in that direction. If so, then it's conventional to plot the cause variable on the x-axis, and the effect variable on the y-axis. With that in mind, let's look at how to draw scatterplots in jamovi, using the same <em>parenthood</em> data set (i.e. <em>parenthood.csv</em>) that I used when introducing correlations.</p>
+
+    <p>Suppose my goal is to draw a scatterplot displaying the relationship between the amount of sleep that I get (dani.sleep) and how grumpy I am the next day (dani.grump).</p>
+
+    <p>There are two different ways in which we can use jamovi to get the plot that we're after. The first way is to use the 'Plot' option under the 'Regression' — 'Correlation Matrix' button, giving us the output shown in <xref ref="fig-fig12-8"/>.</p>
+
+    <figure xml:id="fig-fig12-8">
+      <caption>Scatterplot via the 'Correlation Matrix' command in jamovi</caption>
+      <image source="images/fig12-8.png" width="90%">
+        <description>A jamovi screenshot displaying a correlation matrix analysis. The analysis examines the variables "dan.sleep" and "dan.grump" with options for Pearson and Spearman correlations, covariance, and testing hypotheses. A scatter plot and density plots of the variables are shown.</description>
+      </image>
+    </figure>
+
+    <p>Note that jamovi draws a line through the points, we'll come onto this a bit later in the section on linear regression models. Plotting a scatterplot in this way also allows you to specify 'Densities for variables' and this option adds a density curve showing how the data in each variable is distributed.</p>
+
+    <p>The second way do to it is to use one of the jamovi add-on modules. This module is called 'scatr' and you can install it by clicking on the large '<m>+</m>' icon in the top right of the jamovi screen, opening the jamovi library, scrolling down until you find 'scatr' and clicking 'install'.</p>
+
+    <p>When you have done this, you will find a new 'Scatterplot' command available under the 'Exploration' button. This plot is a bit different than the first way, see <xref ref="fig-fig12-9"/>, but the important information is the same.</p>
+
+    <figure xml:id="fig-fig12-9">
+      <caption>Scatterplot via the 'scatr' add-on module in jamovi</caption>
+      <image source="images/fig12-9.png" width="80%">
+        <description>A scatter plot showing the relationship between 'dan.grump' and 'dan.sleep'. The x-axis represents 'dan.sleep' ranging from 5 to 9, and the y-axis represents 'dan.grump' ranging from 40 to 90. Data points trend downwards, indicating a negative correlation.</description>
+      </image>
+    </figure>
+
+    <subsection xml:id="subsec-scatterplot-matrix">
+      <title>More elaborate options</title>
+
+      <p>Often you will want to look at the relationships between several variables at once, using a <term>scatterplot matrix</term> (in jamovi via the 'Correlation Matrix' — 'Plot' command).</p>
+
+      <p>Just add another variable, for example baby.sleep to the list of variables to be correlated, and jamovi will create a scatterplot matrix for you, just like the one in <xref ref="fig-fig12-10"/>.</p>
+
+      <figure xml:id="fig-fig12-10">
+        <caption>A matrix of scatterplots produced using jamovi</caption>
+        <image source="images/fig12-10.png" width="90%">
+          <description>A series of scatter plots arranged in a matrix format showing correlations between variables: dan.sleep, dan.grump, and baby.sleep. Each plot has points and trend lines with grey confidence intervals. The correlation coefficients are labeled on the plots.</description>
+        </image>
+      </figure>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-linear-regression-model">
+    <title>What is a linear regression model?</title>
+
+    <p>Stripped to its bare essentials, linear regression models are basically a slightly fancier version of the Pearson correlation (see <xref ref="sec-correlations"/>), but they are actually much more powerful tools. We'll return to the <em>parenthood.csv</em> file that we were using to illustrate how correlations work.</p>
+
+    <p>Recall that, in this data set we were trying to find out why Dani is so very grumpy all the time and our working hypothesis was that I'm not getting enough sleep. We drew scatterplots to help us examine the relationship between the amount of sleep I get and my grumpiness the following day, as in <xref ref="fig-fig12-9"/>, and as we saw that this corresponded to a correlation of <m>r = -.90</m>, but what we find ourselves secretly imagining is something that looks closer to <xref ref="fig-fig12-11"/>(a). That is, we mentally draw a straight line through the middle of the data. In statistics, this line that we're drawing is called a <term>regression line</term>.</p>
+
+    <p>Notice that, since we're not idiots, the regression line goes through the middle of the data. We don't find ourselves imagining anything like the rather silly plot shown in <xref ref="fig-fig12-11"/>(b). This is not highly surprising. The line that I've drawn in <xref ref="fig-fig12-11"/>(b) doesn't "fit" the data very well, so it doesn't make a lot of sense to propose it as a way of summarising the data, right?</p>
+
+    <figure xml:id="fig-fig12-11">
+      <caption>Panel (a) shows the sleep-grumpiness scatterplot from <xref ref="fig-fig12-9"/> with the best fitting regression line drawn over the top. Not surprisingly, the line goes through the middle of the data. In contrast, panel (b) shows the same data, but with a very poor choice of regression line drawn over the top</caption>
+      <image source="images/fig-fig12-11-1.png" width="90%">
+        <description>Two scatter plots compare the fitting of regression lines to the relationship between sleep hours and grumpiness. The left plot shows a strong negative correlation with a steep regression line; the right plot shows a weaker fit and a flatter regression line.</description>
+      </image>
+    </figure>
+
+    <p>This is a very simple observation to make, but it turns out to be very powerful when we start trying to wrap just a little bit of maths around it. To do so, let's start with a refresher of some high school maths. The formula for a straight line is usually written like this:
+    <me>y=a+bx</me></p>
+
+    <p>The two variables are <m>x</m> and <m>y</m>, and we have two coefficients, <m>a</m> and <m>b</m>.<fn>Also sometimes written as <m>y = mx + c</m> where <m>m</m> is the slope coefficient and <m>c</m> is the intercept (constant) coefficient.</fn> The coefficient <m>a</m> represents the y-intercept of the line, and coefficient <m>b</m> represents the slope of the line. The intercept is interpreted as "the value of y that you get when <m>x = 0</m>". Similarly, a slope of b means that if you increase the x-value by 1 unit, then the y-value goes up by b units, and a negative slope means that the y-value would go down rather than up. We use the exact same formula for a regression line.</p>
+
+    <p>If <m>Y</m> is the outcome variable (the DV) and <m>X</m> is the predictor variable (the IV), then the formula that describes our regression is written like this:
+    <me>\hat{Y}_i=b_0+b_1X_i</me></p>
+
+    <p>Hmm. Looks like the same formula, but there's some extra frilly bits in this version. Let's make sure we understand them.</p>
+
+    <p>Firstly, notice that I've written <m>X_i</m> and <m>Y_i</m> rather than just plain old <m>X</m> and <m>Y</m>. This is because we want to remember that we're dealing with actual data. In this equation, <m>X_i</m> is the value of predictor variable for the ith observation (i.e., the number of hours of sleep that I got on day i of my little study), and <m>Y_i</m> is the corresponding value of the outcome variable (i.e., my grumpiness on that day). And although I haven't said so explicitly in the equation, what we're assuming is that this formula works for all observations in the data set (i.e., for all i).</p>
+
+    <p>Secondly, notice that I wrote <m>\hat{Y}_i</m> and not <m>Y_i</m>. This is because we want to make the distinction between the actual data <m>Y_i</m>, and the estimate <m>\hat{Y}_i</m> (i.e., the prediction that our regression line is making).</p>
+
+    <p>Thirdly, I changed the letters used to describe the coefficients from a and <m>b</m> to <m>b_0</m> and <m>b_1</m>. That's just the way that statisticians like to refer to the coefficients in a regression model. I've no idea why they chose b, but that's what they did. In any case <m>b_0</m> always refers to the intercept term, and <m>b_1</m> refers to the slope.</p>
+
+    <p>Excellent, excellent. Next, I can't help but notice that, regardless of whether we're talking about the good regression line or the bad one, the data don't fall perfectly on the line. Or, to say it another way, the data <m>Y_i</m> are not identical to the predictions of the regression model <m>\hat{Y}_i</m>. Since statisticians love to attach letters, names and numbers to everything, let's refer to the difference between the model prediction and that actual data point as a residual, and we'll refer to it as <m>\epsilon_i</m>.<fn>The <m>\epsilon</m> symbol is the Greek letter epsilon. It's traditional to use <m>\epsilon_i</m> or <m>e_i</m> to denote a residual.</fn> Written using mathematics, the residuals are defined as:
+    <me>\epsilon_i=Y_i-\hat{Y}_i</me></p>
+
+    <p>which in turn means that we can write down the complete linear regression model as:
+    <me>Y_i=b_0+b_1X_i+\epsilon_i</me></p>
+  </section>
+
+  <section xml:id="sec-estimating-linear-regression">
+    <title>Estimating a linear regression model</title>
+
+    <p>Okay, now let's redraw our pictures but this time I'll add some lines to show the size of the residual for all observations. When the regression line is good, our residuals (the lengths of the solid black lines) all look pretty small, as shown in <xref ref="fig-fig12-12"/>(a), but when the regression line is a bad one the residuals are a lot larger, as you can see from looking at <xref ref="fig-fig12-12"/>(b).</p>
+
+    <figure xml:id="fig-fig12-12">
+      <caption>A depiction of the residuals associated with the best fitting regression line (panel a), and the residuals associated with a poor regression line (panel b). The residuals are much smaller for the good regression line. Again, this is no surprise given that the good line is the one that goes right through the middle of the data</caption>
+      <image source="images/fig-fig12-12-1.png" width="90%">
+        <description>Two scatter plots side by side, both displaying "Grumpiness vs. Sleep" with sleep hours (x-axis) ranging from 0 to 9 and grumpiness (y-axis) ranging from 0 to 100. Each plot has a blue regression line showing a negative correlation. The left plot is labeled "Close to data" and the right plot "Distant from data".</description>
+      </image>
+    </figure>
+
+    <p>Hmm. Maybe what we "want" in a regression model is <em>small</em> residuals. Yes, that does seem to make sense. In fact, I think I'll go so far as to say that the "best fitting" regression line is the one that has the smallest residuals. Or, better yet, since statisticians seem to like to take squares of everything why not say that:</p>
+
+    <blockquote>
+      <p>The estimated regression coefficients, <m>\hat{b}_0</m> and <m>\hat{b}_1</m>, are those that minimise the sum of the squared residuals, which we could either write as <m>\sum_i (Y_i - \hat{Y}_i)^2</m> or as <m>\sum_i \epsilon_i^2</m>.</p>
+    </blockquote>
+
+    <p>Yes, yes that sounds even better. And since I've indented it like that, it probably means that this is the right answer. And since this is the right answer, it's probably worth making a note of the fact that our regression coefficients are estimates (we're trying to guess the parameters that describe a population!), which is why I've added the little hats, so that we get <m>\hat{b}_0</m> and <m>\hat{b}_1</m> rather than <m>b_0</m> and <m>b_1</m>.</p>
+
+    <p>Finally, I should also note that, since there's actually more than one way to estimate a regression model, the more technical name for this estimation process is <term>ordinary least squares (OLS) regression</term>.</p>
+
+    <p>At this point, we now have a concrete definition for what counts as our "best" choice of regression coefficients, <m>\hat{b}_0</m> and <m>\hat{b}_1</m>. The natural question to ask next is, if our optimal regression coefficients are those that minimise the sum squared residuals, how do we find these wonderful numbers? The actual answer to this question is complicated and doesn't help you understand the logic of regression.<fn>Or at least, I'm assuming that it doesn't help most people. But on the off chance that someone reading this is a proper kung fu master of linear algebra (and to be fair, I always have a few of these people in my intro stats class), it will help you to know that the solution to the estimation problem turns out to be <m>\hat{b} = (X^{'}X)^{-1}X^{'}y</m>, where <m>\hat{b}</m> is a vector containing the estimated regression coefficients, <m>X</m> is the "design matrix" that contains the predictor variables (plus an additional column containing all ones; strictly <m>X</m> is a matrix of the regressors, but I haven't discussed the distinction yet), and <m>y</m> is a vector containing the outcome variable. For everyone else, this isn't exactly helpful and can be downright scary. However, since quite a few things in linear regression can be written in linear algebra terms, you'll see a bunch of footnotes like this one in this chapter. If you can follow the maths in them, great. If not, ignore it.</fn> This time I'm going to let you off the hook.</p>
+
+    <p>Instead of showing you the long and tedious way first and then "revealing" the wonderful shortcut that jamovi provides, let's cut straight to the chase and just use jamovi to do all the heavy lifting.</p>
+
+    <subsection xml:id="subsec-linear-regression-jamovi">
+      <title>Linear regression in jamovi</title>
+
+      <p>To run my linear regression, open up the 'Regression' — 'Linear Regression' analysis in jamovi, using the <em>parenthood.csv</em> data file. Then specify dani.grump as the 'Dependent Variable' and dani.sleep as the variable entered in the 'Covariates' box. This gives the results shown in <xref ref="fig-fig12-13"/>, showing an intercept <m>\hat{b}_0 = 125.96</m> and the slope <m>\hat{b}_1 = -8.94</m>. In other words, the best fitting regression line that I plotted in <xref ref="fig-fig12-12"/> has this formula:
+      <me>\hat{Y}_i=125.96+(-8.94 X_i)</me></p>
+
+      <figure xml:id="fig-fig12-13">
+        <caption>A jamovi screenshot showing a simple linear regression analysis</caption>
+        <image source="images/fig12-13.png" width="90%">
+          <description>A jamovi screenshot showing the interface for conducting linear regression analysis. The interface includes sections for selecting variables, setting covariates and factors, and viewing results such as model fit measures and coefficients.</description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-interpreting-estimated-model">
+      <title>Interpreting the estimated model</title>
+
+      <p>The most important thing to be able to understand is how to interpret these coefficients. Let's start with <m>\hat{b}_1</m>, the slope. If we remember the definition of the slope, a regression coefficient of <m>\hat{b}_1 = -8.94</m> means that if I increase <m>X_i</m> by 1, then I'm decreasing <m>Y_i</m> by 8.94. That is, each additional hour of sleep that I gain will improve my mood, reducing my grumpiness by 8.94 grumpiness points. What about the intercept? Well, since <m>\hat{b}_0</m> corresponds to "the expected value of <m>Y_i</m> when <m>X_i</m> equals 0", it's pretty straightforward. It implies that if I get zero hours of sleep (<m>X_i = 0</m>) then my grumpiness will go off the scale, to an insane value of (<m>Y_i = 125.96</m>). Best to be avoided, I think.</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-multiple-linear-regression">
+    <title>Multiple linear regression</title>
+
+    <p>The simple linear regression model that we've discussed up to this point assumes that there's a single predictor variable that you're interested in, in this case dani.sleep. In fact, up to this point every statistical tool that we've talked about has assumed that your analysis uses one predictor variable and one outcome variable.</p>
+
+    <p>However, in many (perhaps most) research projects you actually have multiple predictors that you want to examine. If so, it would be nice to be able to extend the linear regression framework to be able to include multiple predictors. Perhaps some kind of <term>multiple regression</term> model would be in order?</p>
+
+    <p>Multiple regression is conceptually very simple. All we do is add more terms to our regression equation. Let's suppose that we've got two variables that we're interested in; perhaps we want to use both dani.sleep and baby.sleep to predict the dani.grump variable.</p>
+
+    <p>As before, we let <m>Y_{i}</m> refer to my grumpiness on the i-th day. But now we have two <m>X</m> variables: the first corresponding to the amount of sleep I got and the second corresponding to the amount of sleep my son got. So we'll let <m>X_{i1}</m> refer to the hours I slept on the i-th day and <m>X_{i2}</m> refers to the hours that the baby slept on that day. If so, then we can write our regression model like this:
+    <me>Y_i=b_0+b_1X_{i1}+b_2X_{i2}+\epsilon_i</me></p>
+
+    <p>As before, <m>\epsilon_i</m> is the residual associated with the i-th observation, <m>\epsilon_i = Y_i - \hat{Y}_i</m>. In this model, we now have three coefficients that need to be estimated: <m>b_0</m> is the intercept, <m>b_1</m> is the coefficient associated with my sleep, and <m>b_2</m> is the coefficient associated with my son's sleep.</p>
+
+    <p>However, although the number of coefficients that need to be estimated has changed, the basic idea of how the estimation works is unchanged: our estimated coefficients <m>\hat{b}_0</m>, <m>\hat{b}_1</m> and <m>\hat{b}_2</m> are those that minimise the sum squared residuals.</p>
+
+    <subsection xml:id="subsec-multiple-regression-jamovi">
+      <title>Doing it in jamovi</title>
+
+      <p>Multiple regression in jamovi is no different to simple regression. All we have to do is add additional variables to the 'Covariates' box in jamovi. For example, if we want to use both dani.sleep and baby.sleep as predictors in our attempt to explain why I'm so grumpy, then move baby.sleep across into the 'Covariates' box alongside dani.sleep.</p>
+
+      <p>By default, jamovi assumes that the model should include an intercept. The coefficients we get this time are shown in <xref ref="tbl-tab12-4"/>.</p>
+
+      <table xml:id="tbl-tab12-4">
+        <title>Adding multiple variables as predictors in a regression</title>
+        <tabular halign="center">
+          <row header="yes">
+            <cell>(Intercept)</cell>
+            <cell>dani.sleep</cell>
+            <cell>baby.sleep</cell>
+          </row>
+          <row>
+            <cell>125.97</cell>
+            <cell>-8.95</cell>
+            <cell>0.01</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>The coefficient associated with dani.sleep is quite large, suggesting that every hour of sleep I lose makes me a lot grumpier. However, the coefficient for baby.sleep is very small, suggesting that it doesn't really matter how much sleep my son gets. What matters as far as my grumpiness goes is how much sleep I get.</p>
+
+      <p>To get a sense of what this multiple regression model looks like, <xref ref="fig-fig12-14"/> shows a 3D plot that plots all three variables, along with the regression model itself.</p>
+
+      <p>[Additional technical detail<fn>The formula for the general case: The equation that I gave in the main text shows you what a multiple regression model looks like when you include two predictors. Not surprisingly then, if you want more than two predictors all you have to do is add more <m>X</m> terms and more <m>b</m> coefficients. In other words, if you have <m>K</m> predictor variables in the model then the regression equation looks like this: <me>Y_i=b_0+\left(\sum_{k=1}^{K}b_k X_{ik}\right)+\epsilon_i</me></fn>]</p>
+
+      <figure xml:id="fig-fig12-14">
+        <caption>A 3D visualisation of a multiple regression model. There are two predictors in the model, dani.sleep and baby.sleep and the outcome variable is dani.grump. Together, these three variables form a 3D space. Each observation (dot) is a point in this space. In much the same way that a simple linear regression model forms a line in 2D space, this multiple regression model forms a plane in 3D space. When we estimate the regression coefficients what we're trying to do is find a plane that is as close to all the blue dots as possible</caption>
+        <image source="images/fig-fig12-14-1.png" width="90%">
+          <description>A 3D scatter plot shows a correlation between 'baby.sleep' (x-axis), 'dan.sleep' (y-axis), and 'dan.grump' (z-axis) with multiple data points marked by blue dots. A grid plane intersects the data points, visualizing the relationship among the variables.</description>
+        </image>
+      </figure>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-quantifying-fit">
+    <title>Quantifying the fit of the regression model</title>
+
+    <p>So we now know how to estimate the coefficients of a linear regression model. The problem is, we don't yet know if this regression model is any good. For example, the regression model claims that every hour of sleep will improve my mood by quite a lot, but it might just be rubbish.</p>
+
+    <p>Remember, the regression model only produces a prediction <m>\hat{Y}_i</m> about what my mood is like, but my actual mood is <m>Y_i</m>. If these two are very close, then the regression model has done a good job. If they are very different, then it has done a bad job.</p>
+
+    <subsection xml:id="subsec-r-squared">
+      <title>The <m>R^2</m> value</title>
+
+      <p>Once again, let's wrap a little bit of mathematics around this. Firstly, we've got the sum of the squared residuals:
+      <me>SS_{res}=\sum_i (Y_i-\hat{Y}_i)^2</me></p>
+
+      <p>which we would hope to be pretty small. Specifically, what we'd like is for it to be very small in comparison to the total variability in the outcome variable:
+      <me>SS_{tot}=\sum_i(Y_i-\bar{Y})^2</me></p>
+
+      <p>While we're here, let's calculate these values ourselves, not by hand though. Let's use something like Excel or another standard spreadsheet programme. I have done this by opening up the <em>parenthood.csv</em> file in Excel and saving it as parenthood rsquared.xls so that I can work on it.</p>
+
+      <p>The first thing to do is calculate the <m>\hat{Y}</m> values, and for the simple model that uses only a single predictor we would do the following:</p>
+
+      <ol>
+        <li><p>Create a new column called 'Y.pred' using the formula '= 125.97 + (-8.94 <m>\times</m> dani.sleep)'.</p></li>
+        <li><p>Calculate the <m>SS_{resid}</m> by creating a new column called '(Y-Y.pred)^2' using the formula '= (dani.grump - Y.pred)^2'.</p></li>
+        <li><p>Then, at the bottom of this column calculate the sum of these values, i.e. 'sum( ( Y-Y.pred)^2 )'.</p></li>
+        <li><p>At the bottom of the dani.grump column, calculate the mean value for dani.grump (NB Excel uses the word 'AVERAGE' rather than 'mean' in its function).</p></li>
+        <li><p>Then create a new column, called '(Y - mean(Y))^2' using the formula '= (dani.grump - AVERAGE(dani.grump))^2'.</p></li>
+        <li><p>Then, at the bottom of this column calculate the sum of these values, i.e. 'sum( (Y - mean(Y))^2 )'.</p></li>
+        <li><p>Calculate <m>R^2</m> by typing into a blank cell the following: '= 1 - (SS(resid) / SS(tot) )'.</p></li>
+      </ol>
+
+      <p>This gives a value for <m>R^2</m> of '0.8161018'. The <m>R^2</m> value, sometimes called the <term>coefficient of determination</term><fn>And by "sometimes" I mean "almost never". In practice everyone just calls it "R-squared".</fn> has a simple interpretation: it is the proportion of the variance in the outcome variable that can be accounted for by the predictor. So, in this case the fact that we have obtained <m>R^2 = .816</m> means that the predictor (my.sleep) explains <m>81.6\%</m> of the variance in the outcome (my.grump).</p>
+
+      <p>Naturally, you don't actually need to type all these commands into Excel yourself if you want to obtain the <m>R^2</m> value for your regression model. As we'll see later on in the section on running the hypothesis tests in jamovi, all you need to do is specify this as an option in jamovi. However, let's put that to one side for the moment. There's another property of <m>R^2</m> that I want to point out.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-regression-correlation">
+      <title>The relationship between regression and correlation</title>
+
+      <p>At this point we can revisit my earlier claim that regression, in this very simple form that I've discussed so far, is basically the same thing as a correlation. Previously, we used the symbol <m>r</m> to denote a Pearson correlation. Might there be some relationship between the value of the correlation coefficient <m>r</m> and the <m>R^2</m> value from linear regression? Of course there is: the squared correlation <m>r^2</m> is identical to the <m>R^2</m> value for a linear regression with only a single predictor. In other words, running a Pearson correlation is more or less equivalent to running a linear regression model that uses only one predictor variable.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-adjusted-r-squared">
+      <title>The adjusted <m>R^2</m> value</title>
+
+      <p>One final thing to point out before moving on. It's quite common for people to report a slightly different measure of model performance, known as "adjusted <m>R^2</m>". The motivation behind calculating the adjusted <m>R^2</m> value is the observation that adding more predictors into the model will always cause the <m>R^2</m> value to increase (or at least not decrease).</p>
+
+      <p>[Additional technical detail<fn>The adjusted <m>R^2</m> value introduces a slight change to the calculation, as follows. For a regression model with <m>K</m> predictors, fit to a data set containing <m>N</m> observations, the adjusted <m>R^2</m> is: <me>\text{adj.}R^2=1-\left(\frac{SS_{res}}{SS_{tot}} \times \frac{N-1}{N-K-1}\right)</me></fn>]</p>
+
+      <p>This adjustment is an attempt to take the degrees of freedom into account. The big advantage of the adjusted <m>R^2</m> value is that when you add more predictors to the model, the adjusted <m>R^2</m> value will only increase if the new variables improve the model performance more than you'd expect by chance. The big disadvantage is that the adjusted <m>R^2</m> value can't be interpreted in the elegant way that <m>R^2</m> can. <m>R^2</m> has a simple interpretation as the proportion of variance in the outcome variable that is explained by the regression model. To my knowledge, no equivalent interpretation exists for adjusted <m>R^2</m>.</p>
+
+      <p>An obvious question then is whether you should report <m>R^2</m> or adjusted <m>R^2</m>. This is probably a matter of personal preference. If you care more about interpretability, then <m>R^2</m> is better. If you care more about correcting for bias, then adjusted <m>R^2</m> is probably better. Speaking just for myself, I prefer <m>R^2</m>. My feeling is that it's more important to be able to interpret your measure of model performance. Besides, as we'll see in the section on hypothesis tests for regression models, if you're worried that the improvement in <m>R^2</m> that you get by adding a predictor is just due to chance and not because it's a better model, well we've got hypothesis tests for that.</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-hypothesis-tests-regression">
+    <title>Hypothesis tests for regression models</title>
+
+    <p>So far we've talked about what a regression model is, how the coefficients of a regression model are estimated, and how we quantify the performance of the model (the last of these, incidentally, is basically our measure of effect size). The next thing we need to talk about is hypothesis tests. There are two different (but related) kinds of hypothesis tests that we need to talk about: those in which we test whether the regression model as a whole is performing significantly better than a null model, and those in which we test whether a particular regression coefficient is significantly different from zero.</p>
+
+    <subsection xml:id="subsec-testing-model-as-whole">
+      <title>Testing the model as a whole</title>
+
+      <p>Okay, suppose you've estimated your regression model. The first hypothesis test you might try is the null hypothesis that there is no relationship between the predictors and the outcome, and the alternative hypothesis that the data are distributed in exactly the way that the regression model predicts.</p>
+
+      <p>[Additional technical detail<fn>Formally, our "null model" corresponds to the fairly trivial "regression" model in which we include 0 predictors and only include the intercept term <m>b_0</m>: <m>H_0:Y_0=b_0+\epsilon_i</m>. If our regression model has <m>K</m> predictors, the "alternative model" is described using the usual formula for a multiple regression model: <me>H_1:Y_i=b_0+\left(\sum_{k=1}^K b_k X_{ik}\right)+\epsilon_i</me> How can we test these two hypotheses against each other? The trick is to understand that it's possible to divide up the total variance <m>SS_{tot}</m> into the sum of the residual variance <m>SS_{res}</m> and the regression model variance <m>SS_{mod}</m>. I'll skip over the technicalities, since we'll get to that later when we look at ANOVA. But just note that <m>SS_{mod}=SS_{tot}-SS_{res}</m>. And we can convert the sums of squares into mean squares by dividing by the degrees of freedom: <me>MS_{mod}=\frac{SS_{mod}}{df_{mod}}</me> <me>MS_{res}=\frac{SS_{res}}{df_{res}}</me> So, how many degrees of freedom do we have? As you might expect the df associated with the model is closely tied to the number of predictors that we've included. In fact, it turns out that <m>df_{mod} = K</m>. For the residuals the total degrees of freedom is <m>df_{res} = N - K - 1</m>. Now that we've got our mean square values we can calculate an <m>F</m>-statistic like this: <me>F=\frac{MS_{mod}}{MS_{res}}</me> and the degrees of freedom associated with this are <m>K</m> and <m>N - K - 1</m>.</fn>]</p>
+
+      <p>We'll see much more of the <m>F</m>-statistic later, but for now just know that we can interpret large <m>F</m>-values as indicating that the null hypothesis is performing poorly in comparison to the alternative hypothesis. In a moment I'll show you how to do the test in jamovi the easy way, but first let's have a look at the tests for the individual regression coefficients.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-tests-individual-coefficients">
+      <title>Tests for individual coefficients</title>
+
+      <p>The <m>F</m>-test that we've just introduced is useful for checking that the model as a whole is performing better than chance. If your regression model doesn't produce a significant result for the <m>F</m>-test then you probably don't have a very good regression model (or, quite possibly, you don't have very good data). However, while failing this test is a pretty strong indicator that the model has problems, passing the test (i.e., rejecting the null) doesn't imply that the model is good! Why is that, you might be wondering? The answer to that can be found by looking at the coefficients for the multiple linear regression model we have already looked at (<xref ref="tbl-tab12-4"/>).</p>
+
+      <p>I can't help but notice that the estimated regression coefficient for the baby.sleep variable is tiny (<m>0.01</m>), relative to the value that we get for dani.sleep (<m>-8.95</m>). Given that these two variables are absolutely on the same scale (they're both measured in "hours slept"), I find this illuminating. In fact, I'm beginning to suspect that it's really only the amount of sleep that I get that matters in order to predict my grumpiness. We can re-use a hypothesis test that we discussed earlier, the <m>t</m>-test. The test that we're interested in has a null hypothesis that the true regression coefficient is zero (<m>b = 0</m>), which is to be tested against the alternative hypothesis that it isn't (<m>b \neq 0</m>). That is:
+      <md>
+        <mrow>H_0 \amp: b=0</mrow>
+        <mrow>H_1 \amp: b \neq 0</mrow>
+      </md></p>
+
+      <p>How can we test this? Well, if the central limit theorem is kind to us we might be able to guess that the sampling distribution of <m>\hat{b}</m>, the estimated regression coefficient, is a normal distribution with mean centred on <m>b</m>. What that would mean is that if the null hypothesis were true, then the sampling distribution of <m>\hat{b}</m> has mean zero and unknown standard deviation. Assuming that we can come up with a good estimate for the standard error of the regression coefficient, <m>se(\hat{b})</m>, then we're in luck. That's exactly the situation for which we introduced the one-sample <m>t</m>-test back in the chapter on comparing two means. So let's define a <m>t</m>-statistic like this:
+      <me>t=\frac{\hat{b}}{SE(\hat{b})}</me></p>
+
+      <p>I'll skip over the reasons why, but our degrees of freedom in this case are <m>df = N - K - 1</m>. Irritatingly, the estimate of the standard error of the regression coefficient, <m>se(\hat{b})</m>, is not as easy to calculate as the standard error of the mean that we used for the simpler <m>t</m>-tests. In fact, the formula is somewhat ugly, and not terribly helpful to look at.<fn>For advanced readers only. The vector of residuals is <m>\epsilon=y - X\hat{b}</m>. For K predictors plus the intercept, the estimated residual variance is <m>\hat{\sigma}^2 = \frac{\epsilon^{'}\epsilon}{(N - K - 1)}</m>. The estimated covariance matrix of the coefficients is <m>\hat{\sigma}^{2}(X^{'}X)^{-1}</m>, the main diagonal of which is <m>se(\hat{b})</m>, our estimated standard errors.</fn> For our purposes it's sufficient to point out that the standard error of the estimated regression coefficient depends on both the predictor and outcome variables, and it is somewhat sensitive to violations of the homogeneity of variance assumption (discussed shortly).</p>
+
+      <p>In any case, this <m>t</m>-statistic can be interpreted in the same way as the <m>t</m>-statistics that we discussed previously. Assuming that you have a two-sided alternative (i.e., you don't really care if <m>b > 0</m> or <m>b &lt; 0</m>), then it's the extreme values of t (i.e., a lot less than zero or a lot greater than zero) that suggest that you should reject the null hypothesis.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-hypothesis-tests-jamovi">
+      <title>Running the hypothesis tests in jamovi</title>
+
+      <p>To compute all of the statistics that we have talked about so far, all you need to do is make sure the relevant options are checked in jamovi and then run the regression. If we do that, as in <xref ref="fig-fig12-15"/>, we get a whole bunch of useful output.</p>
+
+      <figure xml:id="fig-fig12-15">
+        <caption>A jamovi screenshot showing a multiple linear regression analysis, with some useful options checked</caption>
+        <image source="images/fig12-15.png" width="90%">
+          <description>A jamovi screenshot showing Linear Regression analysis results. The interface includes options for configuring the model, viewing the model's fit measures such as Adjusted R² and AIC, and examining model coefficients.</description>
+        </image>
+      </figure>
+
+      <p>The 'Model Coefficients' at the bottom of the jamovi analysis results shown in <xref ref="fig-fig12-15"/> provides the coefficients of the regression model. Each row in this table refers to one of the coefficients in the regression model. The first row is the intercept term, and the later ones look at each of the predictors. The columns give you all of the relevant information. The first column is the actual estimate of <m>b</m> (e.g., <m>125.97</m> for the intercept, and <m>-8.95</m> for the dani.sleep predictor). The second column is the standard error estimate <m>\hat{\sigma}_b</m>. The third and fourth columns provide the lower and upper values for the 95% confidence interval around the <m>b</m> estimate (more on this later). The fifth column gives you the <m>t</m>-statistic, and it's worth noticing that in this table <m>t=\frac{\hat{b}}{se({\hat{b}})}</m> every time. Finally, the last column gives you the actual <m>p</m>-value for each of these tests.<fn>Note that, although jamovi has done multiple tests here, it hasn't done a Bonferroni correction or anything. These are standard one-sample <m>t</m>-tests with a two-sided alternative. If you want to make corrections for multiple tests, you need to do that yourself.</fn></p>
+
+      <p>The only thing that the coefficients table itself doesn't list is the degrees of freedom used in the <m>t</m>-test, which is always <m>N - K - 1</m> and is listed in the table at the top of the output, labelled 'Model Fit Measures'. We can see from this table that the model performs significantly better than you'd expect by chance (<m>F(2,97) = 215.24, p &lt; .001</m>), which isn't all that surprising: the <m>R^2 = .81</m> value indicates that the regression model accounts for <m>81\%</m> of the variability in the outcome measure (and <m>82\%</m> for the adjusted <m>R^2</m>).</p>
+
+      <p>However, when we look back up at the <m>t</m>-tests for each of the individual coefficients, we have pretty strong evidence that the baby.sleep variable has no significant effect. All the work in this model is being done by the dani.sleep variable. Taken together, these results suggest that this regression model is actually the wrong model for the data. You'd probably be better off dropping the baby.sleep predictor entirely. In other words, the simple regression model that we started with is the better model.</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-regarding-regression-coefficients">
+    <title>Regarding regression coefficients</title>
+
+    <p>Before moving on to discuss the assumptions underlying linear regression and what you can do to check if they're being met, there's two more topics I want to briefly discuss, both of which relate to the regression coefficients. The first thing to talk about is calculating confidence intervals for the coefficients. After that, I'll discuss the somewhat murky question of how to determine which predictor is most important.</p>
+
+    <subsection xml:id="subsec-confidence-intervals-coefficients">
+      <title>Confidence intervals for the coefficients</title>
+
+      <p>Like any population parameter, the regression coefficients <m>b</m> cannot be estimated with complete precision from a sample of data; that's part of why we need hypothesis tests. Given this, it's quite useful to be able to report confidence intervals that capture our uncertainty about the true value of <m>b</m>. This is especially useful when the research question focuses heavily on an attempt to find out how strongly variable <m>X</m> is related to variable <m>Y</m>, since in those situations the interest is primarily in the regression weight <m>b</m>.</p>
+
+      <p>[Additional technical detail<fn>Fortunately, confidence intervals for the regression weights can be constructed in the usual fashion <me>CI(b)=\hat{b} \pm (t_{crit} \times SE(\hat{b}))</me> where <m>se(\hat{b})</m> is the standard error of the regression coefficient, and <m>t_{crit}</m> is the relevant critical value of the appropriate <m>t</m>-distribution. For instance, if it's a 95% confidence interval that we want, then the critical value is the <m>97.5</m>th quantile of a <m>t</m>-distribution with <m>N - K - 1</m> degrees of freedom. In other words, this is basically the same approach to calculating confidence intervals that we've used throughout.</fn>]</p>
+
+      <p>In jamovi we had already specified the '95% Confidence interval' as shown in <xref ref="fig-fig12-15"/>, although we could easily have chosen another value, say a '99% Confidence interval' if that is what we decided on.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-standardised-regression-coefficients">
+      <title>Calculating standardised regression coefficients</title>
+
+      <p>One more thing that you might want to do is to calculate "standardised" regression coefficients, often denoted <m>\beta</m>. The rationale behind standardised coefficients goes like this. In a lot of situations, your variables are on fundamentally different scales. Suppose, for example, my regression model aims to predict people's <m>IQ</m> scores using their educational attainment (number of years of education) and their income as predictors. Obviously, educational attainment and income are not on the same scales. The number of years of schooling might only vary by 10s of years, whereas income can vary by 10,000s of dollars (or more). The units of measurement have a big influence on the regression coefficients. The <m>b</m> coefficients only make sense when interpreted in light of the units, both of the predictor variables and the outcome variable. This makes it very difficult to compare the coefficients of different predictors. Yet there are situations where you really do want to make comparisons between different coefficients. Specifically, you might want some kind of standard measure of which predictors have the strongest relationship to the outcome. This is what <term>standardised coefficients</term> aim to do.</p>
+
+      <p>The basic idea is quite simple; the standardised coefficients are the coefficients that you would have obtained if you'd converted all the variables to <em>z</em>-scores before running the regression.<fn>Strictly, you standardise all the <em>regressors</em>. That is, every "thing" that has a regression coefficient associated with it in the model. For the regression models that I've talked about so far, each predictor variable maps onto exactly one regressor, and vice versa. However, that's not actually true in general. But, for now we don't need to care too much about this distinction.</fn> The idea here is that, by converting all the predictors to <em>z</em>-scores, they all go into the regression on the same scale, thereby removing the problem of having variables on different scales. Regardless of what the original variables were, a <m>\beta</m> value of 1 means that an increase in the predictor of 1 standard deviation will produce a corresponding 1 standard deviation increase in the outcome variable. Therefore, if variable <m>A</m> has a larger absolute value of <m>\beta</m> than variable <m>B</m>, it is deemed to have a stronger relationship with the outcome. Or at least that's the idea. It's worth being a little cautious here, since this does rely very heavily on the assumption that "a 1 standard deviation change" is fundamentally the same kind of thing for all variables. It's not always obvious that this is true.</p>
+
+      <p>[Additional technical detail<fn>Leaving aside the interpretation issues, let's look at how it's calculated. What you could do is standardise all the variables yourself and then run a regression, but there's a much simpler way to do it. As it turns out, the <m>\beta</m> coefficient for a predictor <m>X</m> and outcome <m>Y</m> has a very simple formula, namely <me>\beta_X=b_X \times \frac{\sigma_X}{\sigma_Y}</me> where <m>\sigma_X</m> is the standard deviation of the predictor, and <m>\sigma_Y</m> is the standard deviation of the outcome variable <m>Y</m>. This makes matters a lot simpler.</fn>]</p>
+
+      <p>To make things even simpler, jamovi has an option that computes the <m>\beta</m> coefficients for you using the 'Standardized estimate' checkbox in the 'Model Coefficients' options, see results in <xref ref="fig-fig12-16"/>.</p>
+
+      <figure xml:id="fig-fig12-16">
+        <caption>Standardised coefficients, with 95% confidence intervals, for multiple linear regression</caption>
+        <image source="images/fig12-16.png" width="90%">
+          <description>A jamovi screenshot showing a Linear Regression analysis. The interface includes sections for variables, model fit measures, model coefficients, omnibus test, and references.</description>
+        </image>
+      </figure>
+
+      <p>These results clearly show that the dani.sleep variable has a much stronger effect than the baby.sleep variable. However, this is a perfect example of a situation where it would probably make sense to use the original coefficients <m>b</m> rather than the standardised coefficients <m>\beta</m>. After all, my sleep and the baby's sleep are already on the same scale: number of hours slept. Why complicate matters by converting these to <em>z</em>-scores?</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-assumptions-regression">
+    <title>Assumptions of regression</title>
+
+    <p>The linear regression model that I've been discussing relies on several assumptions. In the next section we'll talk a lot more about how to check that these assumptions are being met, but first let's have a look at each of them.</p>
+
+    <ul>
+      <li><p><term>L</term>inearity. A pretty fundamental assumption of the linear regression model is that the relationship between <m>X</m> and <m>Y</m> actually is linear! Regardless of whether it's a simple regression or a multiple regression, we assume that the relationships involved are linear.</p></li>
+      <li><p><term>I</term>ndependence: residuals are independent of each other. This is really just a "catch all" assumption, to the effect that "there's nothing else funny going on in the residuals". If there is something weird (e.g., the residuals all depend heavily on some other unmeasured variable) going on, it might screw things up. Independence isn't something that you can check directly and specifically with diagnostic tools, but if your regression diagnostics are messed up then think carefully about the independence of your observations and residuals.</p></li>
+      <li><p><term>N</term>ormality. Like many of the models in statistics, basic simple or multiple linear regression relies on an assumption of normality. Specifically, it assumes that the residuals are normally distributed. It's actually okay if the predictors <m>X</m> and the outcome <m>Y</m> variables are non-normal, so long as the residuals <m>\epsilon</m> are normal.</p></li>
+      <li><p><term>E</term>quality (or "homogeneity") of variance. Strictly speaking, the regression model assumes that each residual <m>\epsilon_i</m> is generated from a normal distribution with mean 0, and (more importantly for the current purposes) with a standard deviation <m>\sigma</m> that is the same for every single residual. In practice, it's impossible to test the assumption that every residual is identically distributed. Instead, what we care about is that the standard deviation of the residual is the same for all values of <m>\hat{Y}</m>, and (if we're being especially diligent) all values of every predictor <m>X</m> in the model.</p></li>
+    </ul>
+
+    <p>So, we have four main assumptions for linear regression (that neatly form the acronym <term>LINE</term>). And there are also a couple of other things we should also check for:</p>
+
+    <ul>
+      <li><p>Uncorrelated predictors. The idea here is that, in a multiple regression model, you don't want your predictors to be too strongly correlated with each other. This isn't "technically" an assumption of the regression model, but in practice it's required. Predictors that are too strongly correlated with each other (referred to as "collinearity") can cause problems when evaluating the model.</p></li>
+      <li><p>No "bad" outliers. Again, not actually a technical assumption of the model (or rather, it's sort of implied by all the others), but there is an implicit assumption that your regression model isn't being too strongly influenced by one or two anomalous data points because this raises questions about the adequacy of the model and the trustworthiness of the data in some cases.</p></li>
+    </ul>
+  </section>
+
+  <section xml:id="sec-model-checking">
+    <title>Model checking</title>
+
+    <p>The main focus of this section is <term>regression diagnostics</term>, a term that refers to the art of checking that the assumptions of your regression model have been met, figuring out how to fix the model if the assumptions are violated, and generally to check that nothing "funny" is going on.</p>
+
+    <p>I refer to this as the "art" of model checking with good reason. It's not easy, and while there are a lot of easily available tools that you can use to diagnose and maybe even cure the problems that affect your model (if there are any, that is!), you really do need to exercise a certain amount of judgement when doing this.</p>
+
+    <p>In this section I describe several different things you can do to check that your regression model is doing what it's supposed to. It doesn't cover the full space of things you could do, but it's still much more detailed than what is often done in practice -- unfortunately! But it's important that you get a sense of what tools are at your disposal, so I'll try to introduce a bunch of them here.</p>
+
+    <subsection xml:id="subsec-three-kinds-of-residuals">
+      <title>Three kinds of residuals</title>
+
+      <p>The majority of regression diagnostics revolve around looking at the residuals, and there are several different kinds of residual that we might consider. In particular, the following three kinds of residuals are referred to in this section: "ordinary residuals", "standardised residuals", and "Studentised residuals".</p>
+
+      <p>There is a fourth kind that you'll see referred to in some of the Figures, and that's the "Pearson residual". However, for the models that we're talking about in this chapter the Pearson residual is identical to the ordinary residual.</p>
+
+      <p>The first and simplest kind of residuals that we care about are <term>ordinary residuals</term>. These are the actual raw residuals that I've been talking about throughout this chapter so far. The ordinary residual is just the difference between the predicted value <m>\hat{Y}_i</m> and the observed value <m>Y_i</m>. I've been using the notation <m>\epsilon_i</m> to refer to the i-th ordinary residual and so, with this in mind, we have the very simple equation:
+      <me>\epsilon_i=Y_i-\hat{Y_i}</me></p>
+
+      <p>This is of course what we saw earlier, and unless I specifically refer to some other kind of residual, this is the one I'm talking about. So there's nothing new here. I just wanted to repeat myself. One drawback to using ordinary residuals is that they're always on a different scale, depending on what the outcome variable is and how good the regression model is. That is, unless you've decided to run a regression model without an intercept term, the ordinary residuals will have mean 0 but the variance is different for every regression.</p>
+
+      <p>In a lot of contexts, especially where you're only interested in the pattern of the residuals and not their actual values, it's convenient to estimate the <term>standardised residuals</term>, which are normalised in such a way as to have a standard deviation of 1.</p>
+
+      <p>[Additional technical detail<fn>The way we calculate these is to divide the ordinary residual by an estimate of the (population) standard deviation of these residuals. For technical reasons, the formula for this is: <me>\epsilon_i^{'}=\frac{\epsilon_i}{\hat{\sigma}\sqrt{1-h_i}}</me> where <m>\hat{\sigma}</m> in this context is the estimated population standard deviation of the ordinary residuals, and <m>h_i</m> is the "hat value" of the <m>i</m>th observation. I haven't explained hat values to you yet, so this won't make a lot of sense. For now, it's enough to interpret the standardised residuals as if we'd converted the ordinary residuals to <em>z</em>-scores.</fn>]</p>
+
+      <p>The third kind of residuals are <term>Studentised residuals</term> (also called "jackknifed residuals") and they're even fancier than standardised residuals. Again, the idea is to take the ordinary residual and divide it by some quantity in order to estimate some standardised notion of the residual.<fn>The formula for doing the calculations this time is subtly different <me>\epsilon_i^*=\frac{\epsilon_i}{\hat{\sigma}_{(-i)}\sqrt{1-h_i}}</me> Notice that our estimate of the standard deviation here is written <m>\hat{\sigma}_{(-i)}</m>. What this corresponds to is the estimate of the residual standard deviation that you would have obtained if you just deleted the <m>i</m>th observation from the data set. This standard deviation estimate is actually given by the following equation: <m>\hat{\sigma}_{(-i)}= \hat{\sigma}\sqrt{\frac{N-K-1-{\epsilon_i^{'}}^2}{N-K-2}}</m>.</fn></p>
+
+      <p>Before moving on, I should point out that you don't often need to obtain these residuals yourself, even though they are at the heart of almost all regression diagnostics. Most of the time the various options that provide the diagnostics, or assumption checks, will take care of these calculations for you.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-checking-linearity">
+      <title>Checking the linearity of the relationship</title>
+
+      <p>We should check for the linearity of the relationships between the predictors and the outcomes. There's a few different things that you might want to do in order to check this. Firstly, it never hurts to just plot the relationship between the predicted values <m>\hat{Y}_i</m> and the observed values <m>Y_i</m> for the outcome variable, as illustrated in <xref ref="fig-fig12-17"/>.</p>
+
+      <figure xml:id="fig-fig12-17">
+        <caption>jamovi plot of the predicted values against the observed values of the outcome variable. A straight(-ish) line is what we are hoping to see here. This looks pretty good, suggesting that there is nothing grossly wrong</caption>
+        <image source="images/fig12-17.png" width="60%">
+          <description>A scatter plot with the x-axis labeled "My grumpiness" and the y-axis labeled "Predicted values." The plot has numerous scattered data points. A trend line shows a positive correlation.</description>
+        </image>
+      </figure>
+
+      <p>To draw this in jamovi we saved the predicted values to the data set, and then drew a scatterplot of the observed against the predicted (fitted) values. This gives you a kind of "big picture view" -- if this plot looks approximately linear, then we're probably not doing too badly (though that's not to say that there aren't problems). However, if you can see big departures from linearity here, then it strongly suggests that you need to make some changes.</p>
+
+      <p>In any case, in order to get a more detailed picture it's often more informative to look at the relationship between the predicted values and the residuals themselves. Again, in jamovi you can save the residuals to the data set and then draw a scatterplot of the predicted values against the residual values, as in <xref ref="fig-fig12-18"/>. As you can see, not only does it draw the scatterplot showing the predicted value against the residuals, you can also plot a line through the data that shows the relationship between the two. Ideally, this should be a straight, perfectly horizontal line. In practice, we're looking for a reasonably straight or flat line. This is a matter of judgement.</p>
+
+      <figure xml:id="fig-fig12-18">
+        <caption>jamovi plot of the predicted values against the residuals, with a line showing the relationship between the two. If this is horizontal and straight(-ish), then we can feel reasonably confident that the "average residual" for all "predicted values" is more or less the same.</caption>
+        <image source="images/fig12-18.png" width="70%">
+          <description>A scatter plot shows residuals versus predicted values with a non-linear trend. Residuals range from -10 to 10, and predicted values range from 45 to 85. Data points are scattered around a fitted curve.</description>
+        </image>
+      </figure>
+
+      <p>More advanced versions of the same plot are produced by checking 'Residuals plots' in the regression analysis 'Assumption checks' options in jamovi. These are useful for checking linearity, normality and equality of variance assumptions, and we look at these in more detail in the next section. This option not only draws plots comparing the predicted values to the residuals, it does so for each individual predictor.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-checking-normality-residuals">
+      <title>Checking the normality of the residuals</title>
+
+      <p>Like many of the statistical tools we've discussed in this book, regression models rely on a normality assumption. In this case, we assume that the residuals are normally distributed. The first thing we can do is draw a QQ-plot via the 'Assumption Checks' -- 'Assumption Checks' -- 'Q-Q plot of residuals' option. The output is shown in <xref ref="fig-fig12-19"/>, showing the standardised residuals plotted as a function of their theoretical quantiles according to the regression model.</p>
+
+      <figure xml:id="fig-fig12-19">
+        <caption>Plot of the theoretical quantiles according to the model, against the quantiles of the standardised residuals, produced in jamovi</caption>
+        <image source="images/fig12-19.png" width="80%">
+          <description>Q-Q plot titled "Assumption Checks" showing standardized residuals along the y-axis and theoretical quantiles along the x-axis. Points closely follow the 45-degree reference line, indicating that the residuals follow a normal distribution.</description>
+        </image>
+      </figure>
+
+      <p>Another thing we should check is the relationship between the predicted (fitted) values and the residuals themselves. We can get jamovi to do this using the 'Residuals Plots' option, which provides a scatterplot for each predictor variable, the outcome variable, and the predicted values against residuals, see <xref ref="fig-fig12-20"/>. In these plots we are looking for a fairly uniform distribution of dots, with no clear bunching or patterning of the dots. Looking at these plots, there is nothing particularly worrying as the dots are fairly evenly spread across the whole plot. There may be a little bit of non-uniformity in plot (b), but it is not a strong deviation and probably not worth worrying about.</p>
+
+      <figure xml:id="fig-fig12-20">
+        <caption>Residuals plots produced in jamovi</caption>
+        <sidebyside widths="48% 48%">
+          <image source="images/fig12-20a.png">
+            <description>Scatter plot showing residuals versus fitted values. Data points are scattered across the plot, with residuals ranging from approximately -10 to 10 and fitted values between 50 and 80.</description>
+          </image>
+          <image source="images/fig12-20b.png">
+            <description>A scatter plot with "My grumpiness" on the x-axis and "Residuals" on the y-axis. Data points are dispersed, showing a positive correlation.</description>
+          </image>
+        </sidebyside>
+        <sidebyside widths="48% 48%">
+          <image source="images/fig12-20c.png">
+            <description>A scatter plot shows residuals on the vertical axis and baby's sleep (hours) on the horizontal axis. Numerous data points are dispersed across the plot.</description>
+          </image>
+          <image source="images/fig12-20d.png">
+            <description>A scatter plot showing residual values against hours slept. Residuals vary roughly between -10 and 10, with no clear pattern or trend visible.</description>
+          </image>
+        </sidebyside>
+      </figure>
+
+      <p>If we were worried, then in a lot of cases the solution to this problem (and many others) is to transform one or more of the variables. We discussed the basics of variable transformation earlier, but I do want to make special note of one additional possibility: the Box-Cox transform. The Box-Cox function is a fairly simple one and it's very widely used.<fn><m>f(x,\lambda)=\frac{x^{\lambda}-1}{\lambda}</m> for all values of <m>\lambda</m> except <m>\lambda = 0</m>. When <m>\lambda = 0</m> we just take the natural logarithm (i.e., ln(<m>x</m>)).</fn> You can calculate it using the BOXCOX function in the 'Compute' variables screen in jamovi.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-checking-equality-variance">
+      <title>Checking equality of variance</title>
+
+      <p>The regression models that we've talked about all make an equality (i.e. homogeneity) of variance assumption: the variance of the residuals is assumed to be constant. To plot this in jamovi first we need to calculate the square root of the (absolute) size of the residual<fn>In jamovi, you can compute this new variable using the formula 'SQRT(ABS(Residuals))'.</fn> and then plot this against the predicted values, as in <xref ref="fig-fig12-21"/>. Note that this plot actually uses the standardised residuals rather than the raw ones, but it's immaterial from our point of view. What we're looking to see here is a straight, horizontal line running through the middle of the plot.<fn>It's a bit beyond the scope of this chapter to talk about how to deal with violations of homogeneity of variance, but I'll give you a quick sense of what you need to consider. The <em>main</em> thing to worry about, if homogeneity of variance is violated, is that the standard error estimates associated with the regression coefficients are no longer entirely reliable, and so your <m>t</m>-tests for the coefficients aren't quite right either. A simple fix to the problem is to make use of a "heteroscedasticity corrected covariance matrix" when estimating the standard errors. These are often called <term>sandwich estimators</term>, and these can be estimated in R (but not directly in jamovi).</fn></p>
+
+      <figure xml:id="fig-fig12-21">
+        <caption>jamovi plot of the predicted values (model predictions) against the square root of the absolute standardised residuals. This plot is used to diagnose violations of homogeneity of variance. If the variance is really constant, then the line through the middle should be horizontal and flat(-ish).</caption>
+        <image source="images/fig12-21.png" width="80%">
+          <description>Scatter plot showing the relationship between predicted values (x-axis) and SQR residuals (y-axis). The plot includes scattered data points and a smoothed trend line. Predicted values range from 45 to 85, SQR Residuals from 0.5 to 3.5.</description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-checking-collinearity">
+      <title>Checking for collinearity</title>
+
+      <p>Another regression diagnostic is provided by <term>variance inflation factors</term> (VIFs), which are useful for determining whether or not the predictors in your regression model are too highly correlated with each other. There is a variance inflation factor associated with each predictor <m>X_k</m> in the model.<fn>The formula for the <m>k</m>-th VIF is: <m>VIF_k=\frac{1}{1-R^2_{(-k)}}</m> where <m>R^2_{(-k)}</m> refers to R-squared value you would get if you ran a regression using <m>X_k</m> as the outcome variable, and all the other <m>X</m> variables as the predictors. The idea here is that <m>R^2_{(-k)}</m> is a very good measure of the extent to which <m>X_k</m> is correlated with all the other variables in the model. Better yet, the square root of the VIF is pretty interpretable: it tells you how much wider the confidence interval for the corresponding coefficient <m>b_k</m> is, relative to what you would have expected if the predictors are all nice and uncorrelated with one another.</fn></p>
+
+      <p>If you've only got two predictors, the VIF values are always going to be the same, as we can see if we click on the 'Collinearity' checkbox in the 'Regression' -- 'Assumptions' options in jamovi. For both dani.sleep and baby.sleep the VIF is <m>1.65</m>. And since the square root of <m>1.65</m> is <m>1.28</m>, we see that the correlation between our two predictors isn't causing much of a problem.</p>
+
+      <p>To give a sense of how we could end up with a model that has bigger collinearity problems, suppose I were to run a much less interesting regression model, in which I tried to predict the day on which the data were collected, as a function of all the other variables in the data set. To see why this would be a bit of a problem, let's have a look at the correlation matrix for all four variables (<xref ref="fig-fig12-22"/>).</p>
+
+      <figure xml:id="fig-fig12-22">
+        <caption>Correlation matrix in jamovi for all four variables</caption>
+        <image source="images/fig12-22.png" width="90%">
+          <description>A correlation matrix table showing the relationships between variables: "My grumpiness," "Baby's sleep (hours)," "My sleep (hours)," and "day." Notable correlations include -0.57 between "My grumpiness" and "Baby's sleep" and 0.63 between "My sleep" and "Baby's sleep".</description>
+        </image>
+      </figure>
+
+      <p>We have some fairly large correlations between some of our predictor variables! When we run the regression model and look at the VIF values, we see that the collinearity is causing a lot of uncertainty about the coefficients. First, run the regression, as in <xref ref="fig-fig12-23"/> and you can see from the VIF values that, yep, that's some mighty fine collinearity there.</p>
+
+      <figure xml:id="fig-fig12-23">
+        <caption>Collinearity statistics for multiple regression, produced in jamovi</caption>
+        <image source="images/fig12-23.png" width="90%">
+          <description>A jamovi screenshot displaying a linear regression analysis. The analysis includes model fit measures, coefficients, and assumption checks.</description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-outliers-anomalous-data">
+      <title>Outliers and anomalous data</title>
+
+      <p>One danger that you can run into with linear regression models is that your analysis might be disproportionately sensitive to a smallish number of "unusual" or "anomalous" observations. In the context of linear regression, there are three conceptually distinct ways in which an observation might be called "anomalous". All three are interesting, but they have rather different implications for your analysis.</p>
+
+      <p>The first kind of unusual observation is an <term>outlier</term>. The definition of an outlier (in this context) is an observation that is very different from what the regression model predicts. An example is shown in <xref ref="fig-fig12-24"/>, the outlier has an unusual value on the outcome (y-axis location), but not the predictor (x-axis location) and lies a long way from the regression line. In practice, we operationalise this concept by saying that an outlier is an observation that has a very large residual, <m>\epsilon_i^*</m>. Also see the lower left plot of Anscombe's quartet, <xref ref="fig-fig12-6"/>.</p>
+
+      <figure xml:id="fig-fig12-24">
+        <caption>An illustration of outliers. The solid line shows the regression line with the anomalous outlier observation included. The dashed line plots the regression line estimated without the anomalous outlier observation included. The vertical line from the outlier point to the dashed regression line illustrates the large residual error for the outlier</caption>
+        <image source="images/fig-fig12-24-1.png" width="80%">
+          <description>A scatter plot with blue dots representing data points, an outlier marked near the top-left region. A solid line shows the regression line, while a dashed line shows the ideal line. A vertical line from an outlier point to the dashed regression line illustrates the large residual error for the outlier.</description>
+        </image>
+      </figure>
+
+      <p>Outliers are interesting: a big outlier might correspond to junk data, e.g., the variables might have been recorded incorrectly in the data set, or some other defect may be detectable. Note that you shouldn't throw an observation away just because it's an outlier. But the fact that it's an outlier is often a cue to look more closely at that case and try to find out why it's so different.</p>
+
+      <p>The second way in which an observation can be unusual is if it has high <term>leverage</term>, which happens when the observation is very different from all the other observations. This doesn't necessarily have to correspond to a large residual. If the observation happens to be unusual on all variables in precisely the same way, it can actually lie very close to the regression line. An example of this is shown in <xref ref="fig-fig12-25"/>. The leverage of an observation is operationalised in terms of its hat value, usually written <m>h_i</m>.<fn>The "hat matrix" is defined to be that matrix <m>H</m> that converts the vector of observed values <m>y</m> into a vector of predicted values <m>\hat{y}</m>, such that <m>\hat{y} = Hy</m>. The name comes from the fact that this is the matrix that "puts a hat on y". The hat value of the <m>i</m>-th observation is the <m>i</m>-th diagonal element of this matrix. And here's how it's calculated: <m>H = X(X^{'}X)^{-1}X^{'}</m>.</fn> The formula for the hat value is rather complicated but its interpretation is not: <m>h_i</m> is a measure of the extent to which the i-th observation is "in control" of where the regression line ends up going.</p>
+
+      <figure xml:id="fig-fig12-25">
+        <caption>An illustration of high leverage points. The anomalous observation in this case is unusual both in terms of the predictor (x-axis) and the outcome (y-axis), but this unusualness is highly consistent with the pattern of correlations that exists among the other observations. The observation falls very close to the regression line and does not distort it by very much</caption>
+        <image source="images/fig-fig12-25-1.png" width="80%">
+          <description>A scatter plot with blue dots showing the relationship between a predictor and an outcome. A solid black regression line trends upwards, with one point labeled "High leverage" noticeably distant from the other points. A dashed line represents an alternate linear fit.</description>
+        </image>
+      </figure>
+
+      <p>In general, if an observation lies far away from the other ones in terms of the predictor variables, it will have a large hat value (as a rough guide, high leverage is when the hat value is more than 2-3 times the average; and note that the sum of the hat values is constrained to be equal to <m>K + 1</m>). High leverage points are also worth looking at in more detail, but they're much less likely to be a cause for concern unless they are also outliers.</p>
+
+      <p>This brings us to our third measure of unusualness, the <term>influence</term> of an observation. A high influence observation is an outlier that has high leverage. That is, it is an observation that is very different to all the other ones in some respect, and also lies a long way from the regression line. This is illustrated in <xref ref="fig-fig12-26"/>. Notice the contrast to the previous two figures. Outliers don't move the regression line much and neither do high leverage points. But something that is both an outlier and has high leverage, well that has a big effect on the regression line. That's why we call these points high influence, and it's why they're the biggest worry. We operationalise influence in terms of a measure known as <term>Cook's distance</term>.<fn><m>D_i=\frac{{\epsilon_i^*}^2}{K+1} \times \frac{h_i}{1-h_i}</m> Notice that this is a multiplication of something that measures the outlier-ness of the observation (the bit on the left), and something that measures the leverage of the observation (the bit on the right).</fn></p>
+
+      <figure xml:id="fig-fig12-26">
+        <caption>An illustration of high influence points. In this case, the anomalous observation is highly unusual on the predictor variable (x-axis), and falls a long way from the regression line. As a consequence, the regression line is highly distorted, even though (in this case) the anomalous observation is entirely typical in terms of the outcome variable (y-axis)</caption>
+        <image source="images/fig-fig12-26-1.png" width="80%">
+          <description>Scatter plot showing a linear relationship between Predictor (x-axis) and Outcome (y-axis). Points are scattered around a solid black regression line. One outlier, labeled "High influence," has a vertical distance to the regression line connected by a dashed line.</description>
+        </image>
+      </figure>
+
+      <p>In order to have a large Cook's distance an observation must be a fairly substantial outlier and have high leverage. As a rough guide, Cook's distance greater than 1 is often considered large (that's what I typically use as a quick and dirty rule).</p>
+
+      <p>In jamovi, information about Cook's distance can be calculated by clicking on the 'Cook's Distance' checkbox in the 'Assumption Checks' -- 'Data Summary' options. When you do this, for the multiple regression model we have been using as an example in this chapter, you get the results as shown in <xref ref="fig-fig12-27"/>.</p>
+
+      <figure xml:id="fig-fig12-27">
+        <caption>jamovi output showing the table for the Cook's distance statistics</caption>
+        <image source="images/fig12-27.png" width="70%">
+          <description>A data summary table is shown with Cook's Distance values. The columns listed are Mean (0.01), Median (0.00), SD (0.02), Min (0.00), and Max (0.11).</description>
+        </image>
+      </figure>
+
+      <p>You can see that, in this example, the mean Cook's distance value is <m>0.01</m>, and the range is from <m>0.00</m> to <m>0.11</m>, so this is some way off the rule of thumb figure mentioned above that a Cook's distance greater than 1 is considered large. An obvious question to ask next is, if you do have large values of Cook's distance what should you do?</p>
+
+      <p>As always, there's no hard and fast rule. Probably the first thing to do is to try running the regression with the outlier with the greatest Cook's distance<fn>In jamovi you can save the Cook's distance values to the data set, then draw a boxplot of the Cook's distance values to identify the specific outliers. Or you could use a more powerful regression program such as the "car" package in R which has more options for advanced regression diagnostic analysis.</fn> excluded and see what happens to the model performance and to the regression coefficients.</p>
+
+      <p>If they really are substantially different, it's time to start digging into your data set and your notes that you no doubt were scribbling as you ran your study. Try to figure out why the point is so different. If you start to become convinced that this one data point is badly distorting your results then you might consider excluding it, but that's less than ideal unless you have a solid explanation for why this particular case is qualitatively different from the others and therefore deserves to be handled separately.</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-model-selection">
+    <title>Model selection</title>
+
+    <p>One fairly major problem that remains is the problem of "model selection". That is, if we have a data set that contains several variables, which ones should we include as predictors, and which ones should we not include? In other words, we have a problem of <term>variable selection</term>. In general, model selection is a complex business but it's made somewhat simpler if we restrict ourselves to the problem of choosing a subset of the variables that ought to be included in the model. Nevertheless, I'm not going to try covering even this reduced topic in a lot of detail. Instead, I'll talk about two broad principles that you need to think about, and then discuss one concrete tool that jamovi provides to help you select a subset of variables to include in your model. First, the two principles:</p>
+
+    <ul>
+      <li><p>It's nice to have an actual substantive basis for your choices. That is, in a lot of situations you the researcher have good reasons to pick out a smallish number of possible regression models that are of theoretical interest. These models will have a sensible interpretation in the context of your field. Never discount the importance of this. Statistics serves the scientific process, not the other way around.</p></li>
+      <li><p>To the extent that your choices rely on statistical inference, there is a trade off between simplicity and goodness of fit. As you add more predictors to the model you make it more complex. Each predictor adds a new free parameter (i.e., a new regression coefficient), and each new parameter increases the model's capacity to "absorb" random variations. So the goodness of fit (e.g., <m>R^2</m>) continues to rise, sometimes trivially or by chance, as you add more predictors no matter what. If you want your model to be able to generalise well to new observations you need to avoid throwing in too many variables.</p></li>
+    </ul>
+
+    <p>This latter principle is often referred to as <term>Ockham's razor</term> and is often summarised in terms of the following pithy saying: do not multiply entities beyond necessity. In this context, it means don't chuck in a bunch of largely irrelevant predictors just to boost your <m>R^2</m>.</p>
+
+    <p>In any case, what we need is an actual mathematical criterion that will implement the qualitative principle behind Ockham's razor in the context of selecting a regression model. As it turns out there are several possibilities. The one that I'll talk about is the <term>Akaike information criterion</term> (AIC) simply because it's available as an option in jamovi.<fn>In the context of a linear regression model (and ignoring terms that don't depend on the model in any way!), the AIC for a model that has <m>K</m> predictor variables plus an intercept is <m>AIC=\frac{SS_{res}}{\hat{\sigma}^2}+2K</m>.</fn></p>
+
+    <p>The smaller the AIC value, the better the model performance. If we ignore the low level details it's fairly obvious what the AIC does. On the left we have a term that increases as the model predictions get worse; on the right we have a term that increases as the model complexity increases. The best model is the one that fits the data well (low residuals, left-hand side) using as few predictors as possible (low K, right-hand side). In short, this is a simple implementation of Ockham's razor.</p>
+
+    <p>AIC can be added to the 'Model Fit Measures' output Table when the 'AIC' checkbox is clicked, and a rather clunky way of assessing different models is seeing if the AIC value is lower if you remove one or more of the predictors in the regression model. This is the only way currently implemented in jamovi, but there are alternatives in other more powerful programmes, such as R. These alternative methods can automate the process of selectively removing (or adding) predictor variables to find the best AIC. Although these methods are not implemented in jamovi, I will mention them briefly below just so you know about them.</p>
+
+    <subsection xml:id="subsec-backward-elimination">
+      <title>Backward elimination</title>
+
+      <p>In backward elimination you start with the complete regression model, including all possible predictors. Then, at each "step" we try all possible ways of removing one of the variables, and whichever of these is best (in terms of lowest AIC value) is accepted. This becomes our new regression model, and we then try all possible deletions from the new model, again choosing the option with lowest AIC. This process continues until we end up with a model that has a lower AIC value than any of the other possible models that you could produce by deleting one of its predictors.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-forward-selection">
+      <title>Forward selection</title>
+
+      <p>As an alternative, you can also try <term>forward selection</term>. This time around we start with the smallest possible model as our start point, and only consider the possible additions to the model. However, there's one complication. You also need to specify what the largest possible model you're willing to entertain is.</p>
+
+      <p>Although backward and forward selection can lead to the same conclusion, they don't always.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-model-selection-caveat">
+      <title>A caveat</title>
+
+      <p>Automated variable selection methods are seductive things, especially when they're bundled up in (fairly) simple functions in powerful statistical programmes. They provide an element of objectivity to your model selection, and that's kind of nice. Unfortunately, they're sometimes used as an excuse for thoughtlessness. No longer do you have to think carefully about which predictors to add to the model and what the theoretical basis for their inclusion might be. Everything is solved by the magic of AIC.</p>
+
+      <p>Or, perhaps not. Firstly, there's very little agreement on what counts as an appropriate model selection criterion. The AIC is hardly the Word of the Gods of Statistics. It's an approximation, derived under certain assumptions, and it's guaranteed to work only for large samples when those assumptions are met. Alter those assumptions and you get a different criterion, like the Bayesian Information Criterion (BIC) for instance (also available in jamovi). Take a different approach again and you get the normalised maximum likelihood (NML) criterion. Decide that you're a Bayesian and you get model selection based on posterior odds ratios. Then there are a bunch of regression specific tools that I haven't mentioned. And so on.</p>
+
+      <p>All of these different methods have strengths and weaknesses, and some are easier to calculate than others (AIC is probably the easiest of the lot, which might account for its popularity). Almost all of them produce the same answers when the answer is "obvious" but there's a fair amount of disagreement when the model selection problem becomes hard.</p>
+
+      <p>A better strategy is to show a bit of common sense. If you're staring at the results of an automated backwards or forwards selection procedure, and the model that makes sense is close to having the smallest AIC but is narrowly defeated by a model that doesn't make any sense, then trust your instincts. Statistical model selection is an inexact tool, and as I said at the beginning, interpretability matters.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-comparing-two-regression-models">
+      <title>Comparing two regression models</title>
+
+      <p>An alternative to using automated model selection procedures is for the researcher to explicitly select two or more regression models to compare to each other. You can do this in a few different ways, depending on what research question you're trying to answer.</p>
+
+      <p>Suppose we want to know whether or not the amount of sleep that my son got has any relationship to my grumpiness, over and above what we might expect from the amount of sleep that I got. We also want to make sure that the day on which we took the measurement has no influence on the relationship. In this situation, what we would like to know is whether dani.grump ~ dani.sleep + day + baby.sleep (which I'll call Model 2, or M2) is a better regression model for these data than dani.grump ~ dani.sleep + day (which I'll call Model 1, or M1). There are two different ways we can compare these two models, one based on a model selection criterion like AIC, and the other based on an explicit hypothesis test.</p>
+
+      <p>A somewhat different approach to the problem comes out of the hypothesis testing framework. Suppose you have two regression models, where one of them (Model 1) contains a subset of the predictors from the other one (Model 2). That is, Model 2 contains all of the predictors included in Model 1, plus one or more additional predictors. When this happens we say that Model 1 is nested within Model 2, or possibly that Model 1 is a submodel of Model 2.</p>
+
+      <p>Regardless of the terminology, what this means is that we can think of Model 1 as a null hypothesis and Model 2 as an alternative hypothesis. And in fact we can construct an <m>F</m>-test for this in a fairly straightforward fashion.<fn>We can fit both models to the data and obtain a residual sum of squares for both models, <m>SS_{res}^{(1)}</m> and <m>SS_{res}^{(2)}</m> respectively. Then our <m>F</m> statistic is: <me>F= \frac{\frac{SS_{res}^{(1)} - SS_{res}^{(2)}}{k}}{\frac{SS_{res}^{(2)}}{N-p-1}}</me> where <m>N</m> is the number of observations, <m>p</m> is the number of predictors in the full model (not including the intercept), and <m>k</m> is the difference in the number of parameters between the two models. The degrees of freedom here are <m>k</m> and <m>N - p - 1</m>.</fn></p>
+
+      <p>Okay, so that's the hypothesis test that we use to compare two regression models to one another. Now, how do we do it in jamovi? The answer is to use the 'Model Builder' option and specify the Model 1 predictors dani.sleep and day in 'Block 1' and then add the additional predictor from Model 2 (baby.sleep) in 'Block 2', as in <xref ref="fig-fig12-28"/>.</p>
+
+      <figure xml:id="fig-fig12-28">
+        <caption>Model comparison in jamovi using the 'Model Builder' option</caption>
+        <image source="images/fig12-28.png" width="90%">
+          <description>A jamovi screenshot displaying a linear regression analysis. The screen shows options for dependent variables, factors, and weights on the left, while the right side presents the model fit measures, comparisons, and specific results, including coefficients and standard errors.</description>
+        </image>
+      </figure>
+
+      <p>This shows, in the 'Model Comparisons' Table, that for the comparisons between Model 1 and Model 2, <m>F(1,96) = 0.00</m>, <m>p = 0.954</m>. Since we have p > .05 we retain the null hypothesis (M1).</p>
+
+      <p>This approach to regression, in which we add all of our covariates into a null model, then add the variables of interest into an alternative model, and then compare the two models in a hypothesis testing framework, is often referred to as <term>hierarchical regression</term>.</p>
+
+      <p>We can also use this 'Model Comparison' option to display a table that shows the AIC and BIC for each model, making it easy to compare and identify which model has the lowest value, as in <xref ref="fig-fig12-28"/>.</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-ch12-summary">
+    <title>Summary</title>
+
+    <ul>
+      <li><p>Want to know how strong the relationship is between two variables? Calculate <xref ref="sec-correlations" text="title"/>.</p></li>
+      <li><p>Drawing <xref ref="sec-scatterplots" text="title"/>.</p></li>
+      <li><p>Basic ideas about <xref ref="sec-what-is-regression" text="title"/> and <xref ref="sec-estimating-regression" text="title"/>.</p></li>
+      <li><p><xref ref="sec-multiple-regression" text="title"/>.</p></li>
+      <li><p><xref ref="sec-quantifying-fit" text="title"/> using <m>R^2</m>.</p></li>
+      <li><p><xref ref="sec-hypothesis-tests-regression" text="title"/>.</p></li>
+      <li><p>In <xref ref="sec-regarding-regression-coefficients" text="title"/> we talked about calculating <xref ref="subsec-confidence-intervals-coefficients" text="title"/> and <xref ref="subsec-standardised-regression-coefficients" text="title"/>.</p></li>
+      <li><p>The <xref ref="sec-assumptions-regression" text="title"/> and <xref ref="sec-model-checking" text="title"/>.</p></li>
+      <li><p>Regression <xref ref="sec-model-selection" text="title"/>.</p></li>
+    </ul>
+  </section>
+
 </chapter>
