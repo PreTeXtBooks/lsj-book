@@ -699,7 +699,7 @@
     <p>I refer to this as the "art" of model checking with good reason. It's not easy, and while there are a lot of easily available tools that you can use to diagnose and maybe even cure the problems that affect your model (if there are any, that is!), you really do need to exercise a certain amount of judgement when doing this.</p>
 
     <p>In this section I describe several different things you can do to check that your regression model is doing what it's supposed to. It doesn't cover the full space of things you could do, but it's still much more detailed than what is often done in practice -- unfortunately! But it's important that you get a sense of what tools are at your disposal, so I'll try to introduce a bunch of them here.</p>
-
+<p>Finally, I should note that this section draws quite heavily from Fox & Weisberg (2011), the book associated with the “car” package that is used to conduct regression analysis in <m>R</m>. The "car" package is notable for providing some excellent tools for regression diagnostics, and the book itself talks about them in an admirably clear fashion. I don’t want to sound too gushy about it, but I do think that Fox & Weisberg (2011) is well worth reading, even if some of the advanced diagnostic techniques are only available in "R" and not jamovi.</p>
     <subsection xml:id="subsec-three-kinds-of-residuals">
       <title>Three kinds of residuals</title>
 
