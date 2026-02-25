@@ -38,7 +38,7 @@
 
       <figure xml:id="fig-fig3-1">
         <caption>jamovi starts up!</caption>
-        <image source="../../images/fig3-1.png">
+        <image source="images/fig3-1.png">
           <description>A screenshot of the jamovi interface. The window is segmented into a left pane with a spreadsheet and a right pane currently blank. The top menu bar includes options for Variables, Data, Analyses, and Edit. Various statistical analysis tools are shown.</description>
         </image>
       </figure>
@@ -73,7 +73,7 @@
 
       <figure xml:id="fig-fig3-2">
         <caption>measurement levels</caption>
-        <image source="../../images/fig3-2.png">
+        <image source="images/fig3-2.png">
           <description>The jamovi interface for defining a data variable with options for measure type and data type. The measure type "Nominal" is selected, with other options being Ordinal, Continuous, and ID. The data type is set to "Integer". A level section is on the right.</description>
         </image>
       </figure>
@@ -114,7 +114,7 @@
 
         <figure xml:id="fig-fig3-3">
           <caption>A newly computed variable, the <em>z</em>-score of 'dose'</caption>
-          <image source="../../images/fig3-3.png">
+          <image source="images/fig3-3.png">
             <description>An image of the jamovi interface displaying a data analysis workspace. There is a formula editor for a computed variable "Zscore-len" at the top, and below it, a data table showing columns for "len," "supp," and "dose" with various data entries.</description>
           </image>
         </figure>
@@ -163,7 +163,7 @@
 
       <figure xml:id="fig-fig3-4">
         <caption>The <em>booksales.csv</em> data file. On the left I have opened the file using a spreadsheet program, which shows that the file is basically a table. On the right the same file is open in a standard text editor (the TextEdit program on a Mac), which shows how the file is formatted. The entries in the table are separated by commas</caption>
-        <image source="../../images/fig3-4.png" width="90%">
+        <image source="images/fig3-4.png" width="90%">
           <description>A screenshot shows a csv file in a spreadsheet and a text editor. The spreadsheet contains columns for Month, Days, Sales, and Stock Levels, while the CSV file lists the same data in a comma-separated format.</description>
         </image>
       </figure>
@@ -172,7 +172,7 @@
 
       <figure xml:id="fig-fig3-5">
         <caption>A dialog box on a Mac asking you to select the csv file jamovi should try to import. Mac users will recognise this immediately, as it is the usual way in which a Mac asks you to find a file. Windows users will not see this, instead they will see the usual explorer window that Windows always gives you when it wants you to select a file</caption>
-        <image source="../../images/fig3-5.png" width="90%">
+        <image source="images/fig3-5.png" width="90%">
           <description>A computer screen displaying a file explorer window. The highlighted file is 'booksales.csv', and its details are shown on the right, including size, date created, and date modified.</description>
         </image>
       </figure>
@@ -240,7 +240,7 @@
 
     <figure xml:id="fig-fig3-6">
       <caption>Installing add-on modules in jamovi</caption>
-      <image source="../../images/fig3-6.png">
+      <image source="images/fig3-6.png">
         <description>A screenshot of the jamovi software interface is shown. The "Modules" tab is selected, displaying a list of some available modules, including scatr and lsj-data, and jpower. Descriptions and installation statuses for each module are provided, along with buttons to update or install them.</description>
       </image>
     </figure>
