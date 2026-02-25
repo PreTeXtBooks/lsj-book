@@ -23,6 +23,23 @@
 
   <references>
     <title>References</title>
+
+    <biblio type="raw" xml:id="Box1953">
+      G. E. P. Box. Non-normality and tests on variances. <em>Biometrika</em>, 40:318–335, 1953. <url href="https://doi.org/10.2307/2333350"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="BrownForsythe1974">
+      M. B. Brown and A. B. Forsythe. Robust tests for equality of variances. <em>Journal of the American Statistical Association</em>, 69:364–367, 1974. <url href="https://doi.org/10.2307/2285659"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="Geschwind1972">
+      N. Geschwind. Language and the brain. <em>Scientific American</em>, 226(4):76–83, 1972. <url href="https://doi.org/10.1038/scientificamerican0472-76"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="Levene1960">
+      H. Levene. Robust tests for equality of variances. In I. Olkin et al. (Eds.), <em>Contributions to Probability and Statistics: Essays in Honor of Harold Hotelling</em>, pp. 278–292. Stanford University Press, Palo Alto, CA, 1960.
+    </biblio>
+
   </references>
 
   <index>

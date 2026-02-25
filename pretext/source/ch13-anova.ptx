@@ -51,9 +51,9 @@
 
       <p>First, let's start by introducing some notation. We'll use <m>G</m> to refer to the total number of groups. For our data set there are three drugs, so there are <m>G = 3</m> groups. Next, we'll use <m>N</m> to refer to the total sample size; there are a total of <m>N = 18</m> people in our data set. Similarly, let's use <m>N_k</m> to denote the number of people in the <m>k</m>-th group. In our fake clinical trial, the sample size is <m>N_k = 6</m> for all three groups.<fn>When all groups have the same number of observations, the experimental design is said to be "balanced". Balance isn't such a big deal for one-way ANOVA, which is the topic of this chapter. It becomes more important when you start doing more complicated ANOVAs.</fn> Finally, we'll use <m>Y</m> to denote the outcome variable. In our case, <m>Y</m> refers to mood change. Specifically, we'll use <m>Y_{ik}</m> to refer to the mood change experienced by the <m>i</m>-th member of the <m>k</m>-th group. Similarly, we'll use <m>\bar{Y}</m> to be the average mood change, taken across all 18 people in the experiment, and <m>\bar{Y}_k</m> to refer to the average mood change experienced by the 6 people in group <m>k</m>.</p>
 
-      <p>Now that we've got our notation sorted out we can start writing down formulas. To start with, let's recall the formula for the variance that we used in <xref ref="sec-measures-of-variability"/>, way back in those kinder days when we were just doing descriptive statistics. The sample variance of <m>Y</m> is defined as follows:
+      <p>Now that we've got our notation sorted out we can start writing down formulas. To start with, let's recall the formula for the variance that we used in <xref ref="ch-descriptive-statistics"/>, way back in those kinder days when we were just doing descriptive statistics. The sample variance of <m>Y</m> is defined as follows:
       <me>Var(Y)=\frac{1}{N}\sum_{k=1}^{G}\sum_{i=1}^{N_k}(Y_{ik}-\bar{Y})^2</me>
-      This formula looks pretty much identical to the formula for the variance in <xref ref="sec-measures-of-variability"/>. The only difference is that this time around I've got two summations here: I'm summing over groups (i.e., values for <m>k</m>) and over the people within the groups (i.e., values for <m>i</m>). This is purely a cosmetic detail. If I'd instead used the notation <m>Y_p</m> to refer to the value of the outcome variable for person <m>p</m> in the sample, then I'd only have a single summation. The only reason that we have a double summation here is that I've classified people into groups, and then assigned numbers to people within groups.</p>
+      This formula looks pretty much identical to the formula for the variance in <xref ref="ch-descriptive-statistics"/>. The only difference is that this time around I've got two summations here: I'm summing over groups (i.e., values for <m>k</m>) and over the people within the groups (i.e., values for <m>i</m>). This is purely a cosmetic detail. If I'd instead used the notation <m>Y_p</m> to refer to the value of the outcome variable for person <m>p</m> in the sample, then I'd only have a single summation. The only reason that we have a double summation here is that I've classified people into groups, and then assigned numbers to people within groups.</p>
 
       <p>A concrete example might be useful here. Let's consider <xref ref="tbl-tab13-1"/>, in which we have a total of <m>N = 5</m> people sorted into <m>G = 2</m> groups. Arbitrarily, let's say that the "cool" people are group 1 and the "uncool" people are group 2. It turns out that we have three cool people (<m>N_1 = 3</m>) and two uncool people (<m>N_2 = 2</m>).</p>
 
@@ -502,7 +502,7 @@
     <p>That's all it is. So when I look at the ANOVA table in <xref ref="fig-fig13-3"/>, I see that <m>SS_b = 3.45</m> and <m>SS_{tot} = 3.45 + 1.39 = 4.84</m>. Thus we get an <m>\eta^2</m> value of:
     <me>\eta^2=\frac{3.45}{4.84}=0.71</me></p>
 
-    <p>The interpretation of <m>\eta^2</m> is equally straightforward. It refers to the proportion of the variability in the outcome variable (mood.gain) that can be explained in terms of the predictor (drug). A value of <m>\eta^2=0</m> means that there is no relationship at all between the two, whereas a value of <m>\eta^2=1</m> means that the relationship is perfect. Better yet, the <m>\eta^2</m> value is very closely related to <m>R^2</m>, as discussed previously in <xref ref="sec-r-squared-value"/>, and has an equivalent interpretation. Although many statistics textbooks suggest <m>\eta^2</m> as the default effect size measure in ANOVA, there's an interesting blog post by Daniel Lakens suggesting that eta-squared is perhaps not the best measure of effect size in real-world data analysis, because it can be a biased estimator. Usefully, there is also an option in jamovi to specify omega-squared (<m>\omega^2</m>), which is less biased, alongside eta-squared.</p>
+    <p>The interpretation of <m>\eta^2</m> is equally straightforward. It refers to the proportion of the variability in the outcome variable (mood.gain) that can be explained in terms of the predictor (drug). A value of <m>\eta^2=0</m> means that there is no relationship at all between the two, whereas a value of <m>\eta^2=1</m> means that the relationship is perfect. Better yet, the <m>\eta^2</m> value is very closely related to <m>R^2</m>, as discussed previously in <xref ref="ch-correlation-regression"/>, and has an equivalent interpretation. Although many statistics textbooks suggest <m>\eta^2</m> as the default effect size measure in ANOVA, there's an interesting blog post by Daniel Lakens suggesting that eta-squared is perhaps not the best measure of effect size in real-world data analysis, because it can be a biased estimator. Usefully, there is also an option in jamovi to specify omega-squared (<m>\omega^2</m>), which is less biased, alongside eta-squared.</p>
   </section>
 
   <section xml:id="sec-multiple-comparisons-post-hoc">
@@ -524,58 +524,67 @@
       <title>The null hypothesis and eight possible "states of the world"</title>
       <tabular halign="center">
         <row header="yes">
-          <cell></cell>
-          <cell><m>\mu_A = \mu_P</m></cell>
-          <cell><m>\mu_J = \mu_P</m></cell>
-          <cell><m>\mu_J = \mu_A</m></cell>
+          <cell>possibility:</cell>
+          <cell>is <m>\mu_P = \mu_A</m>?</cell>
+          <cell>is <m>\mu_P = \mu_J</m>?</cell>
+          <cell>is <m>\mu_A = \mu_J</m>?</cell>
+          <cell>which hypothesis?</cell>
         </row>
         <row>
           <cell>1</cell>
-          <cell>TRUE</cell>
-          <cell>TRUE</cell>
-          <cell>TRUE</cell>
+          <cell><m>\checkmark</m></cell>
+          <cell><m>\checkmark</m></cell>
+          <cell><m>\checkmark</m></cell>
+          <cell>null</cell>
         </row>
         <row>
           <cell>2</cell>
-          <cell>TRUE</cell>
-          <cell>TRUE</cell>
-          <cell>FALSE</cell>
+          <cell><m>\checkmark</m></cell>
+          <cell><m>\checkmark</m></cell>
+          <cell></cell>
+          <cell>alternative</cell>
         </row>
         <row>
           <cell>3</cell>
-          <cell>TRUE</cell>
-          <cell>FALSE</cell>
-          <cell>TRUE</cell>
+          <cell><m>\checkmark</m></cell>
+          <cell></cell>
+          <cell><m>\checkmark</m></cell>
+          <cell>alternative</cell>
         </row>
         <row>
           <cell>4</cell>
-          <cell>TRUE</cell>
-          <cell>FALSE</cell>
-          <cell>FALSE</cell>
+          <cell><m>\checkmark</m></cell>
+          <cell></cell>
+          <cell></cell>
+          <cell>alternative</cell>
         </row>
         <row>
           <cell>5</cell>
-          <cell>FALSE</cell>
-          <cell>TRUE</cell>
-          <cell>TRUE</cell>
+          <cell><m>\checkmark</m></cell>
+          <cell><m>\checkmark</m></cell>
+          <cell><m>\checkmark</m></cell>
+          <cell>alternative</cell>
         </row>
         <row>
           <cell>6</cell>
-          <cell>FALSE</cell>
-          <cell>TRUE</cell>
-          <cell>FALSE</cell>
+          <cell></cell>
+          <cell><m>\checkmark</m></cell>
+          <cell></cell>
+          <cell>alternative</cell>
         </row>
         <row>
           <cell>7</cell>
-          <cell>FALSE</cell>
-          <cell>FALSE</cell>
-          <cell>TRUE</cell>
+          <cell></cell>
+          <cell></cell>
+          <cell><m>\checkmark</m></cell>
+          <cell>alternative</cell>
         </row>
         <row>
           <cell>8</cell>
-          <cell>FALSE</cell>
-          <cell>FALSE</cell>
-          <cell>FALSE</cell>
+          <cell></cell>
+          <cell></cell>
+          <cell></cell>
+          <cell>alternative</cell>
         </row>
       </tabular>
     </table>
@@ -639,40 +648,40 @@
         <title>Holm corrected <m>p</m>-values</title>
         <tabular halign="center">
           <row header="yes">
-            <cell>rank (smallest to largest)</cell>
-            <cell>raw <m>p</m>-value</cell>
-            <cell>correction</cell>
-            <cell>corrected <m>p</m>-value</cell>
+            <cell>raw <m>p</m></cell>
+            <cell>rank <m>j</m></cell>
+            <cell><m>p \times j</m></cell>
+            <cell>Holm <m>p</m></cell>
           </row>
           <row>
-            <cell>1 (smallest)</cell>
-            <cell>0.01</cell>
-            <cell><m>\times 5</m></cell>
-            <cell>0.05</cell>
+            <cell>.001</cell>
+            <cell>5</cell>
+            <cell>.005</cell>
+            <cell>.005</cell>
           </row>
           <row>
-            <cell>2</cell>
-            <cell>0.03</cell>
-            <cell><m>\times 4</m></cell>
-            <cell>0.12</cell>
-          </row>
-          <row>
-            <cell>3</cell>
-            <cell>0.04</cell>
-            <cell><m>\times 3</m></cell>
-            <cell>0.12</cell>
-          </row>
-          <row>
+            <cell>.005</cell>
             <cell>4</cell>
-            <cell>0.07</cell>
-            <cell><m>\times 2</m></cell>
-            <cell>0.14</cell>
+            <cell>.020</cell>
+            <cell>.020</cell>
           </row>
           <row>
-            <cell>5 (largest)</cell>
-            <cell>0.15</cell>
-            <cell><m>\times 1</m></cell>
-            <cell>0.15</cell>
+            <cell>.019</cell>
+            <cell>3</cell>
+            <cell>.057</cell>
+            <cell>.057</cell>
+          </row>
+          <row>
+            <cell>.022</cell>
+            <cell>2</cell>
+            <cell>.044</cell>
+            <cell>.057</cell>
+          </row>
+          <row>
+            <cell>.103</cell>
+            <cell>1</cell>
+            <cell>.103</cell>
+            <cell>.103</cell>
           </row>
         </tabular>
       </table>
@@ -711,7 +720,7 @@
 
     <ul>
       <li><p><term>Homogeneity of variance</term>. Notice that we've only got the one value for the population standard deviation (i.e., <m>\sigma</m>), rather than allowing each group to have its own value (i.e., <m>\sigma_k</m>). This is referred to as the homogeneity of variance (sometimes called homoscedasticity) assumption. ANOVA assumes that the population standard deviation is the same for all groups. We'll talk about this extensively in the <xref ref="subsec-checking-homogeneity-variance"/> section.</p></li>
-      <li><p><term>Normality</term>. The residuals are assumed to be normally distributed. As we saw in <xref ref="sec-checking-normality-sample"/>, we can assess this by looking at QQ plots or running a Shapiro-Wilk test. I'll talk about this more in an ANOVA context in the <xref ref="subsec-checking-normality"/> section.</p></li>
+      <li><p><term>Normality</term>. The residuals are assumed to be normally distributed. As we saw in <xref ref="ch-comparing-two-means"/>, we can assess this by looking at QQ plots or running a Shapiro-Wilk test. I'll talk about this more in an ANOVA context in the <xref ref="subsec-checking-normality"/> section.</p></li>
       <li><p><term>Independence</term>. The independence assumption is a little trickier. What it basically means is that, knowing one residual tells you nothing about any other residual. All of the <m>\epsilon_{ik}</m> values are assumed to have been generated without any "regard for" or "relationship to" any of the other ones. There's not an obvious or simple way to test for this, but there are some situations that are clear violations of this. For instance, if you have a repeated measures design, where each participant in your study appears in more than one condition, then independence doesn't hold. There's a special relationship between some observations, namely those that correspond to the same person! When that happens, you need to use something like a <xref ref="sec-repeated-measures-anova"/>.</p></li>
     </ul>
 
@@ -720,10 +729,10 @@
 
       <blockquote>
         <p><em>To make the preliminary test on variances is rather like putting to sea in a rowing boat to find out whether conditions are sufficiently calm for an ocean liner to leave port!</em></p>
-        <attribution>George Box</attribution>
+        <attribution>George Box (<xref ref="Box1953"/>)</attribution>
       </blockquote>
 
-      <p>There's more than one way to skin a cat, as the saying goes, and more than one way to test the homogeneity of variance assumption, too (though for some reason no-one made a saying out of that). The most commonly used test for this that I've seen in the literature is the Levene test, and the closely related Brown-Forsythe test.<fn>The Levene test is shockingly simple. Suppose we have our outcome variable <m>Y_{ik}</m>. All we do is define a new variable, which I'll call <m>Z_{ik}</m>, corresponding to the absolute deviation from the group mean:
+      <p>There's more than one way to skin a cat, as the saying goes, and more than one way to test the homogeneity of variance assumption, too (though for some reason no-one made a saying out of that). The most commonly used test for this that I've seen in the literature is the Levene test (<xref ref="Levene1960"/>), and the closely related Brown-Forsythe test (<xref ref="BrownForsythe1974"/>).<fn>The Levene test is shockingly simple. Suppose we have our outcome variable <m>Y_{ik}</m>. All we do is define a new variable, which I'll call <m>Z_{ik}</m>, corresponding to the absolute deviation from the group mean:
       <me>Z_{ik} = \lvert Y_{ik} - \bar{Y}_k \rvert</me>
       Okay, what good does this do us? Well, let's take a moment to think about what <m>Z_{ik}</m> actually is and what we're trying to test. The value of <m>Z_{ik}</m> is a measure of how the <m>i</m>-th observation in the <m>k</m>-th group deviates from its group mean. And our null hypothesis is that all groups have the same variance, i.e., the same overall deviations from the group means! So the null hypothesis in a Levene test is that the population means of <m>Z</m> are identical for all groups. Hmm. So what we need now is a statistical test of the null hypothesis that all group means are identical. Where have we seen that before? Oh right, that's what ANOVA is, and so all that the Levene test does is run an ANOVA on the new variable <m>Z_{ik}</m>. What about the Brown-Forsythe test? Does that do anything particularly different? Nope. The only change from the Levene test is that it constructs the transformed variable <m>Z</m> in a slightly different way, using deviations from the group medians rather than deviations from the group means. That is, for the Brown-Forsythe test:
       <me>Z_{ik} = \lvert Y_{ik} - \text{median}_k(Y) \rvert</me>
@@ -763,7 +772,7 @@
     <subsection xml:id="subsec-checking-normality">
       <title>Checking the normality assumption</title>
 
-      <p>Testing the normality assumption is relatively straightforward. We covered most of what you need to know in <xref ref="sec-checking-normality-sample"/>. The only thing we really need to do is draw a QQ plot and, in addition if it is available, run the Shapiro-Wilk test. The QQ plot is shown in <xref ref="fig-fig13-7"/> and it looks pretty normal to me.</p>
+      <p>Testing the normality assumption is relatively straightforward. We covered most of what you need to know in <xref ref="ch-comparing-two-means"/>. The only thing we really need to do is draw a QQ plot and, in addition if it is available, run the Shapiro-Wilk test. The QQ plot is shown in <xref ref="fig-fig13-7"/> and it looks pretty normal to me.</p>
 
       <figure xml:id="fig-fig13-7">
         <caption>QQ plot in the one-way ANOVA analysis in jamovi</caption>
@@ -891,7 +900,7 @@
     <subsection xml:id="subsec-repeated-measures-jamovi">
       <title>Repeated measures ANOVA in jamovi</title>
 
-      <p>First, we need some data. Geschwind (1972) has suggested that the exact nature of a patient's language deficit following a stroke can be used to diagnose the specific region of the brain that has been damaged. A researcher is concerned with identifying the specific communication difficulties experienced by six patients suffering from Broca's Aphasia (a language deficit commonly experienced following a stroke) (<xref ref="tbl-tab13-12"/>).</p>
+      <p>First, we need some data. Geschwind (<xref ref="Geschwind1972"/>) has suggested that the exact nature of a patient's language deficit following a stroke can be used to diagnose the specific region of the brain that has been damaged. A researcher is concerned with identifying the specific communication difficulties experienced by six patients suffering from Broca's Aphasia (a language deficit commonly experienced following a stroke) (<xref ref="tbl-tab13-12"/>).</p>
 
       <table xml:id="tbl-tab13-12">
         <title>Word recognition task scores in stroke patients</title>
