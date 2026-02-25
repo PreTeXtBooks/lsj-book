@@ -47,10 +47,35 @@
       statistics are touched on at the end of the book.
     </p>
     <p>
-      This book is an adaptation of DJ Navarro (2018).
+      This book is an adaptation of Danielle J. Navarro (2018).
       <em>Learning statistics with R: A tutorial for psychology students
       and other beginners</em>. (Version 0.6).
+      <url href="https://learningstatisticswithr.com/" visual="learningstatisticswithr.com">
+        learningstatisticswithr.com</url>.
+      The jamovi version was adapted and extended by David R. Foxcroft, and
+      first released in 2018 as version 0.65.
     </p>
+    <p>
+      This is a PreTeXt version of the book, converted from the original
+      Quarto source. Full details of the book and its history can be found
+      at <url href="https://www.learnstatswithjamovi.com" visual="learnstatswithjamovi.com">
+        learnstatswithjamovi.com</url>.
+      The book is also published in partnership with Open Book Publishers:
+      <url href="https://www.openbookpublishers.com/books/10.11647/obp.0333"
+           visual="openbookpublishers.com/books/10.11647/obp.0333">
+        openbookpublishers.com/books/10.11647/obp.0333</url>.
+    </p>
+    <p>
+      If you find any issues with this PreTeXt version of the book, please
+      raise them at
+      <url href="https://github.com/PreTeXtBooks/lsj-book/issues"
+           visual="github.com/PreTeXtBooks/lsj-book/issues">
+        github.com/PreTeXtBooks/lsj-book/issues</url>.
+    </p>
+    <attribution>
+      <line>David Foxcroft</line>
+      <line>January 1st, 2025</line>
+    </attribution>
   </preface>
 
 </frontmatter>
