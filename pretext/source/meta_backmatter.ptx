@@ -143,6 +143,142 @@
       Hróbjartsson, A. and Gøtzsche, P. C. (2010). Placebo interventions for all clinical conditions. <em>Cochrane Database of Systematic Reviews</em>, 1. doi:10.1002/14651858.cd003974.pub3
     </biblio>
 
+    <biblio type="raw" xml:id="Wilkinson2006">
+      Wilkinson, L., Wills, D., Rope, D., Norton, A., and Dubbs, R. (2006). <em>The Grammar of Graphics</em>. Springer.
+    </biblio>
+
+    <biblio type="raw" xml:id="Fisher1922a">
+      Fisher, R. A. (1922). On the interpretation of <m>\chi^2</m> from contingency tables, and the calculation of <m>p</m>. <em>Journal of the Royal Statistical Society</em>, 84, 87–94. doi:10.1111/j.2397-2335.1922.tb00768.x
+    </biblio>
+
+    <biblio type="raw" xml:id="Fisher1922b">
+      Fisher, R. A. (1922). On the mathematical foundation of theoretical statistics. <em>Philosophical Transactions of the Royal Society A</em>, 222, 309–368. doi:10.1098/rsta.1922.0009
+    </biblio>
+
+    <biblio type="raw" xml:id="Evans2011">
+      Evans, M., Hastings, N., and Peacock, B. (2011). <em>Statistical Distributions</em> (3rd ed.). Wiley, New York, NY. doi:10.1002/9780470627242
+    </biblio>
+
+    <biblio type="raw" xml:id="Keynes1923">
+      Keynes, J. M. (1923). <em>A Tract on Monetary Reform</em>. Macmillan &amp; Company, London, UK.
+    </biblio>
+
+    <biblio type="raw" xml:id="Stigler1986">
+      Stigler, S. M. (1986). <em>The History of Statistics</em>. Harvard University Press, Cambridge, MA.
+    </biblio>
+
+    <biblio type="raw" xml:id="Box1976">
+      Box, G. E. P. (1976). Science and statistics. <em>Journal of the American Statistical Association</em>, 71, 791–799. doi:10.1080/01621459.1976.10480949
+    </biblio>
+
+    <biblio type="raw" xml:id="Cohen1988">
+      Cohen, J. (1988). <em>Statistical Power Analysis for the Behavioral Sciences</em> (2nd ed.). Lawrence Erlbaum. doi:10.4324/9780203771587
+    </biblio>
+
+    <biblio type="raw" xml:id="Ellis2010">
+      Ellis, P. D. (2010). <em>The Essential Guide to Effect Sizes: Statistical Power, Meta-Analysis, and the Interpretation of Research Results</em>. Cambridge University Press, Cambridge, UK. doi:10.1017/CBO9780511761676
+    </biblio>
+
+    <biblio type="raw" xml:id="Lehmann2011">
+      Lehmann, E. L. (2011). <em>Fisher, Neyman, and the Creation of Classical Statistics</em>. Springer.
+    </biblio>
+
+    <biblio type="raw" xml:id="Gelman2006">
+      Gelman, A. and Stern, H. (2006). The difference between "significant" and "not significant" is not itself statistically significant. <em>The American Statistician</em>, 60, 328–331. doi:10.1198/000313006X152649
+    </biblio>
+
+    <biblio type="raw" xml:id="Pearson1900">
+      Pearson, K. (1900). On the criterion that a given system of deviations from the probable in the case of a correlated system of variables is such that it can be reasonably supposed to have arisen from random sampling. <em>Philosophical Magazine</em>, 50, 157–175. doi:10.1080/14786440009463897
+    </biblio>
+
+    <biblio type="raw" xml:id="Sokal1994">
+      Sokal, R. R. and Rohlf, F. J. (1994). <em>Biometry: The Principles and Practice of Statistics in Biological Research</em> (3rd ed.). Freeman, New York.
+    </biblio>
+
+    <biblio type="raw" xml:id="Cochran1954">
+      Cochran, W. G. (1954). The <m>\chi^2</m> test of goodness of fit. <em>The Annals of Mathematical Statistics</em>, 23, 315–345. doi:10.1214/aoms/1177729380
+    </biblio>
+
+    <biblio type="raw" xml:id="Larntz1978">
+      Larntz, K. (1978). Small-sample comparisons of exact levels for chi-squared goodness-of-fit statistics. <em>Journal of the American Statistical Association</em>, 73, 253–263. doi:10.1080/01621459.1978.10481567
+    </biblio>
+
+    <biblio type="raw" xml:id="Hogg2005">
+      Hogg, R. V., McKean, J. V., and Craig, A. T. (2005). <em>Introduction to Mathematical Statistics</em> (6th ed.). Pearson, Upper Saddle River, NJ.
+    </biblio>
+
+    <biblio type="raw" xml:id="Tversky1974">
+      Tversky, A. and Kahneman, D. (1974). Judgment under uncertainty: Heuristics and biases. <em>Science</em>, 185(4157), 1124–1131. doi:10.1126/science.185.4157.1124
+    </biblio>
+
+    <biblio type="raw" xml:id="Yates1934">
+      Yates, F. (1934). Contingency tables involving small numbers and the <m>\chi^2</m> test. <em>Supplement to the Journal of the Royal Statistical Society</em>, 1, 217–235. doi:10.2307/2983604
+    </biblio>
+
+    <biblio type="raw" xml:id="Cramer1946">
+      Cramér, H. (1946). <em>Mathematical Methods of Statistics</em>. Princeton University Press, Princeton. doi:10.1515/9781400883868
+    </biblio>
+
+    <biblio type="raw" xml:id="Agresti1996">
+      Agresti, A. (1996). <em>An Introduction to Categorical Data Analysis</em>. Wiley, Hoboken, New Jersey. doi:10.1002/0470114754
+    </biblio>
+
+    <biblio type="raw" xml:id="Agresti2002">
+      Agresti, A. (2002). <em>Categorical Data Analysis</em> (2nd ed.). Wiley, Hoboken, New Jersey. doi:10.1002/0471249688
+    </biblio>
+
+    <biblio type="raw" xml:id="Box1987">
+      Box, J. F. (1987). Guinness, Gosset, Fisher, and small samples. <em>Statistical Science</em>, 2, 45–52. doi:10.1214/ss/1177013437
+    </biblio>
+
+    <biblio type="raw" xml:id="Anscombe1973">
+      Anscombe, F. J. (1973). Graphs in statistical analysis. <em>American Statistician</em>, 27, 17–21. doi:10.1080/00031305.1973.10478966
+    </biblio>
+
+    <biblio type="raw" xml:id="Fox2011">
+      Fox, J. and Weisberg, S. (2011). <em>An R Companion to Applied Regression</em> (2nd ed.). Sage, Los Angeles.
+    </biblio>
+
+    <biblio type="raw" xml:id="Akaike1974">
+      Akaike, H. (1974). A new look at the statistical model identification. <em>IEEE Transactions on Automatic Control</em>, 19, 716–723. doi:10.1109/TAC.1974.1100705
+    </biblio>
+
+    <biblio type="raw" xml:id="Dunn1961">
+      Dunn, O. J. (1961). Multiple comparisons among means. <em>Journal of the American Statistical Association</em>, 56, 52–64. doi:10.1080/01621459.1961.10482090
+    </biblio>
+
+    <biblio type="raw" xml:id="Hays1994">
+      Hays, W. L. (1994). <em>Statistics</em> (5th ed.). Harcourt Brace, Fort Worth, TX.
+    </biblio>
+
+    <biblio type="raw" xml:id="Holm1979">
+      Holm, S. (1979). A simple sequentially rejective multiple test procedure. <em>Scandinavian Journal of Statistics</em>, 6, 65–70. doi:10.2307/4615733
+    </biblio>
+
+    <biblio type="raw" xml:id="Hsu1996">
+      Hsu, J. C. (1996). <em>Multiple Comparisons: Theory and Methods</em>. Chapman &amp; Hall, London, UK. doi:10.1201/b15074
+    </biblio>
+
+    <biblio type="raw" xml:id="KruskalWallis1952">
+      Kruskal, W. H. and Wallis, W. A. (1952). Use of ranks in one-criterion variance analysis. <em>Journal of the American Statistical Association</em>, 47, 583–621. doi:10.1080/01621459.1952.10483441
+    </biblio>
+
+    <biblio type="raw" xml:id="Sahai2000">
+      Sahai, H. and Ageel, M. I. (2000). <em>The Analysis of Variance: Fixed, Random and Mixed Models</em>. Birkhauser, Boston.
+    </biblio>
+
+    <biblio type="raw" xml:id="Shaffer1995">
+      Shaffer, J. P. (1995). Multiple hypothesis testing. <em>Annual Review of Psychology</em>, 46, 561–584. doi:10.1146/annurev.ps.46.020195.003021
+    </biblio>
+
+    <biblio type="raw" xml:id="Welch1951">
+      Welch, B. L. (1951). On the comparison of several mean values: An alternative approach. <em>Biometrika</em>, 38, 330–336. doi:10.1093/biomet/38.3-4.330
+    </biblio>
+
+    <biblio type="raw" xml:id="Meehl1967">
+      Meehl, P. H. (1967). Theory testing in psychology and physics: A methodological paradox. <em>Philosophy of Science</em>, 34, 103–115. doi:10.1086/288135
+    </biblio>
+
   </references>
 
 </backmatter>

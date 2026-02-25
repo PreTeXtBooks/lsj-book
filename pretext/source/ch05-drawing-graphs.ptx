@@ -173,7 +173,7 @@
       <li><p><xref ref="sec-saving-image-files-using-jamovi" text="title"/>. Importantly, we also covered how to export your pictures.</p></li>
     </ul>
 
-    <p>One final thing to point out. Whilst jamovi produces some really neat default graphics, editing the plots is currently not possible. For more advanced graphics and plotting capability the packages available in R are much more powerful. One of the most popular graphics systems is provided by the ggplot2 package (see <url href="https://ggplot2.tidyverse.org/">https://ggplot2.tidyverse.org/</url>), which is loosely based on <em>The grammar of graphics</em>. It's not for novices. You need to have a pretty good grasp of R before you can start using it, and even then it takes a while to really get the hang of it. But when you're ready it's worth taking the time to teach yourself, because it's a much more powerful and cleaner system.</p>
+    <p>One final thing to point out. Whilst jamovi produces some really neat default graphics, editing the plots is currently not possible. For more advanced graphics and plotting capability the packages available in R are much more powerful. One of the most popular graphics systems is provided by the ggplot2 package (see <url href="https://ggplot2.tidyverse.org/">https://ggplot2.tidyverse.org/</url>), which is loosely based on <em>The grammar of graphics</em> <xref ref="Wilkinson2006"/>. It's not for novices. You need to have a pretty good grasp of R before you can start using it, and even then it takes a while to really get the hang of it. But when you're ready it's worth taking the time to teach yourself, because it's a much more powerful and cleaner system.</p>
   </section>
 
 </chapter>
