@@ -691,4 +691,279 @@
     </ul>
   </section>
 
+  <section xml:id="sec-model-checking">
+    <title>Model checking</title>
+
+    <p>The main focus of this section is <term>regression diagnostics</term>, a term that refers to the art of checking that the assumptions of your regression model have been met, figuring out how to fix the model if the assumptions are violated, and generally to check that nothing "funny" is going on.</p>
+
+    <p>I refer to this as the "art" of model checking with good reason. It's not easy, and while there are a lot of easily available tools that you can use to diagnose and maybe even cure the problems that affect your model (if there are any, that is!), you really do need to exercise a certain amount of judgement when doing this.</p>
+
+    <p>In this section I describe several different things you can do to check that your regression model is doing what it's supposed to. It doesn't cover the full space of things you could do, but it's still much more detailed than what is often done in practice -- unfortunately! But it's important that you get a sense of what tools are at your disposal, so I'll try to introduce a bunch of them here.</p>
+
+    <subsection xml:id="subsec-three-kinds-of-residuals">
+      <title>Three kinds of residuals</title>
+
+      <p>The majority of regression diagnostics revolve around looking at the residuals, and there are several different kinds of residual that we might consider. In particular, the following three kinds of residuals are referred to in this section: "ordinary residuals", "standardised residuals", and "Studentised residuals".</p>
+
+      <p>There is a fourth kind that you'll see referred to in some of the Figures, and that's the "Pearson residual". However, for the models that we're talking about in this chapter the Pearson residual is identical to the ordinary residual.</p>
+
+      <p>The first and simplest kind of residuals that we care about are <term>ordinary residuals</term>. These are the actual raw residuals that I've been talking about throughout this chapter so far. The ordinary residual is just the difference between the predicted value <m>\hat{Y}_i</m> and the observed value <m>Y_i</m>. I've been using the notation <m>\epsilon_i</m> to refer to the i-th ordinary residual and so, with this in mind, we have the very simple equation:
+      <me>\epsilon_i=Y_i-\hat{Y_i}</me></p>
+
+      <p>This is of course what we saw earlier, and unless I specifically refer to some other kind of residual, this is the one I'm talking about. So there's nothing new here. I just wanted to repeat myself. One drawback to using ordinary residuals is that they're always on a different scale, depending on what the outcome variable is and how good the regression model is. That is, unless you've decided to run a regression model without an intercept term, the ordinary residuals will have mean 0 but the variance is different for every regression.</p>
+
+      <p>In a lot of contexts, especially where you're only interested in the pattern of the residuals and not their actual values, it's convenient to estimate the <term>standardised residuals</term>, which are normalised in such a way as to have a standard deviation of 1.</p>
+
+      <p>[Additional technical detail<fn>The way we calculate these is to divide the ordinary residual by an estimate of the (population) standard deviation of these residuals. For technical reasons, the formula for this is: <me>\epsilon_i^{'}=\frac{\epsilon_i}{\hat{\sigma}\sqrt{1-h_i}}</me> where <m>\hat{\sigma}</m> in this context is the estimated population standard deviation of the ordinary residuals, and <m>h_i</m> is the "hat value" of the <m>i</m>th observation. I haven't explained hat values to you yet, so this won't make a lot of sense. For now, it's enough to interpret the standardised residuals as if we'd converted the ordinary residuals to <em>z</em>-scores.</fn>]</p>
+
+      <p>The third kind of residuals are <term>Studentised residuals</term> (also called "jackknifed residuals") and they're even fancier than standardised residuals. Again, the idea is to take the ordinary residual and divide it by some quantity in order to estimate some standardised notion of the residual.<fn>The formula for doing the calculations this time is subtly different <me>\epsilon_i^*=\frac{\epsilon_i}{\hat{\sigma}_{(-i)}\sqrt{1-h_i}}</me> Notice that our estimate of the standard deviation here is written <m>\hat{\sigma}_{(-i)}</m>. What this corresponds to is the estimate of the residual standard deviation that you would have obtained if you just deleted the <m>i</m>th observation from the data set. This standard deviation estimate is actually given by the following equation: <m>\hat{\sigma}_{(-i)}= \hat{\sigma}\sqrt{\frac{N-K-1-{\epsilon_i^{'}}^2}{N-K-2}}</m>.</fn></p>
+
+      <p>Before moving on, I should point out that you don't often need to obtain these residuals yourself, even though they are at the heart of almost all regression diagnostics. Most of the time the various options that provide the diagnostics, or assumption checks, will take care of these calculations for you.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-checking-linearity">
+      <title>Checking the linearity of the relationship</title>
+
+      <p>We should check for the linearity of the relationships between the predictors and the outcomes. There's a few different things that you might want to do in order to check this. Firstly, it never hurts to just plot the relationship between the predicted values <m>\hat{Y}_i</m> and the observed values <m>Y_i</m> for the outcome variable, as illustrated in <xref ref="fig-fig12-17"/>.</p>
+
+      <figure xml:id="fig-fig12-17">
+        <caption>jamovi plot of the predicted values against the observed values of the outcome variable. A straight(-ish) line is what we are hoping to see here. This looks pretty good, suggesting that there is nothing grossly wrong</caption>
+        <image source="images/fig12-17.png" width="60%">
+          <description>A scatter plot with the x-axis labeled "My grumpiness" and the y-axis labeled "Predicted values." The plot has numerous scattered data points. A trend line shows a positive correlation.</description>
+        </image>
+      </figure>
+
+      <p>To draw this in jamovi we saved the predicted values to the data set, and then drew a scatterplot of the observed against the predicted (fitted) values. This gives you a kind of "big picture view" -- if this plot looks approximately linear, then we're probably not doing too badly (though that's not to say that there aren't problems). However, if you can see big departures from linearity here, then it strongly suggests that you need to make some changes.</p>
+
+      <p>In any case, in order to get a more detailed picture it's often more informative to look at the relationship between the predicted values and the residuals themselves. Again, in jamovi you can save the residuals to the data set and then draw a scatterplot of the predicted values against the residual values, as in <xref ref="fig-fig12-18"/>. As you can see, not only does it draw the scatterplot showing the predicted value against the residuals, you can also plot a line through the data that shows the relationship between the two. Ideally, this should be a straight, perfectly horizontal line. In practice, we're looking for a reasonably straight or flat line. This is a matter of judgement.</p>
+
+      <figure xml:id="fig-fig12-18">
+        <caption>jamovi plot of the predicted values against the residuals, with a line showing the relationship between the two. If this is horizontal and straight(-ish), then we can feel reasonably confident that the "average residual" for all "predicted values" is more or less the same.</caption>
+        <image source="images/fig12-18.png" width="70%">
+          <description>A scatter plot shows residuals versus predicted values with a non-linear trend. Residuals range from -10 to 10, and predicted values range from 45 to 85. Data points are scattered around a fitted curve.</description>
+        </image>
+      </figure>
+
+      <p>More advanced versions of the same plot are produced by checking 'Residuals plots' in the regression analysis 'Assumption checks' options in jamovi. These are useful for checking linearity, normality and equality of variance assumptions, and we look at these in more detail in the next section. This option not only draws plots comparing the predicted values to the residuals, it does so for each individual predictor.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-checking-normality-residuals">
+      <title>Checking the normality of the residuals</title>
+
+      <p>Like many of the statistical tools we've discussed in this book, regression models rely on a normality assumption. In this case, we assume that the residuals are normally distributed. The first thing we can do is draw a QQ-plot via the 'Assumption Checks' -- 'Assumption Checks' -- 'Q-Q plot of residuals' option. The output is shown in <xref ref="fig-fig12-19"/>, showing the standardised residuals plotted as a function of their theoretical quantiles according to the regression model.</p>
+
+      <figure xml:id="fig-fig12-19">
+        <caption>Plot of the theoretical quantiles according to the model, against the quantiles of the standardised residuals, produced in jamovi</caption>
+        <image source="images/fig12-19.png" width="80%">
+          <description>Q-Q plot titled "Assumption Checks" showing standardized residuals along the y-axis and theoretical quantiles along the x-axis. Points closely follow the 45-degree reference line, indicating that the residuals follow a normal distribution.</description>
+        </image>
+      </figure>
+
+      <p>Another thing we should check is the relationship between the predicted (fitted) values and the residuals themselves. We can get jamovi to do this using the 'Residuals Plots' option, which provides a scatterplot for each predictor variable, the outcome variable, and the predicted values against residuals, see <xref ref="fig-fig12-20"/>. In these plots we are looking for a fairly uniform distribution of dots, with no clear bunching or patterning of the dots. Looking at these plots, there is nothing particularly worrying as the dots are fairly evenly spread across the whole plot. There may be a little bit of non-uniformity in plot (b), but it is not a strong deviation and probably not worth worrying about.</p>
+
+      <figure xml:id="fig-fig12-20">
+        <caption>Residuals plots produced in jamovi</caption>
+        <sidebyside widths="48% 48%">
+          <image source="images/fig12-20a.png">
+            <description>Scatter plot showing residuals versus fitted values. Data points are scattered across the plot, with residuals ranging from approximately -10 to 10 and fitted values between 50 and 80.</description>
+          </image>
+          <image source="images/fig12-20b.png">
+            <description>A scatter plot with "My grumpiness" on the x-axis and "Residuals" on the y-axis. Data points are dispersed, showing a positive correlation.</description>
+          </image>
+        </sidebyside>
+        <sidebyside widths="48% 48%">
+          <image source="images/fig12-20c.png">
+            <description>A scatter plot shows residuals on the vertical axis and baby's sleep (hours) on the horizontal axis. Numerous data points are dispersed across the plot.</description>
+          </image>
+          <image source="images/fig12-20d.png">
+            <description>A scatter plot showing residual values against hours slept. Residuals vary roughly between -10 and 10, with no clear pattern or trend visible.</description>
+          </image>
+        </sidebyside>
+      </figure>
+
+      <p>If we were worried, then in a lot of cases the solution to this problem (and many others) is to transform one or more of the variables. We discussed the basics of variable transformation earlier, but I do want to make special note of one additional possibility: the Box-Cox transform. The Box-Cox function is a fairly simple one and it's very widely used.<fn><m>f(x,\lambda)=\frac{x^{\lambda}-1}{\lambda}</m> for all values of <m>\lambda</m> except <m>\lambda = 0</m>. When <m>\lambda = 0</m> we just take the natural logarithm (i.e., ln(<m>x</m>)).</fn> You can calculate it using the BOXCOX function in the 'Compute' variables screen in jamovi.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-checking-equality-variance">
+      <title>Checking equality of variance</title>
+
+      <p>The regression models that we've talked about all make an equality (i.e. homogeneity) of variance assumption: the variance of the residuals is assumed to be constant. To plot this in jamovi first we need to calculate the square root of the (absolute) size of the residual<fn>In jamovi, you can compute this new variable using the formula 'SQRT(ABS(Residuals))'.</fn> and then plot this against the predicted values, as in <xref ref="fig-fig12-21"/>. Note that this plot actually uses the standardised residuals rather than the raw ones, but it's immaterial from our point of view. What we're looking to see here is a straight, horizontal line running through the middle of the plot.<fn>It's a bit beyond the scope of this chapter to talk about how to deal with violations of homogeneity of variance, but I'll give you a quick sense of what you need to consider. The <em>main</em> thing to worry about, if homogeneity of variance is violated, is that the standard error estimates associated with the regression coefficients are no longer entirely reliable, and so your <m>t</m>-tests for the coefficients aren't quite right either. A simple fix to the problem is to make use of a "heteroscedasticity corrected covariance matrix" when estimating the standard errors. These are often called <term>sandwich estimators</term>, and these can be estimated in R (but not directly in jamovi).</fn></p>
+
+      <figure xml:id="fig-fig12-21">
+        <caption>jamovi plot of the predicted values (model predictions) against the square root of the absolute standardised residuals. This plot is used to diagnose violations of homogeneity of variance. If the variance is really constant, then the line through the middle should be horizontal and flat(-ish).</caption>
+        <image source="images/fig12-21.png" width="80%">
+          <description>Scatter plot showing the relationship between predicted values (x-axis) and SQR residuals (y-axis). The plot includes scattered data points and a smoothed trend line. Predicted values range from 45 to 85, SQR Residuals from 0.5 to 3.5.</description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-checking-collinearity">
+      <title>Checking for collinearity</title>
+
+      <p>Another regression diagnostic is provided by <term>variance inflation factors</term> (VIFs), which are useful for determining whether or not the predictors in your regression model are too highly correlated with each other. There is a variance inflation factor associated with each predictor <m>X_k</m> in the model.<fn>The formula for the <m>k</m>-th VIF is: <m>VIF_k=\frac{1}{1-R^2_{(-k)}}</m> where <m>R^2_{(-k)}</m> refers to R-squared value you would get if you ran a regression using <m>X_k</m> as the outcome variable, and all the other <m>X</m> variables as the predictors. The idea here is that <m>R^2_{(-k)}</m> is a very good measure of the extent to which <m>X_k</m> is correlated with all the other variables in the model. Better yet, the square root of the VIF is pretty interpretable: it tells you how much wider the confidence interval for the corresponding coefficient <m>b_k</m> is, relative to what you would have expected if the predictors are all nice and uncorrelated with one another.</fn></p>
+
+      <p>If you've only got two predictors, the VIF values are always going to be the same, as we can see if we click on the 'Collinearity' checkbox in the 'Regression' -- 'Assumptions' options in jamovi. For both dani.sleep and baby.sleep the VIF is <m>1.65</m>. And since the square root of <m>1.65</m> is <m>1.28</m>, we see that the correlation between our two predictors isn't causing much of a problem.</p>
+
+      <p>To give a sense of how we could end up with a model that has bigger collinearity problems, suppose I were to run a much less interesting regression model, in which I tried to predict the day on which the data were collected, as a function of all the other variables in the data set. To see why this would be a bit of a problem, let's have a look at the correlation matrix for all four variables (<xref ref="fig-fig12-22"/>).</p>
+
+      <figure xml:id="fig-fig12-22">
+        <caption>Correlation matrix in jamovi for all four variables</caption>
+        <image source="images/fig12-22.png" width="90%">
+          <description>A correlation matrix table showing the relationships between variables: "My grumpiness," "Baby's sleep (hours)," "My sleep (hours)," and "day." Notable correlations include -0.57 between "My grumpiness" and "Baby's sleep" and 0.63 between "My sleep" and "Baby's sleep".</description>
+        </image>
+      </figure>
+
+      <p>We have some fairly large correlations between some of our predictor variables! When we run the regression model and look at the VIF values, we see that the collinearity is causing a lot of uncertainty about the coefficients. First, run the regression, as in <xref ref="fig-fig12-23"/> and you can see from the VIF values that, yep, that's some mighty fine collinearity there.</p>
+
+      <figure xml:id="fig-fig12-23">
+        <caption>Collinearity statistics for multiple regression, produced in jamovi</caption>
+        <image source="images/fig12-23.png" width="90%">
+          <description>A jamovi screenshot displaying a linear regression analysis. The analysis includes model fit measures, coefficients, and assumption checks.</description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-outliers-anomalous-data">
+      <title>Outliers and anomalous data</title>
+
+      <p>One danger that you can run into with linear regression models is that your analysis might be disproportionately sensitive to a smallish number of "unusual" or "anomalous" observations. In the context of linear regression, there are three conceptually distinct ways in which an observation might be called "anomalous". All three are interesting, but they have rather different implications for your analysis.</p>
+
+      <p>The first kind of unusual observation is an <term>outlier</term>. The definition of an outlier (in this context) is an observation that is very different from what the regression model predicts. An example is shown in <xref ref="fig-fig12-24"/>, the outlier has an unusual value on the outcome (y-axis location), but not the predictor (x-axis location) and lies a long way from the regression line. In practice, we operationalise this concept by saying that an outlier is an observation that has a very large residual, <m>\epsilon_i^*</m>. Also see the lower left plot of Anscombe's quartet, <xref ref="fig-fig12-6"/>.</p>
+
+      <figure xml:id="fig-fig12-24">
+        <caption>An illustration of outliers. The solid line shows the regression line with the anomalous outlier observation included. The dashed line plots the regression line estimated without the anomalous outlier observation included. The vertical line from the outlier point to the dashed regression line illustrates the large residual error for the outlier</caption>
+        <image source="images/fig-fig12-24-1.png" width="80%">
+          <description>A scatter plot with blue dots representing data points, an outlier marked near the top-left region. A solid line shows the regression line, while a dashed line shows the ideal line. A vertical line from an outlier point to the dashed regression line illustrates the large residual error for the outlier.</description>
+        </image>
+      </figure>
+
+      <p>Outliers are interesting: a big outlier might correspond to junk data, e.g., the variables might have been recorded incorrectly in the data set, or some other defect may be detectable. Note that you shouldn't throw an observation away just because it's an outlier. But the fact that it's an outlier is often a cue to look more closely at that case and try to find out why it's so different.</p>
+
+      <p>The second way in which an observation can be unusual is if it has high <term>leverage</term>, which happens when the observation is very different from all the other observations. This doesn't necessarily have to correspond to a large residual. If the observation happens to be unusual on all variables in precisely the same way, it can actually lie very close to the regression line. An example of this is shown in <xref ref="fig-fig12-25"/>. The leverage of an observation is operationalised in terms of its hat value, usually written <m>h_i</m>.<fn>The "hat matrix" is defined to be that matrix <m>H</m> that converts the vector of observed values <m>y</m> into a vector of predicted values <m>\hat{y}</m>, such that <m>\hat{y} = Hy</m>. The name comes from the fact that this is the matrix that "puts a hat on y". The hat value of the <m>i</m>-th observation is the <m>i</m>-th diagonal element of this matrix. And here's how it's calculated: <m>H = X(X^{'}X)^{-1}X^{'}</m>.</fn> The formula for the hat value is rather complicated but its interpretation is not: <m>h_i</m> is a measure of the extent to which the i-th observation is "in control" of where the regression line ends up going.</p>
+
+      <figure xml:id="fig-fig12-25">
+        <caption>An illustration of high leverage points. The anomalous observation in this case is unusual both in terms of the predictor (x-axis) and the outcome (y-axis), but this unusualness is highly consistent with the pattern of correlations that exists among the other observations. The observation falls very close to the regression line and does not distort it by very much</caption>
+        <image source="images/fig-fig12-25-1.png" width="80%">
+          <description>A scatter plot with blue dots showing the relationship between a predictor and an outcome. A solid black regression line trends upwards, with one point labeled "High leverage" noticeably distant from the other points. A dashed line represents an alternate linear fit.</description>
+        </image>
+      </figure>
+
+      <p>In general, if an observation lies far away from the other ones in terms of the predictor variables, it will have a large hat value (as a rough guide, high leverage is when the hat value is more than 2-3 times the average; and note that the sum of the hat values is constrained to be equal to <m>K + 1</m>). High leverage points are also worth looking at in more detail, but they're much less likely to be a cause for concern unless they are also outliers.</p>
+
+      <p>This brings us to our third measure of unusualness, the <term>influence</term> of an observation. A high influence observation is an outlier that has high leverage. That is, it is an observation that is very different to all the other ones in some respect, and also lies a long way from the regression line. This is illustrated in <xref ref="fig-fig12-26"/>. Notice the contrast to the previous two figures. Outliers don't move the regression line much and neither do high leverage points. But something that is both an outlier and has high leverage, well that has a big effect on the regression line. That's why we call these points high influence, and it's why they're the biggest worry. We operationalise influence in terms of a measure known as <term>Cook's distance</term>.<fn><m>D_i=\frac{{\epsilon_i^*}^2}{K+1} \times \frac{h_i}{1-h_i}</m> Notice that this is a multiplication of something that measures the outlier-ness of the observation (the bit on the left), and something that measures the leverage of the observation (the bit on the right).</fn></p>
+
+      <figure xml:id="fig-fig12-26">
+        <caption>An illustration of high influence points. In this case, the anomalous observation is highly unusual on the predictor variable (x-axis), and falls a long way from the regression line. As a consequence, the regression line is highly distorted, even though (in this case) the anomalous observation is entirely typical in terms of the outcome variable (y-axis)</caption>
+        <image source="images/fig-fig12-26-1.png" width="80%">
+          <description>Scatter plot showing a linear relationship between Predictor (x-axis) and Outcome (y-axis). Points are scattered around a solid black regression line. One outlier, labeled "High influence," has a vertical distance to the regression line connected by a dashed line.</description>
+        </image>
+      </figure>
+
+      <p>In order to have a large Cook's distance an observation must be a fairly substantial outlier and have high leverage. As a rough guide, Cook's distance greater than 1 is often considered large (that's what I typically use as a quick and dirty rule).</p>
+
+      <p>In jamovi, information about Cook's distance can be calculated by clicking on the 'Cook's Distance' checkbox in the 'Assumption Checks' -- 'Data Summary' options. When you do this, for the multiple regression model we have been using as an example in this chapter, you get the results as shown in <xref ref="fig-fig12-27"/>.</p>
+
+      <figure xml:id="fig-fig12-27">
+        <caption>jamovi output showing the table for the Cook's distance statistics</caption>
+        <image source="images/fig12-27.png" width="70%">
+          <description>A data summary table is shown with Cook's Distance values. The columns listed are Mean (0.01), Median (0.00), SD (0.02), Min (0.00), and Max (0.11).</description>
+        </image>
+      </figure>
+
+      <p>You can see that, in this example, the mean Cook's distance value is <m>0.01</m>, and the range is from <m>0.00</m> to <m>0.11</m>, so this is some way off the rule of thumb figure mentioned above that a Cook's distance greater than 1 is considered large. An obvious question to ask next is, if you do have large values of Cook's distance what should you do?</p>
+
+      <p>As always, there's no hard and fast rule. Probably the first thing to do is to try running the regression with the outlier with the greatest Cook's distance<fn>In jamovi you can save the Cook's distance values to the data set, then draw a boxplot of the Cook's distance values to identify the specific outliers. Or you could use a more powerful regression program such as the "car" package in R which has more options for advanced regression diagnostic analysis.</fn> excluded and see what happens to the model performance and to the regression coefficients.</p>
+
+      <p>If they really are substantially different, it's time to start digging into your data set and your notes that you no doubt were scribbling as you ran your study. Try to figure out why the point is so different. If you start to become convinced that this one data point is badly distorting your results then you might consider excluding it, but that's less than ideal unless you have a solid explanation for why this particular case is qualitatively different from the others and therefore deserves to be handled separately.</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-model-selection">
+    <title>Model selection</title>
+
+    <p>One fairly major problem that remains is the problem of "model selection". That is, if we have a data set that contains several variables, which ones should we include as predictors, and which ones should we not include? In other words, we have a problem of <term>variable selection</term>. In general, model selection is a complex business but it's made somewhat simpler if we restrict ourselves to the problem of choosing a subset of the variables that ought to be included in the model. Nevertheless, I'm not going to try covering even this reduced topic in a lot of detail. Instead, I'll talk about two broad principles that you need to think about, and then discuss one concrete tool that jamovi provides to help you select a subset of variables to include in your model. First, the two principles:</p>
+
+    <ul>
+      <li><p>It's nice to have an actual substantive basis for your choices. That is, in a lot of situations you the researcher have good reasons to pick out a smallish number of possible regression models that are of theoretical interest. These models will have a sensible interpretation in the context of your field. Never discount the importance of this. Statistics serves the scientific process, not the other way around.</p></li>
+      <li><p>To the extent that your choices rely on statistical inference, there is a trade off between simplicity and goodness of fit. As you add more predictors to the model you make it more complex. Each predictor adds a new free parameter (i.e., a new regression coefficient), and each new parameter increases the model's capacity to "absorb" random variations. So the goodness of fit (e.g., <m>R^2</m>) continues to rise, sometimes trivially or by chance, as you add more predictors no matter what. If you want your model to be able to generalise well to new observations you need to avoid throwing in too many variables.</p></li>
+    </ul>
+
+    <p>This latter principle is often referred to as <term>Ockham's razor</term> and is often summarised in terms of the following pithy saying: do not multiply entities beyond necessity. In this context, it means don't chuck in a bunch of largely irrelevant predictors just to boost your <m>R^2</m>.</p>
+
+    <p>In any case, what we need is an actual mathematical criterion that will implement the qualitative principle behind Ockham's razor in the context of selecting a regression model. As it turns out there are several possibilities. The one that I'll talk about is the <term>Akaike information criterion</term> (AIC) simply because it's available as an option in jamovi.<fn>In the context of a linear regression model (and ignoring terms that don't depend on the model in any way!), the AIC for a model that has <m>K</m> predictor variables plus an intercept is <m>AIC=\frac{SS_{res}}{\hat{\sigma}^2}+2K</m>.</fn></p>
+
+    <p>The smaller the AIC value, the better the model performance. If we ignore the low level details it's fairly obvious what the AIC does. On the left we have a term that increases as the model predictions get worse; on the right we have a term that increases as the model complexity increases. The best model is the one that fits the data well (low residuals, left-hand side) using as few predictors as possible (low K, right-hand side). In short, this is a simple implementation of Ockham's razor.</p>
+
+    <p>AIC can be added to the 'Model Fit Measures' output Table when the 'AIC' checkbox is clicked, and a rather clunky way of assessing different models is seeing if the AIC value is lower if you remove one or more of the predictors in the regression model. This is the only way currently implemented in jamovi, but there are alternatives in other more powerful programmes, such as R. These alternative methods can automate the process of selectively removing (or adding) predictor variables to find the best AIC. Although these methods are not implemented in jamovi, I will mention them briefly below just so you know about them.</p>
+
+    <subsection xml:id="subsec-backward-elimination">
+      <title>Backward elimination</title>
+
+      <p>In backward elimination you start with the complete regression model, including all possible predictors. Then, at each "step" we try all possible ways of removing one of the variables, and whichever of these is best (in terms of lowest AIC value) is accepted. This becomes our new regression model, and we then try all possible deletions from the new model, again choosing the option with lowest AIC. This process continues until we end up with a model that has a lower AIC value than any of the other possible models that you could produce by deleting one of its predictors.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-forward-selection">
+      <title>Forward selection</title>
+
+      <p>As an alternative, you can also try <term>forward selection</term>. This time around we start with the smallest possible model as our start point, and only consider the possible additions to the model. However, there's one complication. You also need to specify what the largest possible model you're willing to entertain is.</p>
+
+      <p>Although backward and forward selection can lead to the same conclusion, they don't always.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-model-selection-caveat">
+      <title>A caveat</title>
+
+      <p>Automated variable selection methods are seductive things, especially when they're bundled up in (fairly) simple functions in powerful statistical programmes. They provide an element of objectivity to your model selection, and that's kind of nice. Unfortunately, they're sometimes used as an excuse for thoughtlessness. No longer do you have to think carefully about which predictors to add to the model and what the theoretical basis for their inclusion might be. Everything is solved by the magic of AIC.</p>
+
+      <p>Or, perhaps not. Firstly, there's very little agreement on what counts as an appropriate model selection criterion. The AIC is hardly the Word of the Gods of Statistics. It's an approximation, derived under certain assumptions, and it's guaranteed to work only for large samples when those assumptions are met. Alter those assumptions and you get a different criterion, like the Bayesian Information Criterion (BIC) for instance (also available in jamovi). Take a different approach again and you get the normalised maximum likelihood (NML) criterion. Decide that you're a Bayesian and you get model selection based on posterior odds ratios. Then there are a bunch of regression specific tools that I haven't mentioned. And so on.</p>
+
+      <p>All of these different methods have strengths and weaknesses, and some are easier to calculate than others (AIC is probably the easiest of the lot, which might account for its popularity). Almost all of them produce the same answers when the answer is "obvious" but there's a fair amount of disagreement when the model selection problem becomes hard.</p>
+
+      <p>A better strategy is to show a bit of common sense. If you're staring at the results of an automated backwards or forwards selection procedure, and the model that makes sense is close to having the smallest AIC but is narrowly defeated by a model that doesn't make any sense, then trust your instincts. Statistical model selection is an inexact tool, and as I said at the beginning, interpretability matters.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-comparing-two-regression-models">
+      <title>Comparing two regression models</title>
+
+      <p>An alternative to using automated model selection procedures is for the researcher to explicitly select two or more regression models to compare to each other. You can do this in a few different ways, depending on what research question you're trying to answer.</p>
+
+      <p>Suppose we want to know whether or not the amount of sleep that my son got has any relationship to my grumpiness, over and above what we might expect from the amount of sleep that I got. We also want to make sure that the day on which we took the measurement has no influence on the relationship. In this situation, what we would like to know is whether dani.grump ~ dani.sleep + day + baby.sleep (which I'll call Model 2, or M2) is a better regression model for these data than dani.grump ~ dani.sleep + day (which I'll call Model 1, or M1). There are two different ways we can compare these two models, one based on a model selection criterion like AIC, and the other based on an explicit hypothesis test.</p>
+
+      <p>A somewhat different approach to the problem comes out of the hypothesis testing framework. Suppose you have two regression models, where one of them (Model 1) contains a subset of the predictors from the other one (Model 2). That is, Model 2 contains all of the predictors included in Model 1, plus one or more additional predictors. When this happens we say that Model 1 is nested within Model 2, or possibly that Model 1 is a submodel of Model 2.</p>
+
+      <p>Regardless of the terminology, what this means is that we can think of Model 1 as a null hypothesis and Model 2 as an alternative hypothesis. And in fact we can construct an <m>F</m>-test for this in a fairly straightforward fashion.<fn>We can fit both models to the data and obtain a residual sum of squares for both models, <m>SS_{res}^{(1)}</m> and <m>SS_{res}^{(2)}</m> respectively. Then our <m>F</m> statistic is: <me>F= \frac{\frac{SS_{res}^{(1)} - SS_{res}^{(2)}}{k}}{\frac{SS_{res}^{(2)}}{N-p-1}}</me> where <m>N</m> is the number of observations, <m>p</m> is the number of predictors in the full model (not including the intercept), and <m>k</m> is the difference in the number of parameters between the two models. The degrees of freedom here are <m>k</m> and <m>N - p - 1</m>.</fn></p>
+
+      <p>Okay, so that's the hypothesis test that we use to compare two regression models to one another. Now, how do we do it in jamovi? The answer is to use the 'Model Builder' option and specify the Model 1 predictors dani.sleep and day in 'Block 1' and then add the additional predictor from Model 2 (baby.sleep) in 'Block 2', as in <xref ref="fig-fig12-28"/>.</p>
+
+      <figure xml:id="fig-fig12-28">
+        <caption>Model comparison in jamovi using the 'Model Builder' option</caption>
+        <image source="images/fig12-28.png" width="90%">
+          <description>A jamovi screenshot displaying a linear regression analysis. The screen shows options for dependent variables, factors, and weights on the left, while the right side presents the model fit measures, comparisons, and specific results, including coefficients and standard errors.</description>
+        </image>
+      </figure>
+
+      <p>This shows, in the 'Model Comparisons' Table, that for the comparisons between Model 1 and Model 2, <m>F(1,96) = 0.00</m>, <m>p = 0.954</m>. Since we have p > .05 we retain the null hypothesis (M1).</p>
+
+      <p>This approach to regression, in which we add all of our covariates into a null model, then add the variables of interest into an alternative model, and then compare the two models in a hypothesis testing framework, is often referred to as <term>hierarchical regression</term>.</p>
+
+      <p>We can also use this 'Model Comparison' option to display a table that shows the AIC and BIC for each model, making it easy to compare and identify which model has the lowest value, as in <xref ref="fig-fig12-28"/>.</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-ch12-summary">
+    <title>Summary</title>
+
+    <ul>
+      <li><p>Want to know how strong the relationship is between two variables? Calculate <xref ref="sec-correlations" text="title"/>.</p></li>
+      <li><p>Drawing <xref ref="sec-scatterplots" text="title"/>.</p></li>
+      <li><p>Basic ideas about <xref ref="sec-what-is-regression" text="title"/> and <xref ref="sec-estimating-regression" text="title"/>.</p></li>
+      <li><p><xref ref="sec-multiple-regression" text="title"/>.</p></li>
+      <li><p><xref ref="sec-quantifying-fit" text="title"/> using <m>R^2</m>.</p></li>
+      <li><p><xref ref="sec-hypothesis-tests-regression" text="title"/>.</p></li>
+      <li><p>In <xref ref="sec-regarding-regression-coefficients" text="title"/> we talked about calculating <xref ref="subsec-confidence-intervals-coefficients" text="title"/> and <xref ref="subsec-standardised-regression-coefficients" text="title"/>.</p></li>
+      <li><p>The <xref ref="sec-assumptions-regression" text="title"/> and <xref ref="sec-model-checking" text="title"/>.</p></li>
+      <li><p>Regression <xref ref="sec-model-selection" text="title"/>.</p></li>
+    </ul>
+  </section>
+
 </chapter>
