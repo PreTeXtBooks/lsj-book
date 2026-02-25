@@ -83,13 +83,14 @@ And there are two middle numbers, 31 and 32. The median is defined as the averag
 
 Knowing how to calculate means and medians is only a part of the story. You also need to understand what each one is saying about the data, and what that implies for when you should use each one. This is illustrated in @fig-fig4-4. 
 
-```{r out.width="100%"}
-#| label: fig-fig4-4
-#| classes: .enlarge-image
-#| fig-cap: An illustration of the difference between how the mean and the median should be interpreted. The mean is basically the 'centre of gravity' of the data set. If you imagine that the histogram of the data is a solid object, then the point on which you could balance it (as if on a see-saw) is the mean. In contrast, the median is the middle observation, with half of the observations smaller and half of the observations larger
-#| fig-alt: A bar chart on the left has 48 observations and resembles a stair-step pattern with decreasing heights from left to right is shown. The text reads, "The mean is the "centre of mass" of the data." Below the chart, there is a horizontal line labeled "balancing point" with a triangular fulcrum symbolizing balance. The same bar chart is shown on the right with the data split into two groups of 24 observations. The left group is shaded light gray, and the right group is shaded dark gray. An arrow points to the 24th observation with the text "The median is the "middle observation" in the data set
-knitr::include_graphics("images/fig4-4.png")
-```
+::: {#fig-fig4-4 layout-ncol=2 layout-valign="bottom" width=100%}
+
+![](images/fig4-4a.png){#fig-fig4-4a fig-align="left" fig-alt="A bar chart with 48 observations resembles a stair-step pattern with decreasing heights from left to right. The text reads, The mean is the centre of mass of the data. Below the chart, there is a horizontal line labeled balancing point with a triangular fulcrum symbolizing balance."}
+
+![](images/fig4-4b.png){#fig-fig4-4b fig-align="left" fig-alt="The same bar chart with the data split into two groups of 24 observations. The left group is shaded light gray, and the right group is shaded dark gray. An arrow points to the 24th observation with the text The median is the middle observation in the data set."}
+
+An illustration of the difference between how the mean and the median should be interpreted. The mean is basically the 'centre of gravity' of the data set (a). In contrast, the median is the middle observation, with half of the observations smaller and half of the observations larger (b)
+:::
 
 The mean is kind of like the "centre of gravity" of the data set, whereas the median is the "middle value" in the data. What this implies, as far as which one you should use, depends a little on what type of data you've got and what you're trying to achieve. As a rough guide:
 

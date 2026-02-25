@@ -110,10 +110,15 @@
       <p>Knowing how to calculate means and medians is only a part of the story. You also need to understand what each one is saying about the data, and what that implies for when you should use each one. This is illustrated in <xref ref="fig4-4"/>.</p>
 
       <figure xml:id="fig4-4">
-        <caption>An illustration of the difference between how the mean and the median should be interpreted. The mean is basically the 'centre of gravity' of the data set. If you imagine that the histogram of the data is a solid object, then the point on which you could balance it (as if on a see-saw) is the mean. In contrast, the median is the middle observation, with half of the observations smaller and half of the observations larger</caption>
-        <image source="images/fig4-4.png" width="100%">
-          <description>A bar chart on the left has 48 observations and resembles a stair-step pattern with decreasing heights from left to right is shown. The text reads, <q>The mean is the centre of mass of the data.</q> Below the chart, there is a horizontal line labeled <q>balancing point</q> with a triangular fulcrum symbolizing balance. The same bar chart is shown on the right with the data split into two groups of 24 observations. The left group is shaded light gray, and the right group is shaded dark gray. An arrow points to the 24th observation with the text <q>The median is the middle observation in the data set.</q></description>
-        </image>
+        <caption>An illustration of the difference between how the mean and the median should be interpreted. The mean is basically the 'centre of gravity' of the data set (a). In contrast, the median is the middle observation, with half of the observations smaller and half of the observations larger (b)</caption>
+        <sidebyside widths="48% 48%">
+          <image source="images/fig4-4a.png">
+            <description>A bar chart with 48 observations resembles a stair-step pattern with decreasing heights from left to right. The text reads, <q>The mean is the centre of mass of the data.</q> Below the chart, there is a horizontal line labeled <q>balancing point</q> with a triangular fulcrum symbolizing balance.</description>
+          </image>
+          <image source="images/fig4-4b.png">
+            <description>The same bar chart with the data split into two groups of 24 observations. The left group is shaded light gray, and the right group is shaded dark gray. An arrow points to the 24th observation with the text <q>The median is the middle observation in the data set.</q></description>
+          </image>
+        </sidebyside>
       </figure>
 
       <p>The mean is kind of like the <q>centre of gravity</q> of the data set, whereas the median is the <q>middle value</q> in the data. What this implies, as far as which one you should use, depends a little on what type of data you've got and what you're trying to achieve. As a rough guide:</p>
