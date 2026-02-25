@@ -2,7 +2,483 @@
 
 <chapter xml:id="ch-descriptive-statistics" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Descriptive statistics</title>
+
   <introduction>
-    <p>To be added.</p>
+    <p>Any time that you get a new data set to look at one of the first tasks that you have to do is find ways of summarising the data in a compact, easily understood fashion. This is what <term>descriptive statistics</term> (as opposed to inferential statistics) is all about. In fact, to many people the term <q>statistics</q> is synonymous with descriptive statistics. It is this topic that we'll consider in this chapter, but before going into any details, let's take a moment to get a sense of why we need descriptive statistics. To do this, let's open the <em>aflsmall_margins.csv</em> file and see what variables are stored in the file, see <xref ref="fig4-1"/>.</p>
+
+    <figure xml:id="fig4-1">
+      <caption>A screenshot of jamovi showing the variables stored in the <em>aflsmall_margins.csv</em> file</caption>
+      <image source="images/fig4-1.png" width="80%">
+        <description>A jamovi screenshot shows a data analysis interface with a column of numerical data labeled <q>afl.margins.</q> The navigation bar includes options like Exploration, T-Tests, ANOVA, Regression, Frequencies, and Factor under the Analyses tab.</description>
+      </image>
+    </figure>
+
+    <p>In fact, there is just one variable here, <em>afl.margins</em>. We'll focus a bit on this variable in this chapter, so I'd better tell you what it is. Unlike most of the data sets in this book, this is actually real data, relating to the Australian Football League (AFL).<fn>Note for non-Australians: the AFL is an Australian rules football competition. You don't need to know anything about Australian rules in order to follow this section.</fn> The <em>afl.margins</em> variable contains the winning margin (number of points) for all 176 home and away games played during the 2010 season.</p>
+
+    <p>This output doesn't make it easy to get a sense of what the data are actually saying. Just <q>looking at the data</q> isn't a terribly effective way of understanding data. In order to get some idea about what the data are actually saying we need to calculate some descriptive statistics (this chapter) and draw some nice pictures (<xref ref="ch-drawing-graphs"/>). Since the descriptive statistics are the easier of the two topics I'll start with those, but nevertheless I'll show you a histogram of the <em>afl.margins</em> data since it should help you get a sense of what the data we're trying to describe actually look like, see <xref ref="fig4-2"/>. We'll talk a lot more about how to draw histograms in <xref ref="sec-histograms"/> in the next chapter. For now, it's enough to look at the histogram and note that it provides a fairly interpretable representation of the <em>afl.margins</em> data.</p>
+
+    <figure xml:id="fig4-2">
+      <caption>A histogram of the AFL 2010 winning margin data (the <em>afl.margins</em> variable). As you might expect, the larger the winning margin the less frequently you tend to see it</caption>
+      <image source="images/fig4-2.png" width="80%">
+        <description>Histogram depicting the distribution of <q>afl.margins</q> against density. The horizontal axis (x-axis) ranges from 0 to 120, and the vertical axis (y-axis) shows density. Bars are varying in height, indicating the frequency of data within specific margin intervals.</description>
+      </image>
+    </figure>
   </introduction>
+
+  <section xml:id="sec-measures-central-tendency">
+    <title>Measures of central tendency</title>
+
+    <p>Drawing pictures of the data, as I did in <xref ref="fig4-2"/>, is an excellent way to convey the <q>gist</q> of what the data is trying to tell you. It's often extremely useful to try to condense the data into a few simple <q>summary</q> statistics. In most situations, the first thing that you'll want to calculate is a measure of <term>central tendency</term>. That is, you'd like to know something about where the <q>average</q> or <q>middle</q> of your data lies. The three most commonly used measures are the mean, median and mode. I'll explain each of these in turn, and then discuss when each of them is useful.</p>
+
+    <subsection xml:id="subsec-the-mean">
+      <title>The mean</title>
+
+      <p>The <term>mean</term> of a set of observations is just a normal, old-fashioned average. Add all of the values up, and then divide by the total number of values. The first five AFL winning margins were 56, 31, 56, 8 and 32, so the mean of these observations is just:
+      <me>\frac{56 + 31 + 56 + 8 + 32}{5} = \frac{183}{5} = 36.60</me>
+      Of course, this definition of the mean isn't news to anyone. Averages (i.e., means) are used so often in everyday life that this is pretty familiar stuff. However, since the concept of a mean is something that everyone already understands, I'll use this as an excuse to start introducing some of the mathematical notation that statisticians use to describe this calculation, and talk about how the calculations would be done in jamovi.</p>
+
+      <p>The first piece of notation to introduce is <m>N</m>, which we'll use to refer to the number of observations that we're averaging (in this case <m>N = 5</m>). Next, we need to attach a label to the observations themselves. It's traditional to use X for this, and to use subscripts to indicate which observation we're actually talking about. That is, we'll use <m>X_1</m> to refer to the first observation, <m>X_2</m> to refer to the second observation, and so on all the way up to <m>X_N</m> for the last one. Or, to say the same thing in a slightly more abstract way, we use <m>X_i</m> to refer to the i-th observation. Just to make sure we're clear on the notation, <xref ref="tbl-tab4-1"/> lists the 5 observations in the <em>afl.margins</em> variable, along with the mathematical symbol used to refer to it and the actual value that the observation corresponds to.</p>
+
+      <table xml:id="tbl-tab4-1">
+        <title>Observations in the <em>afl.margins</em> variable</title>
+        <tabular halign="center">
+          <col right="minor"/><col right="minor"/><col/>
+          <row header="yes" bottom="minor">
+            <cell>the observation</cell>
+            <cell>its symbol</cell>
+            <cell>the observed value</cell>
+          </row>
+          <row>
+            <cell>winning margin, game 1</cell>
+            <cell><m>X_1</m></cell>
+            <cell>56 points</cell>
+          </row>
+          <row>
+            <cell>winning margin, game 2</cell>
+            <cell><m>X_2</m></cell>
+            <cell>31 points</cell>
+          </row>
+          <row>
+            <cell>winning margin, game 3</cell>
+            <cell><m>X_3</m></cell>
+            <cell>56 points</cell>
+          </row>
+          <row>
+            <cell>winning margin, game 4</cell>
+            <cell><m>X_4</m></cell>
+            <cell>8 points</cell>
+          </row>
+          <row>
+            <cell>winning margin, game 5</cell>
+            <cell><m>X_5</m></cell>
+            <cell>32 points</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>Additional technical detail.<fn>Okay, now let's try to write a formula for the mean. By tradition, we use <m>\bar{X}</m> as the notation for the mean. So the calculation for the mean could be expressed using the following formula: <me>\bar{X}=\frac{X_1 + X_2 \ldots + X_{N-1} + X_{N}}{N}</me> This formula is entirely correct but it's terribly long, so we make use of the <term>summation symbol</term> <m>\sum</m> to shorten it. If I want to add up the first five observations I could write out the sum the long way, <m>X_1 + X_2 + X_3 + X_4 + X_5</m> or I could use the summation symbol to shorten it to this: <me>\sum_{i=1}^{5} X_i</me> Taken literally, this could be read as <q>the sum, taken over all i values from 1 to 5, of the value <m>X_i</m></q>. But basically what it means is <q>add up the first five observations</q>. In any case, we can use this notation to write out the formula for the mean, which looks like this: <me>\bar{X}=\frac{1}{N}\sum_{i=1}^{N}X_i</me> In all honesty, I can't imagine that all this mathematical notation helps clarify the concept of the mean at all. In fact, it's really just a fancy way of writing out the same thing I said in words: add all the values up and then divide by the total number of items. However, that's not really the reason I went into all that detail. My goal was to try to make sure that everyone reading this book is clear on the notation that we'll be using throughout the book: <m>\bar{X}</m> for the mean, <m>\sum</m> for the idea of summation, <m>X_i</m> for the ith observation, and <m>N</m> for the total number of observations. We're going to be re-using these symbols a fair bit so it's important that you understand them well enough to be able to <q>read</q> the equations, and to be able to see that it's just saying <q>add up lots of things and then divide by another thing</q>. The choice to use <m>\sum</m> to denote summation isn't arbitrary. It's the Greek upper case letter sigma, which is the analogue of the letter <m>S</m> in that alphabet. Similarly, there's an equivalent symbol used to denote the multiplication of lots of numbers, because multiplications are also called <q>products</q> we use the <m>\prod</m> symbol for this (the Greek upper case pi, which is the analogue of the letter <m>P</m>).</fn></p>
+    </subsection>
+
+    <subsection xml:id="subsec-mean-jamovi">
+      <title>Calculating the mean in jamovi</title>
+
+      <p>Okay, that's the maths. So how do we get the magic computing box to do the work for us? When the number of observations starts to become large it's much easier to do these sorts of calculations using a computer. To calculate the mean using all the data we can use jamovi. The first step is to click on the 'Exploration' button and then click 'Descriptives'. Then you can highlight the <em>afl.margins</em> variable and click the 'Right arrow' to move it across into the 'Variables box'. As soon as you do that a Table appears on the right-hand side of the screen containing default 'Descriptives' information; see <xref ref="fig4-3"/>.</p>
+
+      <figure xml:id="fig4-3">
+        <caption>Default descriptives for the AFL 2010 winning margin data (the <em>afl.margins</em> variable)</caption>
+        <image source="images/fig4-3.png" width="90%">
+          <description>A screenshot from jamovi displaying descriptive analysis results. The interface includes sections for selecting variables and splitting data. The results section shows descriptive statistics for <q>afl.margins</q> with N, Missing, Mean, Median, Standard deviation, Minimum, and Maximum values.</description>
+        </image>
+      </figure>
+
+      <p>As you can see in <xref ref="fig4-3"/>, the mean value for the <em>afl.margins</em> variable is 35.30. Other information presented includes the total number of observations (N=176), the number of missing values (none), and the median, minimum and maximum values for the variable.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-the-median">
+      <title>The median</title>
+
+      <p>The second measure of central tendency that people use a lot is the <term>median</term>, and it's even easier to describe than the mean. The median of a set of observations is just the middle value. As before let's imagine we were interested only in the first 5 AFL winning margins: <m>56</m>, <m>31</m>, <m>56</m>, <m>8</m> and <m>32</m>. To figure out the median we sort these numbers into ascending order: 8, 31, <em>32</em>, 56, 56.</p>
+
+      <p>From inspection, it's obvious that the median value of these 5 observations is 32 since that's the middle one in the sorted list (I've put it in bold to make it even more obvious). Easy stuff. But what should we do if we are interested in the first 6 games rather than the first 5? Since the sixth game in the season had a winning margin of 14 points, our sorted list is now 8, 14, <em>31</em>, <em>32</em>, 56, 56.</p>
+
+      <p>And there are two middle numbers, 31 and 32. The median is defined as the average of those two numbers, which is of course 31.5. As before, it's very tedious to do this by hand when you've got lots of numbers. In real life, of course, no-one actually calculates the median by sorting the data and then looking for the middle value. In real life we use a computer to do the heavy lifting for us, and jamovi has provided us with a median value of 30.50 for the <em>afl.margins</em> variable (<xref ref="fig4-3"/>).</p>
+    </subsection>
+
+    <subsection xml:id="subsec-mean-or-median">
+      <title>Mean or median? What's the difference?</title>
+
+      <p>Knowing how to calculate means and medians is only a part of the story. You also need to understand what each one is saying about the data, and what that implies for when you should use each one. This is illustrated in <xref ref="fig4-4"/>.</p>
+
+      <figure xml:id="fig4-4">
+        <caption>An illustration of the difference between how the mean and the median should be interpreted. The mean is basically the 'centre of gravity' of the data set. If you imagine that the histogram of the data is a solid object, then the point on which you could balance it (as if on a see-saw) is the mean. In contrast, the median is the middle observation, with half of the observations smaller and half of the observations larger</caption>
+        <image source="images/fig4-4.png" width="100%">
+          <description>A bar chart on the left has 48 observations and resembles a stair-step pattern with decreasing heights from left to right is shown. The text reads, <q>The mean is the centre of mass of the data.</q> Below the chart, there is a horizontal line labeled <q>balancing point</q> with a triangular fulcrum symbolizing balance. The same bar chart is shown on the right with the data split into two groups of 24 observations. The left group is shaded light gray, and the right group is shaded dark gray. An arrow points to the 24th observation with the text <q>The median is the middle observation in the data set.</q></description>
+        </image>
+      </figure>
+
+      <p>The mean is kind of like the <q>centre of gravity</q> of the data set, whereas the median is the <q>middle value</q> in the data. What this implies, as far as which one you should use, depends a little on what type of data you've got and what you're trying to achieve. As a rough guide:</p>
+
+      <ul>
+        <li><p>If your data are nominal scale you probably shouldn't be using either the mean or the median. Both the mean and the median rely on the idea that the numbers assigned to values are meaningful. If the numbering scheme is arbitrary then it's probably best to use the <xref ref="subsec-mode" text="title"/> instead.</p></li>
+        <li><p>If your data are ordinal scale you're more likely to want to use the median than the mean. The median only makes use of the order information in your data (i.e., which numbers are bigger) but doesn't depend on the precise numbers involved. That's exactly the situation that applies when your data are ordinal scale. The mean, on the other hand, makes use of the precise numeric values assigned to the observations, so it's not really appropriate for ordinal data.</p></li>
+        <li><p>For interval and ratio scale data either one is generally acceptable. Which one you pick depends a bit on what you're trying to achieve. The mean has the advantage that it uses all the information in the data (which is useful when you don't have a lot of data). But it's very sensitive to extreme, outlying values.</p></li>
+      </ul>
+
+      <p>Let's expand on that last part a little. One consequence is that there are systematic differences between the mean and the median when the histogram is asymmetric (<xref ref="sec-skew-kurtosis" text="title"/>). This is illustrated in <xref ref="fig4-4"/>. Notice that the median (right-hand side) is located closer to the <q>body</q> of the histogram, whereas the mean (left-hand side) gets dragged towards the <q>tail</q> (where the extreme values are). To give a concrete example, suppose Bob (income $50,000), Kate (income $60,000) and Jane (income $65,000) are sitting at a table. The average income at the table is $58,333 and the median income is $60,000. Then Bill sits down with them (income $100,000,000). The average income has now jumped to $25,043,750 but the median rises only to $62,500. If you're interested in looking at the overall income at the table the mean might be the right answer. But if you're interested in what counts as a typical income at the table the median would be a better choice here.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-real-life-example">
+      <title>A real-life example</title>
+
+      <p>To try to get a sense of why you need to pay attention to the differences between the mean and the median let's consider a real life example. Since I tend to mock journalists for their poor scientific and statistical knowledge, I should give credit where credit is due. This is an excellent article by Michael Janda from the ABC news website<fn><url href="http://www.abc.net.au/news/2010-09-24/housing-bubble-debate-boils-over/2273406">www.abc.net.au/news/2010-09-24/housing-bubble-debate-boils-over/2273406</url></fn> from 24 September, 2010:</p>
+
+      <blockquote>
+        <p>Senior Commonwealth Bank executives have travelled the world in the past couple of weeks with a presentation showing how Australian house prices, and the key price to income ratios, compare favourably with similar countries. <q>Housing affordability has actually been going sideways for the last five to six years,</q> said Craig James, the chief economist of the bank's trading arm, CommSec.</p>
+      </blockquote>
+
+      <p>This probably comes as a huge surprise to anyone with a mortgage, or who wants a mortgage, or pays rent, or isn't completely oblivious to what's been going on in the Australian housing market over the last several years. Back to the article:</p>
+
+      <blockquote>
+        <p>CBA has waged its war against what it believes are housing doomsayers with graphs, numbers and international comparisons. In its presentation, the bank rejects arguments that Australia's housing is relatively expensive compared to incomes. It says Australia's house price to household income ratio of 5.6 in the major cities, and 4.3 nationwide, is comparable to many other developed nations. It says San Francisco and New York have ratios of 7, Auckland's is 6.7, and Vancouver comes in at 9.3.</p>
+      </blockquote>
+
+      <p>More excellent news! Except, the article goes on to make the observation that:</p>
+
+      <blockquote>
+        <p>Many analysts say that has led the bank to use misleading figures and comparisons. If you go to page four of CBA's presentation and read the source information at the bottom of the graph and table, you would notice there is an additional source on the international comparison -- Demographia. However, if the Commonwealth Bank had also used Demographia's analysis of Australia's house price to income ratio, it would have come up with a figure closer to 9 rather than 5.6 or 4.3.</p>
+      </blockquote>
+
+      <p>That's, um, a rather serious discrepancy. One group of people say 9, another says 4-5. Should we just split the difference and say the truth lies somewhere in between? Absolutely not! This is a situation where there is a right answer and a wrong answer. Demographia is correct, and the Commonwealth Bank is wrong. As the article points out:</p>
+
+      <blockquote>
+        <p>[An] obvious problem with the Commonwealth Bank's domestic price to income figures is they compare average incomes with median house prices (unlike the Demographia figures that compare median incomes to median prices). The median is the mid-point, effectively cutting out the highs and lows, and that means the average is generally higher when it comes to incomes and asset prices, because it includes the earnings of Australia's wealthiest people. To put it another way: the Commonwealth Bank's figures count Ralph Norris' multi-million dollar pay packet on the income side, but not his (no doubt) very expensive house in the property price figures, thus understating the house price to income ratio for middle-income Australians.</p>
+      </blockquote>
+
+      <p>Couldn't have put it better myself. The way that Demographia calculated the ratio is correct. The way that the Bank did it is incorrect. As for why an extremely quantitatively sophisticated organisation such as a major bank made such an elementary mistake, well... I can't say for sure since I have no special insight into their thinking. But the article itself does happen to mention the following very interesting facts, which may or may not be relevant:</p>
+
+      <blockquote>
+        <p>[As] Australia's largest home lender, the Commonwealth Bank has one of the biggest vested interests in house prices rising. It effectively owns a massive swathe of Australian housing as security for its home loans as well as many small business loans.</p>
+      </blockquote>
+    </subsection>
+
+    <subsection xml:id="subsec-mode">
+      <title>Mode</title>
+
+      <p>The mode of a sample is very simple. It is the value that occurs most frequently. We can illustrate the mode using a different AFL variable: who has played in the most finals? Open the aflsmall finalists file and take a look at the <em>afl.finalists</em> variable, see <xref ref="fig4-5"/>.</p>
+
+      <figure xml:id="fig4-5">
+        <caption>A screenshot of jamovi showing the variables stored in the aflsmall_finalists.csv file</caption>
+        <image source="images/fig4-5.png" width="80%">
+          <description>A jamovi screenshot of a spreadsheet labeled <q>AFL Finalists</q> with 18 rows. The first column lists various Australian Football League teams, including Hawthorn, Melbourne, and Carlton. The jamovi spreadsheet menu shows options like Variables, Data, and Analyses.</description>
+        </image>
+      </figure>
+
+      <p>This variable contains the names of all 400 teams that played in all 200 finals matches played during the period 1987 to 2010. What we could do is read through all 400 entries and count the number of occasions on which each team name appears in our list of finalists, thereby producing a <term>frequency table</term>. However, that would be mindless and boring: exactly the sort of task that computers are great at. So let's use jamovi to do this for us. Under 'Exploration' -- 'Descriptives' click the small check box labelled 'Frequency tables' and you should get something like <xref ref="fig4-6"/>.</p>
+
+      <figure xml:id="fig4-6">
+        <caption>A screenshot of jamovi showing the frequency table for the <em>afl.finalists</em> variable</caption>
+        <image source="images/fig4-6.png" width="90%">
+          <description>A jamovi screenshot focusing on analyzing AFL finalists. The left panel includes options to select variables and split data. The right panel displays results: Descriptives and Frequencies for AFL finalists by region, including percentages.</description>
+        </image>
+      </figure>
+
+      <p>Now that we have our frequency table we can just look at it and see that, over the 24 years for which we have data, Geelong has played in more finals than any other team. Thus, the mode of the <em>afl.finalists</em> data is <q>Geelong</q>. We can see that Geelong (39 finals) played in more finals than any other team during the 1987-2010 period.</p>
+
+      <p>It's also worth noting that in the 'Descriptives' Table no results are calculated for mean, median, minimum or maximum. This is because the <em>afl.finalists</em> variable is a nominal text variable so it makes no sense to calculate these values.</p>
+
+      <p>One last point to make regarding the mode. Whilst the mode is most often calculated when you have nominal data, because means and medians are useless for those sorts of variables, there are some situations in which you really do want to know the mode of an ordinal, interval or ratio scale variable. For instance, let's go back to our <em>afl.margins</em> variable. This variable is clearly ratio scale (if it's not clear to you, it may help to re-read <xref ref="sec-scales-of-measurement"/>), and so in most situations the mean or the median is the measure of central tendency that you want. But consider this scenario: a friend of yours is offering a bet and they pick a football game at random. Without knowing who is playing you have to guess the exact winning margin. If you guess correctly you win $50. If you don't you lose $1. There are no consolation prizes for <q>almost</q> getting the right answer. You have to guess exactly the right margin. For this bet, the mean and the median are completely useless to you. It is the mode that you should bet on. To calculate the mode for the <em>afl.margins</em> variable in jamovi, go back to that data set and on the 'Exploration' -- 'Descriptives' screen you will see you can expand the section marked 'Statistics'. Click on the checkbox marked 'Mode' and you will see the modal value presented in the 'Descriptives' Table, as in <xref ref="fig4-7"/>. So the 2010 data suggest you should bet on a 3 point margin.</p>
+
+      <figure xml:id="fig4-7">
+        <caption>A screenshot of jamovi showing the modal value for the <em>afl.margins</em> variable</caption>
+        <image source="images/fig4-7.png" width="90%">
+          <description>A jamovi screenshot showing the analysis of <q>afl.margins.</q> The main sections include Descriptives, Variables, and Results. Descriptive statistics like mean, median, and standard deviation are displayed on the right.</description>
+        </image>
+      </figure>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-measures-of-variability">
+    <title>Measures of variability</title>
+
+    <p>The statistics that we've discussed so far all relate to central tendency. That is, they all talk about which values are <q>in the middle</q> or <q>popular</q> in the data. However, central tendency is not the only type of summary statistic that we want to calculate. The second thing that we really want is a measure of the <term>variability</term> of the data. That is, how <q>spread out</q> are the data? How <q>far</q> away from the mean or median do the observed values tend to be? For now, let's assume that the data are interval or ratio scale, and we'll continue to use the <em>afl.margins</em> data. We'll use this data to discuss several different measures of spread, each with different strengths and weaknesses.</p>
+
+    <subsection xml:id="subsec-range">
+      <title>Range</title>
+
+      <p>The <term>range</term> of a variable is very simple. It's the biggest value minus the smallest value. For the AFL winning margins data the maximum value is 116 and the minimum value is 0. Although the range is the simplest way to quantify the notion of <q>variability</q>, it's one of the worst. Recall from our discussion of the mean that we want our summary measure to be robust. If the data set has one or two extremely bad values in it we'd like our statistics to not be unduly influenced by these cases. For example, in a variable containing very extreme outliers</p>
+
+      <p>-100, 2, 3, 4, 5, 6, 7, 8, 9, 10</p>
+
+      <p>it is clear that the range is not robust. This variable has a range of 110 but if the outlier were removed we would have a range of only 8.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-iqr">
+      <title>Interquartile range</title>
+
+      <p>The <term>interquartile range</term> (IQR) is like the range, but instead of the difference between the biggest and smallest value the difference between the 25th percentile and the 75th percentile is taken. If you don't already know what a <term>percentile</term> is, the 10th percentile of a data set is the smallest number x such that 10% of the data is less than x. In fact, we've already come across the idea. The median of a data set is its 50th percentile! In jamovi you can easily specify the 25th, 50th and 75th percentiles by clicking the checkbox 'Quartiles' in the 'Exploration' -- 'Descriptives' -- 'Statistics' screen.</p>
+
+      <p>And not surprisingly, in <xref ref="fig4-8"/> the 50th percentile is the same as the median value. And, by noting that <m>50.50 - 12.75 = 37.75</m>, we can see that the interquartile range for the 2010 AFL winning margins data is 37.75. While it's obvious how to interpret the range it's a little less obvious how to interpret the IQR. The simplest way to think about it is like this: the interquartile range is the range spanned by the <q>middle half</q> of the data. That is, one quarter of the data falls below the 25th percentile and one quarter of the data is above the 75th percentile, leaving the <q>middle half</q> of the data lying in between the two. And the IQR is the range covered by that middle half.</p>
+
+      <figure xml:id="fig4-8">
+        <caption>A screenshot of jamovi showing the Quartiles for the <em>afl.margins</em> variable</caption>
+        <image source="images/fig4-8.png" width="60%">
+          <description>A jamovi screenshot of a table titled <q>Descriptives</q> showing statistical data for <q>afl.margins</q> with N=176, Missing=0, Mean=35.30, Median=30.50, Mode=3.00, Standard deviation=26.07, Minimum=0.00, Maximum=116.00, 25th percentile=12.75, 50th percentile=30.50, and 75th percentile=50.50.</description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-mean-absolute-deviation">
+      <title>Mean absolute deviation</title>
+
+      <p>The two measures we've looked at so far, the range and the interquartile range, both rely on the idea that we can measure the spread of the data by looking at the percentiles of the data. However, this isn't the only way to think about the problem. A different approach is to select a meaningful reference point (usually the mean or the median) and then report the <q>typical</q> deviations from that reference point. What do we mean by <q>typical</q> deviation? Usually, this is the mean or median value of these deviations. In practice, this leads to two different measures: the <q>mean absolute deviation</q> (from the mean) and the <q>median absolute deviation</q> (from the median). From what I've read, the measure based on the median seems to be used in statistics and does seem to be the better of the two. But to be honest I don't think I've seen it used much in psychology. The measure based on the mean does occasionally show up in psychology though. In this section I'll talk about the first one, and I'll come back to talk about the second one later.</p>
+
+      <p>Since the previous paragraph might sound a little abstract, let's go through the <term>mean absolute deviation</term> from the mean a little more slowly. One useful thing about this measure is that the name actually tells you exactly how to calculate it. Let's think about our AFL winning margins data, and once again we'll start by pretending that there are only 5 games in total, with winning margins of 56, 31, 56, 8 and 32. Since our calculations rely on an examination of the deviation from some reference point (in this case the mean), the first thing we need to calculate is the mean, <m>\bar{X}</m>. For these five observations, our mean is <m>\bar{X} = 36.6</m>. The next step is to convert each of our observations <m>X_i</m> into a deviation score. We do this by calculating the difference between the observation <m>X_i</m> and the mean <m>\bar{X}</m>. That is, the deviation score is defined to be <m>X_i - \bar{X}</m>. For the first observation in our sample, this is equal to <m>56 - 36.6 = 19.4</m>. Okay, that's simple enough. The next step in the process is to convert these deviations to absolute deviations, and we do this by converting any negative values to positive ones. Mathematically, we would denote the absolute value of <m>-3</m> as <m>\mid -3 \mid</m>, and so we say that <m>\mid -3 \mid = 3</m>. We use the absolute value here because we don't really care whether the value is higher than the mean or lower than the mean, we're just interested in how close it is to the mean. To help make this process as obvious as possible, <xref ref="tbl-tab4-2"/> shows these calculations for all five observations.</p>
+
+      <table xml:id="tbl-tab4-2">
+        <title>Measures of variability</title>
+        <tabular halign="center">
+          <col right="minor"/><col right="minor"/><col right="minor"/><col right="minor"/><col/>
+          <row header="yes" bottom="minor">
+            <cell>English</cell>
+            <cell>notation</cell>
+            <cell>value</cell>
+            <cell>deviation from mean</cell>
+            <cell>absolute deviation</cell>
+          </row>
+          <row bottom="minor">
+            <cell>notation:</cell>
+            <cell><m>i</m></cell>
+            <cell><m>X_i</m></cell>
+            <cell><m>X_i - \bar{X}</m></cell>
+            <cell><m>\mid X_i - \bar{X} \mid</m></cell>
+          </row>
+          <row>
+            <cell></cell>
+            <cell>1</cell>
+            <cell>56</cell>
+            <cell>19.4</cell>
+            <cell>19.4</cell>
+          </row>
+          <row>
+            <cell></cell>
+            <cell>2</cell>
+            <cell>31</cell>
+            <cell>-5.6</cell>
+            <cell>5.6</cell>
+          </row>
+          <row>
+            <cell></cell>
+            <cell>3</cell>
+            <cell>56</cell>
+            <cell>19.4</cell>
+            <cell>19.4</cell>
+          </row>
+          <row>
+            <cell></cell>
+            <cell>4</cell>
+            <cell>8</cell>
+            <cell>-28.6</cell>
+            <cell>28.6</cell>
+          </row>
+          <row>
+            <cell></cell>
+            <cell>5</cell>
+            <cell>32</cell>
+            <cell>-4.6</cell>
+            <cell>4.6</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>Now that we have calculated the absolute deviation score for every observation in the data set, all that we have to do to calculate the mean of these scores. Let's do that:
+      <me>\frac{19.4 + 5.6 + 19.4 + 28.6 + 4.6}{5} = 15.52</me>
+      And we're done. The mean absolute deviation for these five scores is 15.52.</p>
+
+      <p>Additional technical detail.<fn>However, whilst our calculations for this little example are at an end, we do have a couple of things left to talk about. First, we should really try to write down a proper mathematical formula. But in order to do this I need some mathematical notation to refer to the mean absolute deviation. Irritatingly, <q>mean absolute deviation</q> and <q>median absolute deviation</q> have the same acronym (MAD), which leads to a certain amount of ambiguity so I'd better come up with something different for the mean absolute deviation. Sigh. What I'll do is use AAD instead, short for average absolute deviation. Now that we have some unambiguous notation, here's the formula that describes what we just calculated: <me>AAD(X) =\frac{1}{N} \sum_{i=1}^{N} \mid X_i - \bar{X} \mid = 15.52</me></fn></p>
+    </subsection>
+
+    <subsection xml:id="subsec-variance">
+      <title>Variance</title>
+
+      <p>Although the average absolute deviation measure has its uses, it's not the best measure of variability to use. From a purely mathematical perspective there are some solid reasons to prefer squared deviations rather than absolute deviations. If we do that we obtain a measure called the <term>variance</term>, which has a lot of really nice statistical properties that I'm going to ignore,<fn>Well, I will very briefly mention the one that I think is coolest, for a very particular definition of <q>cool</q>, that is. Variances are additive. Here's what that means. Suppose I have two variables <m>X</m> and <m>Y</m>, whose variances are <m>Var(X)</m> and <m>Var(Y)</m> respectively. Now imagine I want to define a new variable <m>Z</m> that is the sum of the two, <m>Z = X + Y</m>. As it turns out, the variance of <m>Z</m> is equal to <m>Var(X) + Var(Y)</m>. This is a very useful property, but it's not true of the other measures that I talk about in this section.</fn> and one massive psychological flaw that I'm going to make a big deal out of in a moment. The variance of a data set <m>X</m> is sometimes written as <m>Var(X)</m>, but it's more commonly denoted <m>s^2</m> (the reason for this will become clearer shortly).</p>
+
+      <p>Additional technical detail.<fn>The formula that we use to calculate the variance of a set of observations is as follows: <me>VAR(X) =\frac{1}{N} \sum_{i=1}^{N} ( X_i - \bar{X} )^2</me> As you can see, it's basically the same formula that we used to calculate the average absolute deviation, except that instead of using <q>absolute deviations</q> we use <q>squared deviations</q>. It is for this reason that the variance is sometimes referred to as the <q>mean square deviation</q>.</fn></p>
+
+      <p>Now that we've got the basic idea, let's have a look at a concrete example. Once again, let's use the first five AFL games as our data. If we follow the same approach that we took last time, we end up with the information shown in <xref ref="tbl-tab4-3"/>.</p>
+
+      <table xml:id="tbl-tab4-3">
+        <title>Measures of variability for the first five AFL games</title>
+        <tabular halign="center">
+          <col right="minor"/><col right="minor"/><col right="minor"/><col right="minor"/><col/>
+          <row header="yes" bottom="minor">
+            <cell>English</cell>
+            <cell>notation</cell>
+            <cell>value</cell>
+            <cell>deviation from mean</cell>
+            <cell>squared deviation</cell>
+          </row>
+          <row bottom="minor">
+            <cell>notation:</cell>
+            <cell><m>i</m></cell>
+            <cell><m>X_i</m></cell>
+            <cell><m>X_i - \bar{X}</m></cell>
+            <cell><m>( X_i - \bar{X} )^2</m></cell>
+          </row>
+          <row>
+            <cell></cell>
+            <cell>1</cell>
+            <cell>56</cell>
+            <cell>19.4</cell>
+            <cell>376.36</cell>
+          </row>
+          <row>
+            <cell></cell>
+            <cell>2</cell>
+            <cell>31</cell>
+            <cell>-5.6</cell>
+            <cell>31.36</cell>
+          </row>
+          <row>
+            <cell></cell>
+            <cell>3</cell>
+            <cell>56</cell>
+            <cell>19.4</cell>
+            <cell>376.36</cell>
+          </row>
+          <row>
+            <cell></cell>
+            <cell>4</cell>
+            <cell>8</cell>
+            <cell>-28.6</cell>
+            <cell>817.96</cell>
+          </row>
+          <row>
+            <cell></cell>
+            <cell>5</cell>
+            <cell>32</cell>
+            <cell>-4.6</cell>
+            <cell>21.16</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>That last column contains all of our squared deviations, so all we have to do is average them. If we do that by hand, using a calculator, we end up with a variance of <m>324.64</m>. For the moment, don't worry about what a variance of <m>324.64</m> actually means. Instead let's talk a bit more about how to do the calculations in jamovi, because this will reveal something very weird. Start a new jamovi session by clicking on the main menu button (three horizontal lines in the top left corner and selecting 'New'. Now type in the first five values from the <em>afl.margins</em> data set in column A (<m>56</m>, <m>31</m>, <m>56</m>, <m>8</m>, <m>32</m>). Change the variable type to 'Continuous' and under 'Descriptives' click the 'Variance' check box, and you get the same values for variance as the one we calculated by hand (<m>324.64</m>). No, wait, you get a completely different answer (<m>405.80</m>) -- see <xref ref="fig4-9"/>.</p>
+
+      <figure xml:id="fig4-9">
+        <caption>A screenshot of jamovi showing the Variance for the first 5 values of the afl.margins variable</caption>
+        <image source="images/fig4-9.png" width="90%">
+          <description>A jamovi screenshot displaying descriptive statistics. The interface is divided into sections for selecting variables, splitting data, viewing results, and references. A data table shows the variance and other descriptive statistics like mean, median, standard deviation, etc.</description>
+        </image>
+      </figure>
+
+      <p>That's just weird -- is jamovi broken? As it happens, the answer is no.<fn>With the possible exception of the third question.</fn> jamovi is not making a mistake. In fact, it's very simple to explain what jamovi is doing here, but slightly trickier to explain why jamovi is doing it. So let's start with the <q>what</q>. What jamovi is doing is evaluating a slightly different formula to the one I showed you above. Instead of averaging the squared deviations, which requires you to divide by the number of data points N, jamovi has chosen to divide by <m>N - 1</m>.</p>
+
+      <p>Additional technical detail.<fn>In other words, the formula that jamovi is using is this one: <me>\frac{1}{N-1} \sum_{i=1}^{N} ( X_i - \bar{X} )^2</me></fn></p>
+
+      <p>So that's the <em>what</em>. The real question is why jamovi is dividing by <m>N - 1</m> and not by <m>N</m>. After all, the variance is supposed to be the mean squared deviation, right? So shouldn't we be dividing by N, the actual number of observations in the sample? Well, yes, we should. However, as we'll discuss in <xref ref="ch-estimation"/>, there's a subtle distinction between <q>describing a sample</q> and <q>making guesses about the population from which the sample came</q>. Up to this point, it's been a distinction without a difference. Regardless of whether you're describing a sample or drawing inferences about the population, the mean is calculated exactly the same way. Not so for the variance, or the standard deviation, or for many other measures.</p>
+
+      <p>What I outlined to you initially (i.e., take the actual average, and thus divide by <m>N</m>) assumes that you literally intend to calculate the variance of the sample. Most of the time, however, you're not terribly interested in the sample in and of itself. Rather, the sample exists to tell you something about the world. If so, you're actually starting to move away from calculating a <q>sample statistic</q> and towards the idea of estimating a <q>population parameter</q>. However, I'm getting ahead of myself. For now, let's just take it on faith that jamovi knows what it's doing, and we'll revisit the question later on when we talk about estimation in <xref ref="ch-estimation"/>.</p>
+
+      <p>Okay, one last thing. This section so far has read a bit like a mystery novel. I've shown you how to calculate the variance, described the weird <q><m>N - 1</m></q> thing that jamovi does and hinted at the reason why it's there, but I haven't mentioned the single most important thing. How do you interpret the variance? Descriptive statistics are supposed to describe things, after all, and right now the variance is really just a gibberish number. Unfortunately, the reason why I haven't given you the human-friendly interpretation of the variance is that there really isn't one. This is the most serious problem with the variance. Although it has some elegant mathematical properties that suggest that it really is a fundamental quantity for expressing variation, it's completely useless if you want to communicate with an actual human. Variances are completely uninterpretable in terms of the original variable! All the numbers have been squared and they don't mean anything anymore. This is a huge issue. For instance, according to <xref ref="tbl-tab4-3"/>, the margin in game 1 was <q>376.36 points-squared higher than the average margin</q>. This is <em>exactly</em> as stupid as it sounds, and so when we calculate a variance of <m>324.64</m> we're in the same situation. I've watched a lot of footy games, and at no time has anyone ever referred to <q>points squared</q>. It's not a real unit of measurement, and since the variance is expressed in terms of this gibberish unit, it is totally meaningless to a human.</p>
+    </subsection>
+
+    <subsection xml:id="subsec-standard-deviation">
+      <title>Standard deviation</title>
+
+      <p>Okay, suppose that you like the idea of using the variance because of those nice mathematical properties that I haven't talked about, but since you're a human and not a robot you'd like to have a measure that is expressed in the same units as the data itself (i.e., points, not points squared). What should you do? The solution to the problem is obvious! Take the square root of the variance, known as the <term>standard deviation</term>, also called the <q>root mean squared deviation</q>, or RMSD. This solves our problem fairly neatly. Whilst nobody has a clue what <q>a variance of 324.68 points-squared</q> really means, it's much easier to understand <q>a standard deviation of 18.01 points</q> since it's expressed in the original units. It is traditional to refer to the standard deviation of a sample of data as s, though <q>sd</q> and <q>std dev.</q> are also used at times.</p>
+
+      <p>Additional technical detail.<fn>Because the standard deviation is equal to the square root of the variance, you probably won't be surprised to see that the formula is: <me>s=\sqrt{\frac{1}{N} \sum_{i=1}^{N} ( X_i - \bar{X} )^2 }</me> and in jamovi there is a check box for 'Std. deviation' right above the check box for 'Variance'. Selecting this gives a value of <m>26.07</m> for the standard deviation.</fn></p>
+
+      <p>However, as you might have guessed from our discussion of the variance, what jamovi actually calculates is slightly different to the formula given above. Just like we saw with the variance, what jamovi calculates is a version that divides by <m>N - 1</m> rather than <m>N</m>.</p>
+
+      <p>Additional technical detail.<fn>For reasons that will make sense when we return to this topic in <xref ref="ch-estimation"/> I'll refer to this new quantity as <m>\hat{\sigma}</m> (read as: <q>sigma hat</q>), and the formula for this is: <me>\hat{\sigma}=\sqrt{\frac{1}{N-1} \sum_{i=1}^{N} ( X_i - \bar{X} )^2}</me></fn></p>
+
+      <p>Interpreting standard deviations is slightly more complex. Because the standard deviation is derived from the variance, and the variance is a quantity that has little to no meaning that makes sense to us humans, the standard deviation doesn't have a simple interpretation. As a consequence, most of us just rely on a simple rule of thumb. In general, you should expect 68% of the data to fall within 1 standard deviation of the mean, 95% of the data to fall within 2 standard deviation of the mean, and 99.7% of the data to fall within 3 standard deviations of the mean. This rule tends to work pretty well most of the time, but it's not exact. It's actually calculated based on an assumption that the histogram is symmetric and <q>bell shaped</q>. As you can tell from looking at the AFL winning margins histogram in <xref ref="fig4-2"/>, this isn't exactly true of our data! Even so, the rule is approximately correct. As it turns out, 65.3% of the <em>afl.margins</em> data fall within one standard deviation of the mean. This is shown visually in <xref ref="fig-fig4-10-1"/>.</p>
+
+      <figure xml:id="fig-fig4-10-1">
+        <caption>An illustration of the standard deviation from the AFL winning margins data. The shaded bars in the histogram show how much of the data fall within one standard deviation of the mean. In this case, 65.3% of the data set lies within this range, which is pretty consistent with the <q>approximately 68% rule</q> discussed in the main text</caption>
+        <image source="images/fig-fig4-10-1.png" width="80%">
+          <description>A bar graph depicting the standard deviation from the AFL winning margins data. Bars one standard deviation to the left and right of the mean are blue, other bars are white. Horizontal axis labels include <q>Mean - s.d.</q>, <q>Mean</q> and <q>Mean + s.d.</q></description>
+        </image>
+      </figure>
+    </subsection>
+
+    <subsection xml:id="subsec-which-measure-to-use">
+      <title>Which measure to use?</title>
+
+      <p>We've discussed quite a few measures of spread: range, IQR, mean absolute deviation, variance and standard deviation; and hinted at their strengths and weaknesses. Here's a quick summary:</p>
+
+      <ul>
+        <li><p><em>Range</em>. Gives you the full spread of the data. It's very vulnerable to outliers and as a consequence it isn't often used unless you have good reasons to care about the extremes in the data.</p></li>
+        <li><p><em>Interquartile range</em>. Tells you where the <q>middle half</q> of the data sits. It's pretty robust and complements the median nicely. This is used a lot.</p></li>
+        <li><p><em>Mean absolute deviation</em>. Tells you how far <q>on average</q> the observations are from the mean. It's very interpretable but has a few minor issues (not discussed here) that make it less attractive to statisticians than the standard deviation. Used sometimes, but not often.</p></li>
+        <li><p><em>Variance</em>. Tells you the average squared deviation from the mean. It's mathematically elegant and is probably the <q>right</q> way to describe variation around the mean, but it's completely uninterpretable because it doesn't use the same units as the data. Almost never used except as a mathematical tool, but it's buried <q>under the hood</q> of a very large number of statistical tools.</p></li>
+        <li><p><em>Standard deviation</em>. This is the square root of the variance. It's fairly elegant mathematically and it's expressed in the same units as the data so it can be interpreted pretty well. In situations where the mean is the measure of central tendency, this is the default. This is by far the most popular measure of variation.</p></li>
+      </ul>
+
+      <p>In short, the IQR and the standard deviation are easily the two most common measures used to report the variability of the data. But there are situations in which the others are used. I've described all of them in this book because there's a fair chance you'll run into most of these somewhere.</p>
+    </subsection>
+  </section>
+
+  <section xml:id="sec-skew-kurtosis">
+    <title>Skew and kurtosis</title>
+
+    <p>There are two more descriptive statistics that you will sometimes see reported in the psychological literature: skew and kurtosis. In practice, neither one is used anywhere near as frequently as the measures of central tendency and variability that we've been talking about. Skew is pretty important, so you do see it mentioned a fair bit, but I've actually never seen kurtosis reported in a scientific article to date.</p>
+
+    <p>Skewness is basically a measure of asymmetry and the easiest way to explain it is by drawing some pictures. As <xref ref="fig-fig4-11-1"/> illustrates, if the data tend to have a lot of extreme small values (i.e., the lower tail is <q>longer</q> than the upper tail) and not so many extremely large values (left panel) then we say that the data are <em>negatively skewed</em>. On the other hand, if there are more extremely large values than extremely small ones (right panel) we say that the data are positively skewed. If there are relatively more values that are far greater than the mean, the distribution is positively skewed or right skewed, with a tail stretching to the right. Negative or left skew is the opposite. A symmetric distribution has a skewness of 0. The skewness value for a positively skewed distribution is positive, and a negative value for a negatively skewed distribution.</p>
+
+    <p>Additional technical detail.<fn>One formula for the skewness of a data set is: <me>skewness(X)=\frac{1}{N \hat{\sigma}^3} \sum_{i=1}^{N} ( X_i - \bar{X})^3</me> where <m>N</m> is the number of observations, <m>\bar{X}</m> is the sample mean, and <m>\hat{\sigma}</m> is the standard deviation (the <q>divide by <m>N - 1</m></q> version, that is).</fn></p>
+
+    <figure xml:id="fig-fig4-11-1">
+      <caption>An illustration of skewness. On the left we have a negatively skewed data set, in the middle we have a data set with no skew, and on the right we have a positively skewed data set</caption>
+      <image source="images/fig-fig4-11-1.png" width="100%">
+        <description>Three bar charts demonstrate negative skew, no skew, and positive skew, respectively. The chart on the left shows a longer tail on the left, the middle chart is symmetrical, and the chart on the right shows a longer tail on the right.</description>
+      </image>
+    </figure>
+
+    <p>Perhaps more helpfully, you can use jamovi to calculate skewness: it's a check box in the 'Statistics' options under 'Exploration' -- 'Descriptives'. For the <em>afl.margins</em> variable, the skewness figure is <m>0.780</m>. If you divide the skewness estimate by the Std. error for skewness you have an indication of how skewed the data is. Especially in small samples (N <m>\lt</m> 50), one rule of thumb suggests that a value of 2 or less can mean that the data is not very skewed, and a value of over 2 that there is sufficient skew in the data to possibly limit its use in some statistical analyses. Though there is no clear agreement on this interpretation. That said, this does indicate that the AFL winning margins data is somewhat skewed (<m>\frac{0.780}{0.183} = 4.262</m>).</p>
+
+    <p>The final measure that is sometimes referred to, though very rarely in practice, is the kurtosis of a data set. Put simply, kurtosis is a measure of how thin or fat the tails of a distribution are, as illustrated in <xref ref="fig-fig4-12-1"/>.</p>
+
+    <figure xml:id="fig-fig4-12-1">
+      <caption>An illustration of kurtosis. On the left, we have a <q>platykurtic</q> distribution (kurtosis = -.95) meaning that the distribution has <q>thin</q> or flat tails. In the middle we have a <q>mesokurtic</q> distribution (kurtosis is almost exactly 0) which means that the tails are neither thin or fat. Finally, on the right, we have a <q>leptokurtic</q> distribution (kurtosis = 2.12) indicating that the distribution has <q>fat</q> tails. Note that kurtosis is measured with respect to a normal curve (black line)</caption>
+      <image source="images/fig-fig4-12-1.png" width="100%">
+        <description>A comparison of three types of distribution curves: Platykurtic (thin tails) on the left, Mesokurtic in the center, and Leptokurtic (fat tails) on the right, each with corresponding bar graphs in blue and overlaid black curves.</description>
+      </image>
+    </figure>
+
+    <p>By convention, we say that the <q>normal curve</q> (black lines) has zero kurtosis, so the degree of kurtosis is assessed relative to this curve. In this Figure, the data on the left have a pretty flat distribution, with thin tails, so the kurtosis is negative and we call the data platykurtic. The data on the right have a distribution with fat tails, so the kurtosis is positive and we say that the data is leptokurtic. But the data in the middle have neither thin or fat tails, so we say that it is mesokurtic and has kurtosis zero. This is summarised in <xref ref="tbl-tab4-4"/>.</p>
+
+    <table xml:id="tbl-tab4-4">
+      <title>Thin to fat tails to illustrate kurtosis</title>
+      <tabular halign="center">
+        <col right="minor"/><col right="minor"/><col/>
+        <row header="yes" bottom="minor">
+          <cell>English</cell>
+          <cell>informal term</cell>
+          <cell>kurtosis value</cell>
+        </row>
+        <row>
+          <cell><q>tails too thin</q></cell>
+          <cell>platykurtic</cell>
+          <cell>negative</cell>
+        </row>
+        <row>
+          <cell><q>tails neither thin or fat</q></cell>
+          <cell>mesokurtic</cell>
+          <cell>zero</cell>
+        </row>
+        <row>
+          <cell><q>tails too fat</q></cell>
+          <cell>leptokurtic</cell>
+          <cell>positive</cell>
+        </row>
+      </tabular>
+    </table>
+
+    <p>Additional technical detail.<fn>The equation for kurtosis is pretty similar in spirit to the formulas we've seen already for the variance and the skewness. Except that where the variance involved squared deviations and the skewness involved cubed deviations, the kurtosis involves raising the deviations to the fourth power: <me>kurtosis(X)=\frac{1}{N \hat{\sigma}^4} \sum_{i=1}^{N} ( X_i - \bar{X} )^4 - 3</me> I know, it's not terribly interesting to me either. The <q>-3</q> part is something that statisticians tack on to ensure that the normal curve has kurtosis zero. It looks a bit stupid, just sticking a <q>-3</q> at the end of the formula, but there are good mathematical reasons for doing this.</fn></p>
+
+    <p>More to the point, jamovi has a check box for kurtosis just below the check box for skewness, and this gives a value for kurtosis of <m>0.101</m> with a standard error of <m>0.364</m>. This means that the AFL winning margins data has only a small kurtosis, which is ok.</p>
+  </section>
+
 </chapter>
