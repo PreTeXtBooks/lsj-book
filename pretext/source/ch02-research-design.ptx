@@ -391,7 +391,7 @@
     <title>Assessing the reliability of a measurement</title>
 
     <p>
-      At this point we've thought a little bit about how to operationalise a theoretical construct and thereby create a psychological measure. And we've seen that by applying psychological measures we end up with variables, which can come in many different types. At this point, we should start discussing the obvious question: is the measurement any good? We'll do this in terms of two related ideas: <em>reliability</em> and <em>validity</em>. Put simply, the <term>reliability</term> of a measure tells you how precisely you are measuring something, whereas the <term>validity</term> of a measure tells you how accurate the measure is. In this section we'll talk about reliability; we'll talk about validity in the section on <xref provisional="Assessing the validity of a study"/>.
+      At this point we've thought a little bit about how to operationalise a theoretical construct and thereby create a psychological measure. And we've seen that by applying psychological measures we end up with variables, which can come in many different types. At this point, we should start discussing the obvious question: is the measurement any good? We'll do this in terms of two related ideas: <em>reliability</em> and <em>validity</em>. Put simply, the <term>reliability</term> of a measure tells you how precisely you are measuring something, whereas the <term>validity</term> of a measure tells you how accurate the measure is. In this section we'll talk about reliability; we'll talk about validity in the section on <xref ref="sec-assessing-validity-of-a-study"/>.
     </p>
 
     <p>
@@ -404,7 +404,7 @@
       <li><p><term>Test-retest reliability</term>. This relates to consistency over time. If we repeat the measurement at a later date do we get the same answer?</p></li>
       <li><p><term>Inter-rater reliability</term>. This relates to consistency across people. If someone else repeats the measurement (e.g., someone else rates my intelligence) will they produce the same answer?</p></li>
       <li><p><term>Parallel forms reliability</term>. This relates to consistency across theoretically-equivalent measurements. If I use a different set of bathroom scales to measure my weight does it give the same answer?</p></li>
-      <li><p><term>Internal consistency reliability</term>. If a measurement is constructed from lots of different parts that perform similar functions (e.g., a personality questionnaire result is added up across several questions) do the individual parts tend to give similar answers. We'll look at this particular form of reliability later in the book, in <xref provisional="Internal consistency reliability analysis"/>.</p></li>
+      <li><p><term>Internal consistency reliability</term>. If a measurement is constructed from lots of different parts that perform similar functions (e.g., a personality questionnaire result is added up across several questions) do the individual parts tend to give similar answers. We'll look at this particular form of reliability later in the book, in <xref ref="sec-internal-consistency-reliability"/>.</p></li>
     </ul>
 
     <p>
