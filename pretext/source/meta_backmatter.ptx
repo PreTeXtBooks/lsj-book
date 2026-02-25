@@ -75,6 +75,74 @@
       H. Levene. Robust tests for equality of variances. In I. Olkin et al. (Eds.), <em>Contributions to Probability and Statistics: Essays in Honor of Harold Hotelling</em>, pp. 278–292. Stanford University Press, Palo Alto, CA, 1960.
     </biblio>
 
+    <biblio type="raw" xml:id="Adair1984">
+      Adair, G. (1984). The Hawthorne effect: A reconsideration of the methodological artifact. <em>Journal of Applied Psychology</em>, 69, 334–345. doi:10.1037/0021-9010.69.2.334
+    </biblio>
+
+    <biblio type="raw" xml:id="Bickel1975">
+      Bickel, P. J., Hammel, E. A., and O'Connell, J. W. (1975). Sex bias in graduate admissions: Data from Berkeley. <em>Science</em>, 187, 398–404. doi:10.1126/science.187.4175.398
+    </biblio>
+
+    <biblio type="raw" xml:id="Campbell1963">
+      Campbell, D. T. and Stanley, J. C. (1963). <em>Experimental and Quasi-Experimental Designs for Research</em>. Houghton Mifflin, Boston, MA.
+    </biblio>
+
+    <biblio type="raw" xml:id="Evans1983">
+      Evans, J. St. B. T., Barston, J. L., and Pollard, P. (1983). On the conflict between logic and belief in syllogistic reasoning. <em>Memory and Cognition</em>, 11, 295–306. doi:10.3758/BF03196976
+    </biblio>
+
+    <biblio type="raw" xml:id="Fisher1925">
+      Fisher, R. A. (1925). <em>Statistical Methods for Research Workers</em>. Oliver &amp; Boyd, Edinburgh, UK.
+    </biblio>
+
+    <biblio type="raw" xml:id="Ioannidis2005">
+      Ioannidis, J. P. A. (2005). Why most published research findings are false. <em>PLoS Med</em>, 2(8), 697–701. doi:10.1371/journal.pmed.1004085
+    </biblio>
+
+    <biblio type="raw" xml:id="Jeffreys1961">
+      Jeffreys, H. (1961). <em>The Theory of Probability</em> (3rd ed.). Oxford. doi:10.1093/oso/9780198503682.001.0001
+    </biblio>
+
+    <biblio type="raw" xml:id="Johnson2013">
+      Johnson, V. E. (2013). Revised standards for statistical evidence. <em>Proceedings of the National Academy of Sciences</em>, 110(48), 19313–19317. doi:10.1073/pnas.1313476110
+    </biblio>
+
+    <biblio type="raw" xml:id="Kahneman1973">
+      Kahneman, D. and Tversky, A. (1973). On the psychology of prediction. <em>Psychological Review</em>, 80, 237–251. doi:10.1037/h0034747
+    </biblio>
+
+    <biblio type="raw" xml:id="Kass1995">
+      Kass, R. E. and Raftery, A. E. (1995). Bayes factors. <em>Journal of the American Statistical Association</em>, 90, 773–795. doi:10.1080/01621459.1995.10476572
+    </biblio>
+
+    <biblio type="raw" xml:id="Kruschke2011">
+      Kruschke, J. K. (2011). <em>Doing Bayesian Data Analysis: A Tutorial with R and BUGS</em>. Academic Press, Burlington, MA.
+    </biblio>
+
+    <biblio type="raw" xml:id="Kuhberger2014">
+      Kühberger, A., Fritz, A., and Scherndl, T. (2014). Publication bias in psychology: A diagnosis based on the correlation between effect size and sample size. <em>Public Library of Science One</em>, 9, 1–8. doi:10.1371/journal.pone.0105825
+    </biblio>
+
+    <biblio type="raw" xml:id="Lee2014">
+      Lee, M. D. and Wagenmakers, E.-J. (2014). <em>Bayesian Cognitive Modeling: A Practical Course</em>. Cambridge University Press. doi:10.1017/CBO9781139087759
+    </biblio>
+
+    <biblio type="raw" xml:id="Pfungst1911">
+      Pfungst, O. (1911). <em>Clever Hans (The Horse of Mr. von Osten): A Contribution to Experimental Animal and Human Psychology</em> (C. L. Rahn, Trans.). Henry Holt, New York.
+    </biblio>
+
+    <biblio type="raw" xml:id="Rosenthal1966">
+      Rosenthal, R. (1966). <em>Experimenter Effects in Behavioral Research</em>. Appleton, New York.
+    </biblio>
+
+    <biblio type="raw" xml:id="Stevens1946">
+      Stevens, S. S. (1946). On the theory of scales of measurement. <em>Science</em>, 103, 677–680. doi:10.1126/science.103.2684.677
+    </biblio>
+
+    <biblio type="raw" xml:id="hrobjartsson2010">
+      Hróbjartsson, A. and Gøtzsche, P. C. (2010). Placebo interventions for all clinical conditions. <em>Cochrane Database of Systematic Reviews</em>, 1. doi:10.1002/14651858.cd003974.pub3
+    </biblio>
+
   </references>
 
 </backmatter>

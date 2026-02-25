@@ -187,7 +187,7 @@
 
     <p>As in economics, so too in psychology and statistics. It is not enough to know that we will eventually arrive at the right answer when calculating the sample mean. Knowing that an infinitely large data set will tell me the exact value of the population mean is cold comfort when my actual data set has a sample size of <m>N = 100</m>. In real life, then, we must know something about the behaviour of the sample mean when it is calculated from a more modest data set!</p>
 
-    <subsection xml:id="subsec-sampling-distribution-of-the-mean">
+    <subsection xml:id="sec-sampling-distribution-of-the-mean">
       <title>Sampling distribution of the mean</title>
 
       <p>With this in mind, let's abandon the idea that our studies will have sample sizes of 10,000 and consider instead a very modest experiment indeed. This time around we'll sample <m>N = 5</m> people and measure their IQ scores. As before, I can simulate this experiment in jamovi = NORM(100,15) function, but I only need 5 participant IDs this time, not 10,000. These are the five numbers that jamovi generated:</p>
