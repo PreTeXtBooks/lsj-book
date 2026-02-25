@@ -24,6 +24,30 @@
   <references>
     <title>References</title>
 
+    <biblio type="raw" xml:id="Child1990">
+      D. Child. <em>The Essentials of Factor Analysis</em> (2nd ed.). Cassell Educational, 1990.
+    </biblio>
+
+    <biblio type="raw" xml:id="Cronbach1951">
+      L. J. Cronbach. Coefficient alpha and the internal structure of tests. <em>Psychometrika</em>, 16(3):297–334, 1951. <url href="https://doi.org/10.1007/BF02310555"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="Fabrigar1999">
+      L. R. Fabrigar, D. T. Wegener, R. C. MacCallum, and E. J. Strahan. Evaluating the use of exploratory factor analysis in psychological research. <em>Psychological Methods</em>, 4:272–299, 1999. <url href="https://doi.org/10.1037/1082-989X.4.3.272"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="Hewitt2004">
+      A. K. Hewitt, D. R. Foxcroft, and J. MacDonald. Multitrait-multimethod confirmatory factor analysis of the Attributional Style Questionnaire. <em>Personality and Individual Differences</em>, 37(7):1483–1491, 2004. <url href="https://doi.org/10.1016/j.paid.2004.02.005"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="Kline1994">
+      P. Kline. <em>An Easy Guide to Factor Analysis</em>. Routledge, London, UK, 1994. <url href="https://doi.org/10.4324/9781315788135"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="Peterson1984">
+      C. Peterson and M. Seligman. Causal explanations as a risk factor for depression: Theory and evidence. <em>Psychological Review</em>, 91:347–374, 1984. <url href="https://doi.org/10.1037/0033-295X.91.3.347"/>
+    </biblio>
+
     <biblio type="raw" xml:id="Box1953">
       G. E. P. Box. Non-normality and tests on variances. <em>Biometrika</em>, 40:318–335, 1953. <url href="https://doi.org/10.2307/2333350"/>
     </biblio>
