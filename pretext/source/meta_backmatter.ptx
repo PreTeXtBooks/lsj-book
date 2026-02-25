@@ -46,6 +46,49 @@
 
     <biblio type="raw" xml:id="Welch1947">
       Welch, B. L. (1947). The generalization of <q>Student's</q> problem when several different population variances are involved. <em>Biometrika</em>, 34, 28&#x2013;35. doi:10.1093/biomet/34.1-2.28
+
+    <biblio type="raw" xml:id="Child1990">
+      D. Child. <em>The Essentials of Factor Analysis</em> (2nd ed.). Cassell Educational, 1990.
+    </biblio>
+
+    <biblio type="raw" xml:id="Cronbach1951">
+      L. J. Cronbach. Coefficient alpha and the internal structure of tests. <em>Psychometrika</em>, 16(3):297–334, 1951. <url href="https://doi.org/10.1007/BF02310555"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="Fabrigar1999">
+      L. R. Fabrigar, D. T. Wegener, R. C. MacCallum, and E. J. Strahan. Evaluating the use of exploratory factor analysis in psychological research. <em>Psychological Methods</em>, 4:272–299, 1999. <url href="https://doi.org/10.1037/1082-989X.4.3.272"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="Hewitt2004">
+      A. K. Hewitt, D. R. Foxcroft, and J. MacDonald. Multitrait-multimethod confirmatory factor analysis of the Attributional Style Questionnaire. <em>Personality and Individual Differences</em>, 37(7):1483–1491, 2004. <url href="https://doi.org/10.1016/j.paid.2004.02.005"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="Kline1994">
+      P. Kline. <em>An Easy Guide to Factor Analysis</em>. Routledge, London, UK, 1994. <url href="https://doi.org/10.4324/9781315788135"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="Peterson1984">
+      C. Peterson and M. Seligman. Causal explanations as a risk factor for depression: Theory and evidence. <em>Psychological Review</em>, 91:347–374, 1984. <url href="https://doi.org/10.1037/0033-295X.91.3.347"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="Box1953">
+      G. E. P. Box. Non-normality and tests on variances. <em>Biometrika</em>, 40:318–335, 1953. <url href="https://doi.org/10.2307/2333350"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="BrownForsythe1974">
+      M. B. Brown and A. B. Forsythe. Robust tests for equality of variances. <em>Journal of the American Statistical Association</em>, 69:364–367, 1974. <url href="https://doi.org/10.2307/2285659"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="Geschwind1972">
+      N. Geschwind. Language and the brain. <em>Scientific American</em>, 226(4):76–83, 1972. <url href="https://doi.org/10.1038/scientificamerican0472-76"/>
+    </biblio>
+
+    <biblio type="raw" xml:id="Everitt1996">
+      B. S. Everitt. <em>Making Sense of Statistics in Psychology. A Second-Level Course</em>. Oxford University Press, 1996.
+    </biblio>
+
+    <biblio type="raw" xml:id="Levene1960">
+      H. Levene. Robust tests for equality of variances. In I. Olkin et al. (Eds.), <em>Contributions to Probability and Statistics: Essays in Honor of Harold Hotelling</em>, pp. 278–292. Stanford University Press, Palo Alto, CA, 1960.
     </biblio>
 
   </references>
