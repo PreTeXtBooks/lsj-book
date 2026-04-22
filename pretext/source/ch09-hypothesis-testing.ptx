@@ -352,7 +352,7 @@
 
     <figure xml:id="fig-fig9-4">
       <caption>Binomial test analysis and results in jamovi</caption>
-      <image source="fig9-4.png" width="90%">
+      <image source="images/fig9-4.png" width="90%">
         <description>A jamovi screenshot of a proportion test with two outcomes. The interface includes sections for selecting variables, adjusting hypotheses, viewing results, and displaying references. The results section shows tabulated proportions and confidence intervals.</description>
       </image>
     </figure>
