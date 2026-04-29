@@ -1,8 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
 
-<introduction xml:id="prelude-part-iv" xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xml:id="prelude-part-iv" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Prelude</title>
 
+  <introduction>
   <p>Part IV of the book is by far the most theoretical, focusing as it does
   on the theory of statistical inference. Over the next three chapters my
   goal is to give you an introduction to probability theory, sampling and
@@ -19,8 +20,9 @@
   assumptions</q>, and psychology classes often talk about assumptions and
   biases as bad things that we should try to avoid. From personal experience I
   have learned never to say such things around philosophers!</p>
+  </introduction>
 
-  <subsection xml:id="prelude-part-iv-limits-of-logical-reasoning">
+  <section xml:id="prelude-part-iv-limits-of-logical-reasoning">
     <title>On the limits of logical reasoning</title>
 
     <blockquote>
@@ -185,9 +187,9 @@
     <blockquote>
       <p>me: I don't see the logical evidence for that.</p>
     </blockquote>
-  </subsection>
+  </section>
 
-  <subsection xml:id="prelude-part-iv-learning-without-assumptions">
+  <section xml:id="prelude-part-iv-learning-without-assumptions">
     <title>Learning without making assumptions is a myth</title>
 
     <p>There are lots of different ways in which we could dissect this
@@ -246,6 +248,6 @@
     are good ones for your data. As we go through the rest of this book I'll
     often point out the assumptions that underpin a particular statistical
     technique, and how you can check whether those assumptions are sensible.</p>
-  </subsection>
+  </section>
 
-</introduction>
+</chapter>
