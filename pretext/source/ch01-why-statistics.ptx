@@ -2,16 +2,15 @@
 
 <chapter xml:id="ch-why-statistics" xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Why do we learn statistics?</title>
-
   <introduction>
     <blockquote>
       <p>
-        <em>Thou shalt not answer questionnaires</em><br/>
-        <em>Or quizzes upon World Affairs,</em><br/>
-        <em>Nor with compliance</em><br/>
-        <em>Take any test. Thou shalt not sit</em><br/>
-        <em>With statisticians nor commit</em><br/>
-        <em>A social science</em>
+        "Thou shalt not answer questionnaires<br/>
+     Or quizzes upon World Affairs,<br/>
+     Nor with compliance<br/>
+     Take any test. Thou shalt not sit<br/>
+     With statisticians nor commit<br/>
+     A social science"<br/>
       </p>
       <attribution>
         W.H. Auden<fn>The quote comes from Auden's 1946 poem <em>Under Which Lyre: A Reactionary Tract for the Times</em>, delivered as part of a commencement address at Harvard University. The history of the poem is kind of interesting, see Adam Kirsch's analysis in the <em>Harvard Magazine</em>, <url href="https://www.harvardmagazine.com/2007/11/a-poets-warning.html">https://www.harvardmagazine.com/2007/11/a-poets-warning.html</url></fn>
@@ -22,12 +21,13 @@
   <section xml:id="sec-on-psychology-of-statistics">
     <title>On the psychology of statistics</title>
 
+    <introduction>
     <p>
       To the surprise of many students, statistics is a fairly significant part of a psychological education. To the surprise of no-one, statistics is very rarely the <em>favourite</em> part of one's psychological education. After all, if you really loved the idea of doing statistics, you'd probably be enrolled in a statistics class right now, not a psychology class. So, not surprisingly, there's a pretty large proportion of the student base that isn't happy about the fact that psychology has so much statistics in it. In view of this, I thought that the right place to start might be to answer some of the more common questions that people have about stats.
     </p>
 
     <p>
-      A big part of this issue at hand relates to the very idea of statistics. What is it? What's it there for? And why are scientists so bloody obsessed with it? These are all good questions, when you think about it. So let's start with the last one. As a group, scientists seem to be bizarrely fixated on running statistical tests on everything. In fact, we use statistics so often that we sometimes forget to explain to people why we do. It's a kind of article of faith among scientists — and especially social scientists — that your findings can't be trusted until you've done some stats. Undergraduate students might be forgiven for thinking that we're all completely mad, because no-one takes the time to answer one very simple question:
+      A big part of this issue at hand relates to the very idea of statistics. What is it? What's it there for? And why are scientists so bloody obsessed with it? These are all good questions, when you think about it. So let's start with the last one. As a group, scientists seem to be bizarrely fixated on running statistical tests on everything. In fact, we use statistics so often that we sometimes forget to explain to people why we do. It's a kind of article of faith among scientists <mdash /> and especially social scientists <mdash /> that your findings can't be trusted until you've done some stats. Undergraduate students might be forgiven for thinking that we're all completely mad, because no-one takes the time to answer one very simple question:
     </p>
 
     <blockquote>
@@ -37,12 +37,13 @@
     </blockquote>
 
     <p>
-      It's a naive question in some ways, but most good questions are. There's a lot of good answers to it,<fn>Including the suggestion that common sense is in short supply among scientists.</fn> but for my money, the best answer is a really simple one: we don't trust ourselves enough. We worry that we're human, and susceptible to all of the biases, temptations and frailties that humans suffer from. Much of statistics is basically a safeguard. Using <q>common sense</q> to evaluate evidence means trusting gut instincts, relying on verbal arguments and on using the raw power of human reason to come up with the right answer. Most scientists don't think this approach is likely to work.
+      It's a naive question in some ways, but most good questions are. There's a lot of good answers to it,<fn>Including the suggestion that common sense is in short supply among scientists.</fn> but for my money, the best answer is a really simple one: we don't trust ourselves enough. We worry that we're human, and susceptible to all of the biases, temptations and frailties that humans suffer from. Much of statistics is basically a safeguard. Using "common sense" to evaluate evidence means trusting gut instincts, relying on verbal arguments and on using the raw power of human reason to come up with the right answer. Most scientists don't think this approach is likely to work.
     </p>
 
     <p>
-      In fact, come to think of it, this sounds a lot like a psychological question to me, and since I do work in a psychology department, it seems like a good idea to dig a little deeper here. Is it really plausible to think that this <q>common sense</q> approach is very trustworthy? Verbal arguments have to be constructed in language, and all languages have biases — some things are harder to say than others, and not necessarily because they're false (e.g., quantum electrodynamics is a good theory, but hard to explain in words). The instincts of our <q>gut</q> aren't designed to solve scientific problems, they're designed to handle day-to-day inferences — and given that biological evolution is slower than cultural change, we should say that they're designed to solve the day-to-day problems for a <em>different world</em> than the one we live in. Most fundamentally, reasoning sensibly requires people to engage in <q>induction</q>, making wise guesses and going beyond the immediate evidence of the senses to make generalisations about the world. If you think that you can do that without being influenced by various distractors, well, I have a bridge in London I'd like to sell you. Heck, as the next section shows, we can't even solve <q>deductive</q> problems (ones where no guessing is required) without being influenced by our pre-existing biases.
+      In fact, come to think of it, this sounds a lot like a psychological question to me, and since I do work in a psychology department, it seems like a good idea to dig a little deeper here. Is it really plausible to think that this "common sense" approach is very trustworthy? Verbal arguments have to be constructed in language, and all languages have biases <mdash /> some things are harder to say than others, and not necessarily because they're false (e.g., quantum electrodynamics is a good theory, but hard to explain in words). The instincts of our "gut" aren't designed to solve scientific problems, they're designed to handle day-to-day inferences <mdash /> and given that biological evolution is slower than cultural change, we should say that they're designed to solve the day-to-day problems for a <em>different world</em> than the one we live in. Most fundamentally, reasoning sensibly requires people to engage in "induction", making wise guesses and going beyond the immediate evidence of the senses to make generalisations about the world. If you think that you can do that without being influenced by various distractors, well, I have a bridge in London I'd like to sell you. Heck, as the next section shows, we can't even solve "deductive" problems (ones where no guessing is required) without being influenced by our pre-existing biases.
     </p>
+    </introduction>
 
     <subsection xml:id="subsec-curse-of-belief-bias">
       <title>The curse of belief bias</title>
@@ -51,23 +52,19 @@
         People are mostly pretty smart. We're smarter than the other species that we share the planet with (though many people might disagree). Our minds are quite amazing things, and we seem to be capable of the most incredible feats of thought and reason. That doesn't make us perfect though. And among the many things that psychologists have shown over the years is that we really do find it hard to be neutral, to evaluate evidence impartially and without being swayed by pre-existing biases. A good example of this is the <term>belief bias effect</term> in logical reasoning: if you ask people to decide whether a particular argument is logically valid (i.e., the conclusion would be true if the premises were true), we tend to be influenced by the believability of the conclusion, even when we shouldn't. For instance, here's a valid argument where the conclusion is believable:
       </p>
 
-      <blockquote>
-        <p>
-          All cigarettes are expensive (Premise 1)<br/>
-          Some addictive things are inexpensive (Premise 2)<br/>
-          Therefore, some addictive things are not cigarettes (Conclusion)
-        </p>
-      </blockquote>
+      <ul>
+        <li><p>All cigarettes are expensive (Premise 1)</p></li>
+        <li><p>Some addictive things are inexpensive (Premise 2)</p></li>
+        <li><p>Therefore, some addictive things are not cigarettes (Conclusion)</p></li>
+      </ul>
 
       <p>And here's a valid argument where the conclusion is not believable:</p>
 
-      <blockquote>
-        <p>
-          All addictive things are expensive (Premise 1)<br/>
-          Some cigarettes are inexpensive (Premise 2)<br/>
-          Therefore, some cigarettes are not addictive (Conclusion)
-        </p>
-      </blockquote>
+      <ul>
+        <li><p> All addictive things are expensive (Premise 1)</p></li>
+        <li><p>Some cigarettes are inexpensive (Premise 2)</p></li>
+        <li><p>Therefore, some cigarettes are not addictive (Conclusion)</p></li>
+      </ul>
 
       <p>
         The logical <em>structure</em> of argument #2 is identical to the structure of argument #1, and they're both valid. However, in the second argument, there are good reasons to think that premise 1 is incorrect, and as a result it's probably the case that the conclusion is also incorrect. But that's entirely irrelevant to the topic at hand; an argument is deductively valid if the conclusion is a logical consequence of the premises. That is, a valid argument doesn't have to involve true statements.
@@ -75,23 +72,19 @@
 
       <p>On the other hand, here's an invalid argument that has a believable conclusion:</p>
 
-      <blockquote>
-        <p>
-          All addictive things are expensive (Premise 1)<br/>
-          Some cigarettes are inexpensive (Premise 2)<br/>
-          Therefore, some addictive things are not cigarettes (Conclusion)
-        </p>
-      </blockquote>
+      <ul>
+        <li><p>All addictive things are expensive (Premise 1)</p></li>
+        <li><p>Some cigarettes are inexpensive (Premise 2)</p></li>
+        <li><p>Therefore, some addictive things are not cigarettes (Conclusion)</p></li>
+      </ul>
 
       <p>And finally, an invalid argument with an unbelievable conclusion:</p>
 
-      <blockquote>
-        <p>
-          All cigarettes are expensive (Premise 1)<br/>
-          Some addictive things are inexpensive (Premise 2)<br/>
-          Therefore, some cigarettes are not addictive (Conclusion)
-        </p>
-      </blockquote>
+      <ul>
+        <li><p>All cigarettes are expensive (Premise 1)</p></li>
+        <li><p>Some addictive things are inexpensive (Premise 2)</p></li>
+        <li><p>Therefore, some cigarettes are not addictive (Conclusion)</p></li>
+      </ul>
 
       <p>
         Now, suppose that people really are perfectly able to set aside their pre-existing biases about what is true and what isn't, and purely evaluate an argument on its logical merits. We'd expect 100% of people to say that the valid arguments are valid, and 0% of people to say that the invalid arguments are valid. So if you ran an experiment looking at this, you'd expect to see data as in <xref ref="tbl-tab1-1"/>.
@@ -99,22 +92,21 @@
 
       <table xml:id="tbl-tab1-1">
         <title>Validity of arguments</title>
-        <tabular halign="center">
-          <col right="minor"/><col/><col/>
-          <row header="yes" bottom="minor">
+        <tabular>
+          <row header="yes">
             <cell></cell>
             <cell>conclusion feels true</cell>
             <cell>conclusion feels false</cell>
           </row>
           <row>
             <cell>argument is valid</cell>
-            <cell>100% say <q>valid</q></cell>
-            <cell>100% say <q>valid</q></cell>
+            <cell>100% say "valid"</cell>
+            <cell>100% say "valid"</cell>
           </row>
           <row>
             <cell>argument is invalid</cell>
-            <cell>0% say <q>valid</q></cell>
-            <cell>0% say <q>valid</q></cell>
+            <cell>0% say "valid"</cell>
+            <cell>0% say "valid"</cell>
           </row>
         </tabular>
       </table>
@@ -124,27 +116,51 @@
       </p>
 
       <p>
-        In a classic study, <xref ref="Evans1983"/> ran an experiment looking at exactly this. What they found is that when pre-existing biases (i.e., beliefs) were in agreement with the structure of the data, everything went the way you'd hope (<xref ref="tbl-tab1-2"/>). Not perfect, but that's pretty good. But look what happens when our intuitive feelings about the truth of the conclusion run against the logical structure of the argument, see (<xref ref="tbl-tab1-3"/>).
+        In a classic study, <xref ref="Evans1983"/> ran an experiment looking at exactly this. What they found is that when pre-existing biases (i.e., beliefs) were in agreement with the structure of the data, everything went the way you'd hope (<xref ref="tbl-tab1-2"/>).
       </p>
 
       <table xml:id="tbl-tab1-2">
         <title>Pre-existing biases and argument validity</title>
-        <tabular halign="center">
-          <col right="minor"/><col/><col/>
-          <row header="yes" bottom="minor">
+        <tabular>
+          <row header="yes">
             <cell></cell>
             <cell>conclusion feels true</cell>
             <cell>conclusion feels false</cell>
           </row>
           <row>
             <cell>argument is valid</cell>
-            <cell>92% say <q>valid</q></cell>
-            <cell></cell>
+            <cell>92% say "valid"</cell>
+            <cell><mdash /></cell>
           </row>
           <row>
             <cell>argument is invalid</cell>
+            <cell><mdash /></cell>
+            <cell>8% say "valid"</cell>
+          </row>
+        </tabular>
+      </table>
+
+      <p>
+        Not perfect, but that's pretty good. But look what happens when our intuitive feelings about the truth of the conclusion run against the logical structure of the argument, see (<xref ref="tbl-tab1-3"/>).
+      </p>
+
+      <table xml:id="tbl-tab1-3">
+        <title>Intuition and argument validity</title>
+        <tabular>
+          <row header="yes">
             <cell></cell>
-            <cell>8% say <q>valid</q></cell>
+            <cell>conclusion feels true</cell>
+            <cell>conclusion feels false</cell>
+          </row>
+          <row>
+            <cell>argument is valid</cell>
+            <cell>92% say "valid"</cell>
+            <cell><alert>46% say "valid"</alert></cell>
+          </row>
+          <row>
+            <cell>argument is invalid</cell>
+            <cell><alert>92% say "valid"</alert></cell>
+            <cell>8% say "valid"</cell>
           </row>
         </tabular>
       </table>
@@ -153,30 +169,8 @@
         Oh dear, that's not as good. Apparently, when people are presented with a strong argument that contradicts our pre-existing beliefs, we find it pretty hard to even perceive it to be a strong argument (people only did so 46% of the time). Even worse, when people are presented with a weak argument that agrees with our pre-existing biases, almost no-one can see that the argument is weak (people got that one wrong 92% of the time!).<fn>In my more cynical moments I feel like this fact alone explains 95% of what I read on the internet.</fn>
       </p>
 
-      <table xml:id="tbl-tab1-3">
-        <title>Intuition and argument validity</title>
-        <tabular halign="center">
-          <col right="minor"/><col/><col/>
-          <row header="yes" bottom="minor">
-            <cell></cell>
-            <cell>conclusion feels true</cell>
-            <cell>conclusion feels false</cell>
-          </row>
-          <row>
-            <cell>argument is valid</cell>
-            <cell>92% say <q>valid</q></cell>
-            <cell>46% say <q>valid</q></cell>
-          </row>
-          <row>
-            <cell>argument is invalid</cell>
-            <cell>92% say <q>valid</q></cell>
-            <cell>8% say <q>valid</q></cell>
-          </row>
-        </tabular>
-      </table>
-
       <p>
-        If you think about it, it's not as if these data are horribly damning. Overall, people did do better than chance at compensating for their prior biases, since about 60% of people's judgements were correct (you'd expect 50% by chance). Even so, if you were a professional <q>evaluator of evidence</q>, and someone came along and offered you a magic tool that improves your chances of making the right decision from 60% to (say) 95%, you'd probably jump at it, right? Of course you would. Thankfully, we actually do have a tool that can do this. But it's not magic, it's statistics. So that's reason #1 why scientists love statistics. It's just too easy for us to <q>believe what we want to believe</q>. So instead, if we want to <q>believe in the data</q>, we're going to need a bit of help to keep our personal biases under control. That's what statistics does, it helps keep us honest.
+        If you think about it, it's not as if these data are horribly damning. Overall, people did do better than chance at compensating for their prior biases, since about 60% of people's judgements were correct (you'd expect 50% by chance). Even so, if you were a professional "evaluator of evidence", and someone came along and offered you a magic tool that improves your chances of making the right decision from 60% to (say) 95%, you'd probably jump at it, right? Of course you would. Thankfully, we actually do have a tool that can do this. But it's not magic, it's statistics. So that's reason #1 why scientists love statistics. It's just too easy for us to "believe what we want to believe". So instead, if we want to "believe in the data", we're going to need a bit of help to keep our personal biases under control. That's what statistics does, it helps keep us honest.
       </p>
 
     </subsection>
@@ -192,9 +186,8 @@
 
     <table xml:id="tbl-tab1-4">
       <title>Berkeley students by gender</title>
-      <tabular halign="center">
-        <col right="minor"/><col/><col/>
-        <row header="yes" bottom="minor">
+      <tabular>
+        <row header="yes">
           <cell></cell>
           <cell>Number of applicants</cell>
           <cell>Percent admitted</cell>
@@ -217,24 +210,19 @@
     </p>
 
     <p>
-      Oddly, it's actually sort of true. When people started looking more carefully at the admissions data they told a rather different story <xref ref="Bickel1975"/>. Specifically, when they looked at it on a department by department basis, it turned out that most of the departments actually had a slightly <em>higher</em> success rate for female applicants than for male applicants. <xref ref="tbl-tab1-5"/> shows the admission figures for the six largest departments (with the names of the departments removed for privacy reasons):
+      Oddly, it's actually sort of true. When people started looking more carefully at the admissions data they told a rather different story <xref ref="Bickel1975"/>(Bickel, Hammel, and O'Connell, 1975)</xref>.
+      Specifically, when they looked at it on a department by department basis, it turned out that most of the departments actually had a slightly <em>higher</em> success rate for female applicants than for male applicants. <xref ref="tbl-tab1-5"/> shows the admission figures for the six largest departments (with the names of the departments removed for privacy reasons):
     </p>
 
     <table xml:id="tbl-tab1-5">
       <title>Berkeley students by gender for six largest departments</title>
-      <tabular halign="center">
-        <col right="minor"/><col/><col/><col/><col/>
-        <row header="yes" bottom="minor">
+      <tabular>
+        <row header="yes">
           <cell>Department</cell>
-          <cell colspan="2">Males</cell>
-          <cell colspan="2">Females</cell>
-        </row>
-        <row header="yes" bottom="minor">
-          <cell></cell>
-          <cell>Applicants</cell>
-          <cell>Percent admitted</cell>
-          <cell>Applicants</cell>
-          <cell>Percent admitted</cell>
+          <cell>Male Applicants</cell>
+          <cell>Male % admitted</cell>
+          <cell>Female Applicants</cell>
+          <cell>Female % admitted</cell>
         </row>
         <row>
           <cell>A</cell>
@@ -286,12 +274,10 @@
     </p>
 
     <p>
-      Here's what's going on. Firstly, notice that the departments are not equal to one another in terms of their admission percentages: some departments (e.g., A, B) tended to admit a high percentage of the qualified applicants, whereas others (e.g., F) tended to reject most of the candidates, even if they were high quality. So, among the six departments shown above, notice that department A is the most generous, followed by B, C, D, E and F in that order. Next, notice that males and females tended to apply to different departments. If we rank the departments in terms of the total number of male applicants, we get <term>A</term>&gt;<term>B</term>&gt;D&gt;C&gt;F&gt;E (the <q>easy</q> departments are in bold). On the whole, males tended to apply to the departments that had high admission rates.
-    </p>
-
-    <p>
-      Now compare this to how the female applicants distributed themselves. Ranking the departments in terms of the total number of female applicants produces a quite different ordering C&gt;E&gt;D&gt;F&gt;<term>A</term>&gt;<term>B</term>. In other words, what these data seem to be suggesting is that the female applicants tended to apply to <q>harder</q> departments. And in fact, if we look at <xref ref="fig1-1"/> we see that this trend is systematic, and quite striking.
-    </p>
+      Here's what's going on. Firstly, notice that the departments are not equal to one another in terms of their admission percentages: some departments (e.g., A, B) tended to admit a high percentage of the qualified applicants, whereas others (e.g., F) tended to reject most of the candidates, even if they were high quality. So, among the six departments shown above, notice that department A is the most generous, followed by B, C, D, E and F in that order. Next, notice that males and females tended to apply to different departments. If we rank the departments in terms of the total number of male applicants, we get <term>A</term>&gt;<term>B</term>&gt;D&gt;C&gt;F&gt;E (the "easy" departments are in bold). On the whole, males tended to apply to the departments that had high admission rates.
+      Now compare this to how the female applicants distributed themselves. Ranking the departments in terms of the total number of female applicants produces a quite different ordering C&gt;E&gt;D&gt;F&gt;<term>A</term>&gt;<term>B</term>. In other words, what these data seem to be suggesting is that the female applicants tended to apply to "harder" departments. And in fact, if we look at <xref ref="fig1-1"/> we see that this trend is systematic, and quite striking.
+      This effect is known as <term>Simpson's paradox</term>. It's not common, but it does happen in real life, and most people are very surprised by it when they first encounter it, and many people refuse to even believe that it's real. It is very real. And while there are lots of very subtle statistical lessons buried in there, I want to use it to make a much more important point: doing research is hard, and there are lots of subtle, counter-intuitive traps lying in wait for the unwary. That's reason #2 why scientists love statistics, and why we teach research methods. Because science is hard, and the truth is sometimes cunningly hidden in the nooks and crannies of complicated data.
+     </p>
 
     <figure xml:id="fig1-1">
       <caption>
@@ -305,15 +291,11 @@
     </figure>
 
     <p>
-      This effect is known as <term>Simpson's paradox</term>. It's not common, but it does happen in real life, and most people are very surprised by it when they first encounter it, and many people refuse to even believe that it's real. It is very real. And while there are lots of very subtle statistical lessons buried in there, I want to use it to make a much more important point: doing research is hard, and there are lots of subtle, counter-intuitive traps lying in wait for the unwary. That's reason #2 why scientists love statistics, and why we teach research methods. Because science is hard, and the truth is sometimes cunningly hidden in the nooks and crannies of complicated data.
+      Before leaving this topic entirely, I want to point out something else really critical that is often overlooked in a research methods class. Statistics only solves <em>part</em> of the problem. Remember that we started all this with the concern that Berkeley's admissions processes might be unfairly biased against female applicants. When we looked at the "aggregated" data, it did seem like the university was discriminating against women, but when we "disaggregate" and looked at the individual behaviour of all the departments, it turned out that the actual departments were, if anything, slightly biased in favour of women. The gender bias in total admissions was caused by the fact that women tended to self-select for harder departments. From a legal perspective, that would probably put the university in the clear. Postgraduate admissions are determined at the level of the individual department, and there are good reasons to do that. At the level of individual departments the decisions are more or less unbiased (the weak bias in favour of females at that level is small, and not consistent across departments). Since the university can't dictate which departments people choose to apply to, and the decision making takes place at the level of the department it can hardly be held accountable for any biases that those choices produce.
     </p>
 
     <p>
-      Before leaving this topic entirely, I want to point out something else really critical that is often overlooked in a research methods class. Statistics only solves <em>part</em> of the problem. Remember that we started all this with the concern that Berkeley's admissions processes might be unfairly biased against female applicants. When we looked at the <q>aggregated</q> data, it did seem like the university was discriminating against women, but when we <q>disaggregate</q> and looked at the individual behaviour of all the departments, it turned out that the actual departments were, if anything, slightly biased in favour of women. The gender bias in total admissions was caused by the fact that women tended to self-select for harder departments. From a legal perspective, that would probably put the university in the clear. Postgraduate admissions are determined at the level of the individual department, and there are good reasons to do that. At the level of individual departments the decisions are more or less unbiased (the weak bias in favour of females at that level is small, and not consistent across departments). Since the university can't dictate which departments people choose to apply to, and the decision making takes place at the level of the department it can hardly be held accountable for any biases that those choices produce.
-    </p>
-
-    <p>
-      That was the basis for my somewhat glib remarks earlier, but that's not exactly the whole story, is it? After all, if we're interested in this from a more sociological and psychological perspective, we might want to ask <em>why</em> there are such strong gender differences in applications. Why do males tend to apply to engineering more often than females, and why is this reversed for the English department? And why is it the case that the departments that tend to have a female-application bias tend to have lower overall admission rates than those departments that have a male-application bias? Might this not still reflect a gender bias, even though every single department is itself unbiased? It might. Suppose, hypothetically, that males preferred to apply to <q>hard sciences</q> and females prefer <q>humanities</q>. And suppose further that the reason for why the humanities departments have low admission rates is because the government doesn't want to fund the humanities (Ph.D. places, for instance, are often tied to government funded research projects). Does that constitute a gender bias? Or just an unenlightened view of the value of the humanities? What if someone at a high level in the government cut the humanities funds because they felt that the humanities are <q>useless chick stuff</q>. That seems pretty blatantly gender biased. None of this falls within the purview of statistics, but it matters to the research project. If you're interested in the overall structural effects of subtle gender biases, then you probably want to look at both the aggregated and disaggregated data. If you're interested in the decision making process at Berkeley itself then you're probably only interested in the disaggregated data.
+      That was the basis for my somewhat glib remarks earlier, but that's not exactly the whole story, is it? After all, if we're interested in this from a more sociological and psychological perspective, we might want to ask <em>why</em> there are such strong gender differences in applications. Why do males tend to apply to engineering more often than females, and why is this reversed for the English department? And why is it the case that the departments that tend to have a female-application bias tend to have lower overall admission rates than those departments that have a male-application bias? Might this not still reflect a gender bias, even though every single department is itself unbiased? It might. Suppose, hypothetically, that males preferred to apply to "hard sciences" and females prefer "humanities". And suppose further that the reason for why the humanities departments have low admission rates is because the government doesn't want to fund the humanities (Ph.D. places, for instance, are often tied to government funded research projects). Does that constitute a gender bias? Or just an unenlightened view of the value of the humanities? What if someone at a high level in the government cut the humanities funds because they felt that the humanities are "useless chick stuff". That seems pretty blatantly gender biased. None of this falls within the purview of statistics, but it matters to the research project. If you're interested in the overall structural effects of subtle gender biases, then you probably want to look at both the aggregated and disaggregated data. If you're interested in the decision making process at Berkeley itself then you're probably only interested in the disaggregated data.
     </p>
 
     <p>
@@ -334,7 +316,7 @@
     </blockquote>
 
     <p>
-      To be perfectly honest, there's a few different reasons, some of which are better than others. The most important reason is that psychology is a statistical science. What I mean by that is that the <q>things</q> that we study are <em>people</em>. Real, complicated, gloriously messy, infuriatingly perverse people. The <q>things</q> of physics include objects like electrons, and while there are all sorts of complexities that arise in physics, electrons don't have minds of their own. They don't have opinions, they don't differ from each other in weird and arbitrary ways, they don't get bored in the middle of an experiment, and they don't get angry at the experimenter and then deliberately try to sabotage the data set (not that I've ever done that!). At a fundamental level psychology is harder than physics.<fn>Which might explain why physics is just a teensy bit further advanced as a science than we are.</fn> Basically, we teach statistics to you as psychologists because you need to be better at stats than physicists. There's actually a saying used sometimes in physics, to the effect that <q>if your experiment needs statistics, you should have done a better experiment</q>. They have the luxury of being able to say that because their objects of study are pathetically simple in comparison to the vast mess that confronts social scientists. And it's not just psychology. Most social sciences are desperately reliant on statistics. Not because we're bad experimenters, but because we've picked a harder problem to solve. We teach you stats because you really, really need it.
+      To be perfectly honest, there's a few different reasons, some of which are better than others. The most important reason is that psychology is a statistical science. What I mean by that is that the "things" that we study are <em>people</em>. Real, complicated, gloriously messy, infuriatingly perverse people. The "things" of physics include objects like electrons, and while there are all sorts of complexities that arise in physics, electrons don't have minds of their own. They don't have opinions, they don't differ from each other in weird and arbitrary ways, they don't get bored in the middle of an experiment, and they don't get angry at the experimenter and then deliberately try to sabotage the data set (not that I've ever done that!). At a fundamental level psychology is harder than physics.<fn>Which might explain why physics is just a teensy bit further advanced as a science than we are.</fn> Basically, we teach statistics to you as psychologists because you need to be better at stats than physicists. There's actually a saying used sometimes in physics, to the effect that "if your experiment needs statistics, you should have done a better experiment". They have the luxury of being able to say that because their objects of study are pathetically simple in comparison to the vast mess that confronts social scientists. And it's not just psychology. Most social sciences are desperately reliant on statistics. Not because we're bad experimenters, but because we've picked a harder problem to solve. We teach you stats because you really, really need it.
     </p>
 
     <blockquote>
@@ -358,7 +340,7 @@
       </li>
       <li>
         <p>
-          Thirdly, there's a big practical problem with being dependent on other people to do all your statistics: statistical analysis is <em>expensive</em>. If you ever get bored and want to look up how much the Australian government charges for university fees, you'll notice something interesting: statistics is designated as a <q>national priority</q> category, and so the fees are much, much lower than for any other area of study. This is because there's a massive shortage of statisticians out there. So, from your perspective as a psychological researcher, the laws of supply and demand aren't exactly on your side here! As a result, in almost any real-life situation where you want to do psychological research, the cruel facts will be that you don't have enough money to afford a statistician. So the economics of the situation mean that you have to be pretty self-sufficient.
+          Thirdly, there's a big practical problem with being dependent on other people to do all your statistics: statistical analysis is <em>expensive</em>. If you ever get bored and want to look up how much the Australian government charges for university fees, you'll notice something interesting: statistics is designated as a "national priority" category, and so the fees are much, much lower than for any other area of study. This is because there's a massive shortage of statisticians out there. So, from your perspective as a psychological researcher, the laws of supply and demand aren't exactly on your side here! As a result, in almost any real-life situation where you want to do psychological research, the cruel facts will be that you don't have enough money to afford a statistician. So the economics of the situation mean that you have to be pretty self-sufficient.
         </p>
       </li>
     </ul>
@@ -382,10 +364,12 @@
 
     <blockquote>
       <p>
-        <em>We are drowning in information,</em><br/>
-        <em>but we are starved for knowledge</em>
+        "We are drowning in information, <br/>
+          but we are starved for knowledge"
       </p>
-      <attribution>Various authors, original probably John Naisbitt</attribution>
+      <p>
+        <mdash /> Various authors, original probably John Naisbitt
+      </p>
     </blockquote>
 
     <p>
@@ -402,7 +386,7 @@
     </p>
 
     <p>
-      But note that <q>urgent</q> is different from <q>important</q> — they both matter. I really do want to stress that research design is just as important as data analysis, and this book does spend some time on it. However, while statistics has a kind of universality, and provides a set of core tools that are useful for most types of psychological and social research, the research methods side isn't quite so universal. There are some general principles that everyone should think about, but a lot of research design is idiosyncratic and is specific to the area of research that you want to engage in.
+      But note that "urgent" is different from "important" <mdash /> they both matter. I really do want to stress that research design is just as important as data analysis, and this book does spend some time on it. However, while statistics has a kind of universality, and provides a set of core tools that are useful for most types of psychological and social research, the research methods side isn't quite so universal. There are some general principles that everyone should think about, but a lot of research design is idiosyncratic and is specific to the area of research that you want to engage in. To the extent that it's the details that matter, those details don't usually show up in an introductory stats and research methods class.
     </p>
 
   </section>
